@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ProjectInfo>
+	<Project Name="WwiseNullTeamGameDevJam" GUID="{7CF26530-36E3-44EA-8DA6-C494226B343D}" Generator="2023.1.0.8367"/>
+	<CacheRoot>../../../../../WwiseNULLTEAMGameDevJam/WwiseNullTeamGameDevJam/.cache</CacheRoot>
+	<Platforms>
+		<Platform Name="Mac" GUID="{EEEC68D6-CB00-4E67-993A-42D7E234A8E7}" BasePlatform="Mac" BasePlatformGUID="{9C6217D5-DD11-4795-87C1-6CE02853C540}" Path="Mac"/>
+		<Platform Name="Windows" GUID="{C228C1E0-71D9-45B8-AD16-CB0FC90510D5}" BasePlatform="Windows" BasePlatformGUID="{6E0CB257-C6C8-4C5C-8366-2740DFC441EB}" Path="Windows"/>
+	</Platforms>
+	<Languages>
+		<Language Name="English(US)" Id="684519430" GUID="{7146855A-9022-47AE-82B6-B4B4EB89AC66}" Default="true" UseAsStandIn="true"/>
+	</Languages>
+	<FileHash>{DE4482BF-16A2-2A86-723D-0337B27C78E4}</FileHash>
+</ProjectInfo>
