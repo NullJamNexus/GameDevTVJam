@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: bce176c023723c24896f00e4fd04e78b
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 232715
+  packageName: GIT LFS Locks
+  packageVersion: 1.0.2
+  assetPath: Assets/GitLocks/Editor/Git/GitGUIStyle.cs
+  uploadId: 536336

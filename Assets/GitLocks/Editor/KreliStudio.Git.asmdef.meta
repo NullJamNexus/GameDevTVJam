@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 449173b5f27189945b1427de8a0167df
+AssemblyDefinitionImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 232715
+  packageName: GIT LFS Locks
+  packageVersion: 1.0.2
+  assetPath: Assets/GitLocks/Editor/KreliStudio.Git.asmdef
+  uploadId: 536336

@@ -1,0 +1,10 @@
+﻿fileFormatVersion: 2
+guid: 7c3f917867f84be7b5b72cc3a594067b
+timeCreated: 1597845062
+AssetOrigin:
+  serializedVersion: 1
+  productId: 232715
+  packageName: GIT LFS Locks
+  packageVersion: 1.0.2
+  assetPath: Assets/GitLocks/Editor/Git/GitLocksAutoRefresh.cs
+  uploadId: 536336

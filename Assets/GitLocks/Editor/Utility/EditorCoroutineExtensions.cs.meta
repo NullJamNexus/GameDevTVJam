@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 266b722d6f947de4aab1566225129b8c
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 232715
+  packageName: GIT LFS Locks
+  packageVersion: 1.0.2
+  assetPath: Assets/GitLocks/Editor/Utility/EditorCoroutineExtensions.cs
+  uploadId: 536336

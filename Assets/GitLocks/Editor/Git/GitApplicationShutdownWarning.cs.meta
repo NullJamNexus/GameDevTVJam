@@ -1,0 +1,10 @@
+﻿fileFormatVersion: 2
+guid: e1a06e84b9454993bdc343c01a24b245
+timeCreated: 1597840016
+AssetOrigin:
+  serializedVersion: 1
+  productId: 232715
+  packageName: GIT LFS Locks
+  packageVersion: 1.0.2
+  assetPath: Assets/GitLocks/Editor/Git/GitApplicationShutdownWarning.cs
+  uploadId: 536336

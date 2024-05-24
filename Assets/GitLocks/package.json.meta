@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: de3e9369f7e5130458a534c9b08ce8ba
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 232715
+  packageName: GIT LFS Locks
+  packageVersion: 1.0.2
+  assetPath: Assets/GitLocks/package.json
+  uploadId: 536336

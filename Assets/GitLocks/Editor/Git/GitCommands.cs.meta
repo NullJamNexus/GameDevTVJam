@@ -1,0 +1,10 @@
+﻿fileFormatVersion: 2
+guid: 5f73b1ba1a4741eeacaf8ae515475ff4
+timeCreated: 1597741391
+AssetOrigin:
+  serializedVersion: 1
+  productId: 232715
+  packageName: GIT LFS Locks
+  packageVersion: 1.0.2
+  assetPath: Assets/GitLocks/Editor/Git/GitCommands.cs
+  uploadId: 536336

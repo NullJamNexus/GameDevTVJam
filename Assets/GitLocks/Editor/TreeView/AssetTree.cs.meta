@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: e2079e80e9d9e7044aaa2e470b89d4c7
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 232715
+  packageName: GIT LFS Locks
+  packageVersion: 1.0.2
+  assetPath: Assets/GitLocks/Editor/TreeView/AssetTree.cs
+  uploadId: 536336
