@@ -14,7 +14,7 @@ namespace NJN.Runtime.Installers
         public override void InstallBindings()
         {
             // Player
-            Container.Bind<IPlayerFactory>().To<PlayerFactory>().AsSingle().WithArguments(_levelSettingsData);
+            Container.Bind<ICharacterFactory>().To<CharacterFactory>().AsSingle().WithArguments(_levelSettingsData);
         }
     }
 }

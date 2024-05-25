@@ -7,7 +7,7 @@ using Zenject;
 
 namespace NJN.Runtime.Controllers.Player
 {
-    public class PlayerController : CharacterController
+    public class PlayerController : BaseCharacterController
     {
         [field: BoxGroup("Stats"), SerializeField]
         public float MovementSpeed { get; private set; } = 5f;
@@ -61,21 +61,6 @@ namespace NJN.Runtime.Controllers.Player
         private void Start()
         {
             StateMachine.ChangeState(IdleState);
-        }
-        
-        private void Update()
-        {
-            StateMachine.CurrentState.LogicUpdate();
-        }
-        
-        private void FixedUpdate()
-        {
-            StateMachine.CurrentState.PhysicsUpdate();
-        }
-
-        private void OnDestroy()
-        {
-            StateMachine.CleanUp();
         }
 
         #endregion

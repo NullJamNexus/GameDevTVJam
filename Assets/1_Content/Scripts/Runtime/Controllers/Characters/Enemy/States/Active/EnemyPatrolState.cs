@@ -1,0 +1,70 @@
+﻿using NJN.Runtime.Controllers.States;
+using NJN.Runtime.StateMachines;
+using UnityEngine;
+
+namespace NJN.Runtime.Controllers.Enemy
+{
+    public class EnemyPatrolState : EnemyActiveState
+    {
+        private float _closeEnough = 0.5f;
+        private int _patrolPointIndex = 0;
+        private Vector2 _direction;
+        
+        public EnemyPatrolState(EnemyController controller, ControllerStateMachine<CharacterState, BaseCharacterController> stateMachine) : base(controller, stateMachine)
+        {
+        }
+
+        public override void Enter()
+        {
+            base.Enter();
+
+            if (_enemy.PatrolPoints.Count > 0)
+                GetMoveDirection();
+            else
+                _stateMachine.ChangeState(_enemy.IdleState);
+        }
+
+        public override void LogicUpdate()
+        {
+            base.LogicUpdate();
+            
+            _enemy.Movement.Move(_direction, _enemy.PatrolSpeed);
+
+            if (ShouldIdle())
+            {
+                _patrolPointIndex = (_patrolPointIndex + 1) % _enemy.PatrolPoints.Count;
+                _stateMachine.ChangeState(_enemy.IdleState);
+            }
+        }
+
+        public override void PhysicsUpdate()
+        {
+            base.PhysicsUpdate();
+        }
+
+        public override void Exit()
+        {
+            base.Exit();
+        }
+        
+        private void GetMoveDirection()
+        {
+            Vector2 destination = GetPatrolPosition();
+            Vector2 direction = destination - (Vector2)_enemy.transform.position;
+            _direction = direction.x > 0 ? Vector2.right : Vector2.left;
+        }
+
+        private Vector2 GetPatrolPosition()
+        {
+            return _enemy.PatrolPoints[_patrolPointIndex];
+        }
+        
+        private bool ShouldIdle()
+        {
+            if (Vector2.Distance(GetPatrolPosition(), _enemy.transform.position) < _closeEnough)
+                return true;
+
+            return false;
+        }
+    }
+}

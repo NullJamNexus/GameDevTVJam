@@ -8,5 +8,8 @@ namespace NJN.Scriptables.Settings
     {
         [field: BoxGroup("Player Settings"), SerializeField]
         public GameObject PlayerPrefab { get; private set; }
+        
+        [field: BoxGroup("Enemy Settings"), SerializeField]
+        public GameObject EnemyPrefab { get; private set; }
     }
 }
