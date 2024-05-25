@@ -9,9 +9,6 @@ namespace NJN.Runtime.Controllers.Player
 {
     public class PlayerController : BaseCharacterController
     {
-        [field: BoxGroup("Stats"), SerializeField]
-        public float MovementSpeed { get; private set; } = 5f;
-        
         public IInputProvider InputProvider { get; private set; }
 
         #region Components
