@@ -20,6 +20,7 @@ namespace NJN.Runtime.Controllers.Enemy
         #region Components
 
         public IMovement Movement { get; private set; }
+        public IDamageProcessor DamageProcessor { get; private set; }
 
         #endregion
         
@@ -51,6 +52,7 @@ namespace NJN.Runtime.Controllers.Enemy
             base.Awake();
             
             Movement = VerifyComponent<IMovement>();
+            DamageProcessor = VerifyComponent<IDamageProcessor>();
         }
         
         private void Start()

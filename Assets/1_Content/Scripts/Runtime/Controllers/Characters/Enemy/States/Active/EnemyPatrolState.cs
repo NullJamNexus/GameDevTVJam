@@ -9,6 +9,7 @@ namespace NJN.Runtime.Controllers.Enemy
         private float _closeEnough = 0.5f;
         private int _patrolPointIndex = 0;
         private Vector2 _direction;
+        private Vector2 _patrolDestination;
         
         public EnemyPatrolState(EnemyController controller, ControllerStateMachine<CharacterState, BaseCharacterController> stateMachine) : base(controller, stateMachine)
         {
@@ -49,19 +50,16 @@ namespace NJN.Runtime.Controllers.Enemy
         
         private void GetMoveDirection()
         {
-            Vector2 destination = GetPatrolPosition();
-            Vector2 direction = destination - (Vector2)_enemy.transform.position;
+            _patrolDestination = _enemy.PatrolPoints[_patrolPointIndex];
+            Vector2 direction = _patrolDestination - (Vector2)_enemy.transform.position;
             _direction = direction.x > 0 ? Vector2.right : Vector2.left;
-        }
-
-        private Vector2 GetPatrolPosition()
-        {
-            return _enemy.PatrolPoints[_patrolPointIndex];
         }
         
         private bool ShouldIdle()
         {
-            if (Vector2.Distance(GetPatrolPosition(), _enemy.transform.position) < _closeEnough)
+            float distance = Mathf.Abs(_patrolDestination.x - _enemy.transform.position.x);
+            
+            if (distance < _closeEnough)
                 return true;
 
             return false;
