@@ -14,6 +14,8 @@ namespace NJN.Runtime.Controllers.Player
         #region Components
 
         public IMovement Movement { get; private set; }
+        
+        public IClimbing Climbing {get; private set;}
 
         #endregion
         
@@ -21,6 +23,7 @@ namespace NJN.Runtime.Controllers.Player
 
         public PlayerIdleState IdleState { get; private set; }
         public PlayerMoveState MoveState { get; private set; }
+        public PlayerClimbState ClimbState{get; private set;}
         public CharacterBusyState BusyState { get; private set; }
         public CharacterDeadState DeadState { get; private set; }
 
@@ -36,6 +39,7 @@ namespace NJN.Runtime.Controllers.Player
         {
             IdleState = new PlayerIdleState(this, StateMachine);
             MoveState = new PlayerMoveState(this, StateMachine);
+            ClimbState = new PlayerClimbState(this, StateMachine);
             BusyState = new CharacterBusyState(this, StateMachine);
             DeadState = new CharacterDeadState(this, StateMachine);
             
@@ -57,5 +61,8 @@ namespace NJN.Runtime.Controllers.Player
         }
 
         #endregion
+
+        //Check layer of ladder and initiate climbing
+        
     }
 }
