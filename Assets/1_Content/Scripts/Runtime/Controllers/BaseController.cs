@@ -23,7 +23,22 @@ namespace NJN.Runtime.Controllers
         }
 
         protected abstract void InitializeStateMachine();
+
+        protected virtual void Update()
+        {
+            StateMachine.CurrentState.LogicUpdate();
+        }
         
+        protected virtual void FixedUpdate()
+        {
+            StateMachine.CurrentState.PhysicsUpdate();
+        }
+        
+        protected virtual void OnDestroy()
+        {
+            StateMachine.CleanUp();
+        }
+
         protected T VerifyComponent<T>() where T : IComponent
         {
             EnsureInterface<T>();

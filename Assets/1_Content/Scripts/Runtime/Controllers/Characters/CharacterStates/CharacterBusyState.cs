@@ -4,8 +4,8 @@ namespace NJN.Runtime.Controllers.States
 {
     public class CharacterBusyState : CharacterState
     {
-        public CharacterBusyState(CharacterController controller, ControllerStateMachine<CharacterState, 
-            CharacterController> stateMachine) : base(controller, stateMachine)
+        public CharacterBusyState(BaseCharacterController controller, ControllerStateMachine<CharacterState, 
+            BaseCharacterController> stateMachine) : base(controller, stateMachine)
         {
         }
     }

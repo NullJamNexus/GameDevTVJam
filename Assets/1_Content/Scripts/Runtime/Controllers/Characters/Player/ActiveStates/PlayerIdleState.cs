@@ -8,7 +8,7 @@ namespace NJN.Runtime.Controllers.Player
     {
         private PlayerController _player;
         
-        public PlayerIdleState(PlayerController controller, ControllerStateMachine<CharacterState, CharacterController> stateMachine) : base(controller, stateMachine)
+        public PlayerIdleState(PlayerController controller, ControllerStateMachine<CharacterState, BaseCharacterController> stateMachine) : base(controller, stateMachine)
         {
             _player = controller;
         }

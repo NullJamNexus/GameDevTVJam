@@ -10,7 +10,7 @@ namespace NJN.Runtime.Controllers.Player
         private PlayerController _player;
         
         public PlayerMoveState(PlayerController controller, ControllerStateMachine<CharacterState, 
-            CharacterController> stateMachine) : base(controller, stateMachine)
+            BaseCharacterController> stateMachine) : base(controller, stateMachine)
         {
             _player = controller;
         }
@@ -23,8 +23,9 @@ namespace NJN.Runtime.Controllers.Player
         public override void LogicUpdate()
         {
             base.LogicUpdate();
-            
-            _player.Movement.Move(_player.InputProvider.MoveInput.normalized, _player.MovementSpeed);
+
+            Vector2 horizontalMove = new (_player.InputProvider.MoveInput.x, 0f);
+            _player.Movement.Move(horizontalMove, _player.MovementSpeed);
             
             if (ShouldIdle())
             {
