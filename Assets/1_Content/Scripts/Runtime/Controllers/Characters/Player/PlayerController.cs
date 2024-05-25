@@ -65,10 +65,7 @@ namespace NJN.Runtime.Controllers.Player
 
         #endregion
 
-        //Check layer of ladder
-        if ((_player.InputHandler.Movement.y > 0 && _enemy.Movement.LadderLayer & (1 << colldier.gameObject.layer)) != 0)
-            {
-
-            }
+        //Check layer of ladder and initiate climbing
+        
     }
 }

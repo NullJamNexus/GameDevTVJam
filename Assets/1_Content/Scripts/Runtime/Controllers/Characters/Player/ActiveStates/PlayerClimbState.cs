@@ -10,7 +10,7 @@ namespace NJN.Runtime.Controllers.Player
         private PlayerController _player;
         
         public PlayerClimbState(PlayerController controller, ControllerStateMachine<CharacterState, 
-            CharacterController> stateMachine) : base(controller, stateMachine)
+            BaseCharacterController> stateMachine) : base(controller, stateMachine)
         {
             _player = controller;
         }
@@ -24,7 +24,8 @@ namespace NJN.Runtime.Controllers.Player
         {
             base.LogicUpdate();
             
-            _player.Climbing.Climb(_player.InputProvider.MoveInput, _player.MovementSpeed);
+            // fix this
+            //_player.Climbing.Climb(_player.InputProvider.MoveInput, _player.MovementSpeed);
             
             if (ShouldIdle())
             {
