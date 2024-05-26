@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using NJN.Runtime.Components;
 using NJN.Runtime.Controllers.States;
+using NJN.Runtime.Systems.Distraction;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace NJN.Runtime.Controllers.Enemy
 {
-    public class EnemyController : BaseCharacterController
+    public enum E_FaceDirection {right, left};
+    public class EnemyController : BaseCharacterController, I_Distractable
     {
         [field: BoxGroup("Settings"), SerializeField]
         public List<Vector2> PatrolPoints { get; private set; }
@@ -16,6 +18,8 @@ namespace NJN.Runtime.Controllers.Enemy
 
         [field: BoxGroup("Settings"), SerializeField]
         public float PatrolSpeed { get; private set; } = 5f;
+
+        public E_FaceDirection _faceDirection { get; private set; }
         
         #region Components
 
@@ -33,6 +37,7 @@ namespace NJN.Runtime.Controllers.Enemy
         public EnemyAttackState AttackState { get; private set; }
         public CharacterBusyState BusyState { get; private set; }
         public CharacterDeadState DeadState { get; private set; }
+        public EnemyDistractedState DistractedState { get; private set; }
         
         #endregion
         
@@ -44,6 +49,7 @@ namespace NJN.Runtime.Controllers.Enemy
             AttackState = new EnemyAttackState(this, StateMachine);
             BusyState = new CharacterBusyState(this, StateMachine);
             DeadState = new CharacterDeadState(this, StateMachine);
+            DistractedState = new EnemyDistractedState(this, StateMachine);
             
             StateMachine.Initialize(BusyState);
         }
@@ -60,6 +66,21 @@ namespace NJN.Runtime.Controllers.Enemy
         private void Start()
         {
             StateMachine.ChangeState(IdleState);
+        }
+
+        public void ChangeFaceDirection(E_FaceDirection newDirection)
+        {
+            _faceDirection = newDirection;
+        }
+        public void Distraction(Vector3 position, float distractionTime)
+        {
+            if (StateMachine.CurrentState == ChaseState)
+                return;
+            if (StateMachine.CurrentState == AttackState)
+                return;
+
+            DistractedState.Distraction(position, distractionTime);
+            StateMachine.ChangeState(DistractedState);
         }
     }
 }
