@@ -1,4 +1,5 @@
-﻿using NJN.Runtime.Components;
+﻿using System;
+using NJN.Runtime.Components;
 using NJN.Runtime.Controllers.States;
 using NJN.Runtime.Input;
 using Sirenix.OdinInspector;
@@ -11,9 +12,15 @@ namespace NJN.Runtime.Controllers.Player
     {
         public IInputProvider InputProvider { get; private set; }
 
+        private SignalBus _signalBus;
+        
+        // [field: Inject(Id = "MainCamera")]
+        // public Camera MainCamera;
+        
         #region Components
 
         public IMovement Movement { get; private set; }
+        public ISurvivalStats Stats { get; private set; }
 
         #endregion
         
@@ -28,9 +35,10 @@ namespace NJN.Runtime.Controllers.Player
         #endregion
 
         [Inject]
-        private void Construct(IInputProvider inputProvider)
+        private void Construct(IInputProvider inputProvider, SignalBus signalBus)
         {
             InputProvider = inputProvider;
+            _signalBus = signalBus;
         }
         
         protected override void InitializeStateMachine()
@@ -51,16 +59,29 @@ namespace NJN.Runtime.Controllers.Player
             base.Awake();
 
             Movement = VerifyComponent<IMovement>();
+            Stats = VerifyComponent<ISurvivalStats>();
         }
-        
+
+        private void OnEnable()
+        {
+            Stats.DiedEvent += OnDeath;
+        }
+
         private void Start()
         {
             StateMachine.ChangeState(IdleState);
         }
 
-        #endregion
+        private void OnDisable()
+        {
+            Stats.DiedEvent -= OnDeath;
+        }
 
-        //Check layer of ladder and initiate climbing
+        #endregion
         
+        private void OnDeath()
+        {
+            _signalBus.Fire(new PlayerDiedSignal());
+        }
     }
 }

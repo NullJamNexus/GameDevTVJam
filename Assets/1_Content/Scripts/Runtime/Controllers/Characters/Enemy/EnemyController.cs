@@ -21,6 +21,7 @@ namespace NJN.Runtime.Controllers.Enemy
 
         public IMovement Movement { get; private set; }
         public IDamageProcessor DamageProcessor { get; private set; }
+        public IHealth Health { get; private set; }
 
         #endregion
         
@@ -53,6 +54,7 @@ namespace NJN.Runtime.Controllers.Enemy
             
             Movement = VerifyComponent<IMovement>();
             DamageProcessor = VerifyComponent<IDamageProcessor>();
+            Health = VerifyComponent<IHealth>();
         }
         
         private void Start()

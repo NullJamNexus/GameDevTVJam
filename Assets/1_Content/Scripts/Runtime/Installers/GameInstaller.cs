@@ -8,6 +8,8 @@ namespace NJN.Runtime.Installers
     {
         public override void InstallBindings()
         {
+            SignalBusInstaller.Install(Container);
+            
             // Input
             InputHandler inputHandler = gameObject.GetOrAdd<InputHandler>();
             Container.BindInterfacesTo<InputHandler>().FromInstance(inputHandler).AsSingle().NonLazy();

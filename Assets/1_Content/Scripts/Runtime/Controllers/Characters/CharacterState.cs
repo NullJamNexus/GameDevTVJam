@@ -9,7 +9,7 @@ namespace NJN.Runtime.Controllers
             BaseCharacterController> stateMachine) : base(controller, stateMachine)
         {
         }
-        
+
         public virtual void OnCollisionEnter(Collision2D collision) { }
         public virtual void OnCollisionStay(Collision2D collision) { }
         public virtual void OnCollisionExit(Collision2D collision) { }

@@ -21,6 +21,16 @@ namespace NJN.Runtime.Controllers.Player
             _player.StateName = _stateMachine.CurrentState.GetType().Name;
         }
 
+        public override void OnTriggerEnter(Collider2D collider)
+        {
+            base.OnTriggerEnter(collider);
+            
+            if (collider.gameObject.TryGetComponent(out ICollectable collectable))
+            {
+                collectable.Collect(_player);
+            }
+        }
+
         public override void OnTriggerStay(Collider2D collider)
         {
             base.OnTriggerStay(collider);
