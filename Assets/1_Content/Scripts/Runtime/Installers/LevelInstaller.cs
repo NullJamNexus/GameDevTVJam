@@ -1,6 +1,7 @@
 ﻿using NJN.Runtime.Components;
 using NJN.Runtime.Controllers.Player;
 using NJN.Runtime.Factories;
+using NJN.Runtime.Managers;
 using NJN.Runtime.Systems;
 using NJN.Runtime.Systems.Spawners;
 using NJN.Scriptables.Settings;
@@ -28,6 +29,9 @@ namespace NJN.Runtime.Installers
             // Signals
             Container.DeclareSignal<PlayerDiedSignal>();
             Container.DeclareSignal<ResourceCollectedSignal>();
+
+            //Managers
+            Container.BindInterfacesAndSelfTo<LevelManager>().FromComponentsInHierarchy().AsSingle().NonLazy();
         }
     }
 }
