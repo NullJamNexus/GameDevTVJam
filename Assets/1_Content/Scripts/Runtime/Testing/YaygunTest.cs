@@ -1,28 +1,32 @@
 ﻿using System;
+using System.Collections.Generic;
 using NJN.Runtime.Controllers.Enemy;
-using NJN.Runtime.Controllers.Player;
-using NJN.Runtime.Factories;
-using NJN.Runtime.Input;
 using NJN.Runtime.Systems.Distraction;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using Zenject;
+using Vit.Utilities;
+
 
 namespace NJN.Runtime.Testing
 {
     public class YaygunTest : MonoBehaviour
     {
+        [SerializeField, ValueDropdown("GetLayerNames")]
+        private string _selectedLayer;
+
+        private IEnumerable<string> GetLayerNames()
+        {
+            return Tools.GetLayerNames();
+        }
+
         [SerializeField] private bool _fireDistraction;
         [SerializeField] private float _radius;
         [SerializeField] private float _time;
 
-        private void Update()
+        [Button(ButtonSizes.Large)]
+        private void FireDistraction()
         {
-            if (_fireDistraction)
-            {
-                _fireDistraction = false;
-                DistractionSystem.FireDistraction(transform.position, _radius, _time);
-            }
+            DistractionSystem.FireDistraction(transform.position, _radius, _time, LayerMask.GetMask(_selectedLayer));          
         }
         [Button(ButtonSizes.Large)]
         private void ChasePlayer()
