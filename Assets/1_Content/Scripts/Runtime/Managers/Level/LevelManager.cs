@@ -33,6 +33,10 @@ namespace NJN.Runtime.Managers
             _signalBus.Subscribe<ResourceCollectedSignal>(OnResourceCollected);
         }
 
+        private void Start(){
+            SpawnPlayer();
+        }
+
         [Inject]
         private void Construct(ICharacterFactory characterFactory, IEnemySpawner enemySpawner, IItemSpawner itemSpawner,
             IInputProvider inputProvider, SignalBus signalBus)
