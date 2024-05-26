@@ -4,6 +4,7 @@ using NJN.Runtime.Controllers.Player;
 using NJN.Runtime.Factories;
 using NJN.Runtime.Input;
 using NJN.Runtime.Systems;
+using NJN.Runtime.Systems.Spawners;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using Zenject;
@@ -14,9 +15,13 @@ namespace NJN.Runtime.Managers
     {
         [field: FoldoutGroup("Level Inventory"), SerializeField, HideLabel]
         public LevelInventory LevelInventory { get; private set; }
+
+        [field: BoxGroup("Items"), SerializeField]
+        private int _itemsToSpawn = 10;
         
         private ICharacterFactory _characterFactory;
         private IEnemySpawner _enemySpawner;
+        private IItemSpawner _itemSpawner;
         private IInputProvider _inputProvider;
         private SignalBus _signalBus;
         
@@ -29,11 +34,12 @@ namespace NJN.Runtime.Managers
         }
 
         [Inject]
-        private void Construct(ICharacterFactory characterFactory, IEnemySpawner enemySpawner, IInputProvider inputProvider,
-            SignalBus signalBus)
+        private void Construct(ICharacterFactory characterFactory, IEnemySpawner enemySpawner, IItemSpawner itemSpawner,
+            IInputProvider inputProvider, SignalBus signalBus)
         {
             _characterFactory = characterFactory;
             _enemySpawner = enemySpawner;
+            _itemSpawner = itemSpawner;
             _inputProvider = inputProvider;
             _signalBus = signalBus;
         }
@@ -56,6 +62,13 @@ namespace NJN.Runtime.Managers
         private void StartEnemySpawner()
         {
             _enemySpawner.StartSpawner();
+        }
+        
+        [Button(ButtonSizes.Large)]
+        private void SpawnItems()
+        {
+            for (int i = 0; i < _itemsToSpawn; i++)
+                _itemSpawner.SpawnItem();
         }
         
         private void OnPlayerDied(PlayerDiedSignal signal)

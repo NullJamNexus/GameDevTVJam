@@ -19,7 +19,7 @@ namespace NJN.Runtime.Installers
         {
             // Factories
             Container.Bind<ICharacterFactory>().To<CharacterFactory>().AsSingle().WithArguments(_levelSettingsData).NonLazy();
-            Container.Bind<IItemFactory>().To<ItemFactory>().AsSingle().NonLazy();
+            Container.BindInterfacesTo<ItemFactory>().AsSingle().NonLazy();
             
             // Spawners
             Container.BindInterfacesTo<EnemySpawner>().AsSingle().NonLazy();
