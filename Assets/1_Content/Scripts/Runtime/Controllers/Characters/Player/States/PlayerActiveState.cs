@@ -22,38 +22,59 @@ namespace NJN.Runtime.Controllers.Player
             _player.StateName = _stateMachine.CurrentState.GetType().Name;
         }
 
+        public override void LogicUpdate()
+        {
+            base.LogicUpdate();
+            
+            if (_stateMachine.CurrentState != _player.ClimbState && ShouldClimb(_player.Movement.Climbable))
+            {
+                _stateMachine.ChangeState(_player.ClimbState);
+                return;
+            }
+        }
+
         public override void OnTriggerEnter(Collider2D collider)
         {
             base.OnTriggerEnter(collider);
             
             if (collider.gameObject.TryGetComponent(out ICollectable collectable))
             {
-                collectable.Collect(_player);
+                collectable.Collect(_player.Stats);
             }
-        }
-
-        public override void OnTriggerStay(Collider2D collider)
-        {
-            base.OnTriggerStay(collider);
             
-            if (ShouldClimb() && collider.gameObject.TryGetComponent(out IClimbable climbable))
+            if (collider.gameObject.TryGetComponent(out IClimbable climbable))
             {
-                _player.StateMachine.ChangeState(_player.ClimbState);
-            }
-    //attempting to stop player from clipping through floor when climbing
-            if(collider.gameObject.layer==3){
-                _player.StateMachine.ChangeState(_player.IdleState);
-                _player.transform.position = new Vector2(_player.transform.position.x,_player.transform.position.y+0.2f);
-                Debug.Log("Stopped climbing due to touching an obstacle");
+                _player.Movement.Climbable = climbable;
             }
         }
         
-        protected virtual bool ShouldClimb()
+        public override void OnTriggerExit(Collider2D collider)
         {
-            if (_stateMachine.CurrentState == _player.ClimbState)
+            base.OnTriggerExit(collider);
+            
+            if (collider.TryGetComponent(out IClimbable climbable) && climbable == _player.Movement.Climbable)
+            {
+                _player.Movement.Climbable = null;
+            }
+        }
+        
+        protected virtual bool ShouldClimb(IClimbable climbable)
+        {
+            if (climbable == null)
                 return false;
             
-            return _player.InputProvider.MoveInput.y != 0;
+            float moveInputY = _player.InputProvider.MoveInput.y;
+            float playerPosY = _player.transform.position.y;
+            float climbableTopY = climbable.GetTop().y;
+            float climbableBottomY = climbable.GetBottom().y;
+
+            if (moveInputY > 0 && playerPosY >= climbableTopY)
+                return false;
+
+            if (moveInputY < 0 && playerPosY <= climbableBottomY)
+                return false;
+
+            return moveInputY != 0;
         }
     }
 }

@@ -5,9 +5,9 @@ namespace NJN.Runtime.Components
 {
     public class FoodResource : Resource
     {
-        public override void Collect(PlayerController player)
+        public override void Collect(ISurvivalStats stats)
         {
-            player.Stats.AddFood(Amount);
+            _signalBus.Fire(new ResourceCollectedSignal(this));
             Destroy(gameObject);
         }
     }

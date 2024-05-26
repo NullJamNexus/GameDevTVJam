@@ -4,6 +4,6 @@ namespace NJN.Runtime.Components
 {
     public interface ICollectable
     {
-        public void Collect(PlayerController player);
+        public void Collect(ISurvivalStats stats);
     }
 }

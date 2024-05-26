@@ -1,6 +1,4 @@
-﻿using System;
-using NJN.Runtime.Controllers.Player;
-using Sirenix.OdinInspector;
+﻿using Sirenix.OdinInspector;
 using UnityEngine;
 using Zenject;
 
@@ -19,6 +17,6 @@ namespace NJN.Runtime.Components
             _signalBus = signalBus;
         }
 
-        public abstract void Collect(PlayerController player);
+        public abstract void Collect(ISurvivalStats stats);
     }
 }
