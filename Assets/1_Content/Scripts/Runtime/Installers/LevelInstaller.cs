@@ -1,4 +1,5 @@
 ﻿using NJN.Runtime.Factories;
+using NJN.Runtime.Systems;
 using NJN.Scriptables.Settings;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -14,7 +15,10 @@ namespace NJN.Runtime.Installers
         public override void InstallBindings()
         {
             // Player
-            Container.Bind<ICharacterFactory>().To<CharacterFactory>().AsSingle().WithArguments(_levelSettingsData);
+            Container.Bind<ICharacterFactory>().To<CharacterFactory>().AsSingle().WithArguments(_levelSettingsData).NonLazy();
+            
+            // Spawners
+            Container.BindInterfacesTo<EnemySpawner>().AsSingle().NonLazy();
         }
     }
 }

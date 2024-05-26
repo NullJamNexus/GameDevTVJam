@@ -14,8 +14,6 @@ namespace NJN.Runtime.Controllers.Player
         #region Components
 
         public IMovement Movement { get; private set; }
-        
-        public IClimbing Climbing {get; private set;}
 
         #endregion
         
@@ -23,7 +21,7 @@ namespace NJN.Runtime.Controllers.Player
 
         public PlayerIdleState IdleState { get; private set; }
         public PlayerMoveState MoveState { get; private set; }
-        public PlayerClimbState ClimbState{get; private set;}
+        public PlayerClimbState ClimbState {get; private set;}
         public CharacterBusyState BusyState { get; private set; }
         public CharacterDeadState DeadState { get; private set; }
 

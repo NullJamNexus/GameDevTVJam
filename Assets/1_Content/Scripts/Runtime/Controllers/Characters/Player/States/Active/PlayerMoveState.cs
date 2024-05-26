@@ -5,14 +5,11 @@ using UnityEngine;
 
 namespace NJN.Runtime.Controllers.Player
 {
-    public class PlayerMoveState : CharacterActiveState
+    public class PlayerMoveState : PlayerActiveState
     {
-        private PlayerController _player;
-        
         public PlayerMoveState(PlayerController controller, ControllerStateMachine<CharacterState, 
             BaseCharacterController> stateMachine) : base(controller, stateMachine)
         {
-            _player = controller;
         }
 
         public override void Enter()
@@ -45,7 +42,7 @@ namespace NJN.Runtime.Controllers.Player
         
         private bool ShouldIdle()
         {
-            return _player.InputProvider.MoveInput == Vector2.zero;
+            return _player.InputProvider.MoveInput.x == 0;
         }
     }
 }
