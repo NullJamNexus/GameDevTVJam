@@ -1,4 +1,5 @@
-﻿using NJN.Runtime.Components;
+﻿using ModestTree;
+using NJN.Runtime.Components;
 using NJN.Runtime.Controllers.States;
 using NJN.Runtime.StateMachines;
 using UnityEngine;
@@ -38,6 +39,12 @@ namespace NJN.Runtime.Controllers.Player
             if (ShouldClimb() && collider.gameObject.TryGetComponent(out IClimbable climbable))
             {
                 _player.StateMachine.ChangeState(_player.ClimbState);
+            }
+    //attempting to stop player from clipping through floor when climbing
+            if(collider.gameObject.layer==3){
+                _player.StateMachine.ChangeState(_player.IdleState);
+                _player.transform.position = new Vector2(_player.transform.position.x,_player.transform.position.y+0.2f);
+                Debug.Log("Stopped climbing due to touching an obstacle");
             }
         }
         
