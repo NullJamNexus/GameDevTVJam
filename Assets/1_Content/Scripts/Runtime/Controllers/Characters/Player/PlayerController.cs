@@ -3,6 +3,7 @@ using NJN.Runtime.Components;
 using NJN.Runtime.Controllers.States;
 using NJN.Runtime.Input;
 using Sirenix.OdinInspector;
+using Unity.Cinemachine;
 using UnityEngine;
 using Zenject;
 
@@ -11,16 +12,15 @@ namespace NJN.Runtime.Controllers.Player
     public class PlayerController : BaseCharacterController
     {
         public IInputProvider InputProvider { get; private set; }
+        public CinemachineCamera Camera { get; private set; }
 
         private SignalBus _signalBus;
-        
-        // [field: Inject(Id = "MainCamera")]
-        // public Camera MainCamera;
         
         #region Components
 
         public IMovement Movement { get; private set; }
         public ISurvivalStats Stats { get; private set; }
+        public IInteractor Interactor { get; private set; }
 
         #endregion
         
@@ -35,10 +35,12 @@ namespace NJN.Runtime.Controllers.Player
         #endregion
 
         [Inject]
-        private void Construct(IInputProvider inputProvider, SignalBus signalBus)
+        private void Construct(IInputProvider inputProvider, SignalBus signalBus,
+            [Inject(Id = "FollowCamera")] CinemachineCamera vmCamera)
         {
             InputProvider = inputProvider;
             _signalBus = signalBus;
+            Camera = vmCamera;
         }
         
         protected override void InitializeStateMachine()
@@ -60,6 +62,7 @@ namespace NJN.Runtime.Controllers.Player
 
             Movement = VerifyComponent<IMovement>();
             Stats = VerifyComponent<ISurvivalStats>();
+            Interactor = VerifyComponent<IInteractor>();
         }
 
         private void OnEnable()
@@ -69,6 +72,7 @@ namespace NJN.Runtime.Controllers.Player
 
         private void Start()
         {
+            Camera.Follow = transform;
             StateMachine.ChangeState(IdleState);
         }
 

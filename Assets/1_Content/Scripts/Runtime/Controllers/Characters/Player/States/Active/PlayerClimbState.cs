@@ -28,10 +28,9 @@ namespace NJN.Runtime.Controllers.Player
         {
             base.LogicUpdate();
 
-            Vector2 climbInput = new (0f, _player.InputProvider.MoveInput.y);
-            _player.Movement.Move(climbInput, _player.MovementSpeed);
             
-            if (ShouldIdle())
+            
+            if (!ShouldClimb(_player.Movement.Climbable))
             {
                 _player.StateMachine.ChangeState(_player.IdleState);
             }
@@ -40,29 +39,18 @@ namespace NJN.Runtime.Controllers.Player
         public override void PhysicsUpdate()
         {
             base.PhysicsUpdate();
-        }
-
-        public override void OnTriggerExit(Collider2D collider)
-        {
-            base.OnTriggerExit(collider);
             
-            if (collider.TryGetComponent(out IClimbable climbable))
-            {
-                _stateMachine.ChangeState(_player.IdleState);
-            }
+            Vector2 climbInput = new (0f, _player.InputProvider.MoveInput.y);
+            _player.Movement.PhysicsMove(climbInput, false);
         }
 
         public override void Exit()
         {
             base.Exit();
             
+            _player.Movement.PhysicsStop();
             _player.Rigidbody.gravityScale = _originalGravity;
             _player.Collider.isTrigger = false;
-        }
-        
-        private bool ShouldIdle()
-        {
-            return _player.InputProvider.MoveInput.y == 0;
         }
     }
 }

@@ -48,6 +48,17 @@ namespace NJN.Runtime.Managers
             _signalBus = signalBus;
         }
         
+        private void OnEnable()
+        {
+            _signalBus.Subscribe<PlayerDiedSignal>(OnPlayerDied);
+            _signalBus.Subscribe<ResourceCollectedSignal>(OnResourceCollected);
+        }
+
+        private void Start()
+        {
+            SpawnPlayer();
+        }
+
         private void OnDisable()
         {
             _signalBus.TryUnsubscribe<PlayerDiedSignal>(OnPlayerDied);
@@ -57,6 +68,9 @@ namespace NJN.Runtime.Managers
         [Button(ButtonSizes.Large)]
         private void SpawnPlayer()
         {
+            if (Player != null)
+                Player.transform.position = Vector2.zero;
+            
             Player = _characterFactory.CreatePlayer();
             Player.transform.position = Vector2.zero;
             _inputProvider.EnablePlayerControls();

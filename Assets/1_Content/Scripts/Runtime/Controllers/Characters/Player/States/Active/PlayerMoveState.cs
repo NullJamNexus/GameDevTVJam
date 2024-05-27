@@ -7,6 +7,8 @@ namespace NJN.Runtime.Controllers.Player
 {
     public class PlayerMoveState : PlayerActiveState
     {
+        private bool _isSprinting;
+        
         public PlayerMoveState(PlayerController controller, ControllerStateMachine<CharacterState, 
             BaseCharacterController> stateMachine) : base(controller, stateMachine)
         {
@@ -21,8 +23,7 @@ namespace NJN.Runtime.Controllers.Player
         {
             base.LogicUpdate();
 
-            Vector2 horizontalMove = new (_player.InputProvider.MoveInput.x, 0f);
-            _player.Movement.Move(horizontalMove, _player.MovementSpeed);
+            _isSprinting = _player.InputProvider.SprintInput.Held;
             
             if (ShouldIdle())
             {
@@ -33,11 +34,16 @@ namespace NJN.Runtime.Controllers.Player
         public override void PhysicsUpdate()
         {
             base.PhysicsUpdate();
+            
+            Vector2 horizontalMove = new (_player.InputProvider.MoveInput.x, 0f);
+            _player.Movement.PhysicsHorizontalMove(horizontalMove, _isSprinting);
         }
 
         public override void Exit()
         {
             base.Exit();
+            
+            _player.Movement.PhysicsStop();
         }
         
         private bool ShouldIdle()

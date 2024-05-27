@@ -2,8 +2,8 @@
 
 namespace NJN.Runtime.Components
 {
-    public interface ICollectable
+    public interface IInteractable
     {
-        public void Collect(ISurvivalStats stats);
+        public void Interact(PlayerController player);
     }
 }

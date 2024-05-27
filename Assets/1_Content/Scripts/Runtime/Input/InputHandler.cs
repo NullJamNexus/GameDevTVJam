@@ -18,6 +18,8 @@ namespace NJN.Runtime.Input
         // Buttons
         [field: FoldoutGroup("Debugging"), SerializeField, ReadOnly, InlineProperty]
         public InputState InteractInput { get; private set; }
+        [field: FoldoutGroup("Debugging"), SerializeField, ReadOnly, InlineProperty]
+        public InputState SprintInput { get; private set; }
         
         #endregion
 
@@ -26,6 +28,7 @@ namespace NJN.Runtime.Input
             _inputActions = new InputSystem();
 
             InteractInput = new InputState(_inputActions.Player.Interact);
+            SprintInput = new InputState(_inputActions.Player.Sprint);
         }
 
         private void OnEnable()
@@ -42,6 +45,7 @@ namespace NJN.Runtime.Input
         private void LateUpdate()
         {
             InteractInput.Reset();
+            SprintInput.Reset();
         }
         
         public void EnablePlayerControls()

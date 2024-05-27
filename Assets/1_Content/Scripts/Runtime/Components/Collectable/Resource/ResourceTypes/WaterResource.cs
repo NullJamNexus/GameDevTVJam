@@ -5,9 +5,9 @@ namespace NJN.Runtime.Components
 {
     public class WaterResource : Resource
     {
-        public override void Collect(PlayerController player)
+        public override void Collect(ISurvivalStats stats)
         {
-            player.Stats.AddWater(Amount);
+            stats.AddWater(Amount);
             Destroy(gameObject);
         }
     }

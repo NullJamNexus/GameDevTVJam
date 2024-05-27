@@ -9,9 +9,16 @@ namespace NJN.Runtime.Managers
     public class LevelInventory
     {
         [field: SerializeField, ReadOnly]
+        public float Food { get; private set; }
+        [field: SerializeField, ReadOnly]
         public float Fuel { get; private set; }
         [field: SerializeField, ReadOnly]
         public int Scraps { get; private set; }
+        
+        public void AddFood(float amount)
+        {
+            Food += amount;
+        }
         
         public void AddFuel(float amount)
         {
@@ -25,7 +32,11 @@ namespace NJN.Runtime.Managers
         
         public void AddResource(Resource resource)
         {
-            if (resource is FuelResource fuelResource)
+            if (resource is FoodResource foodResource)
+            {
+                AddFuel(foodResource.Amount);
+            }
+            else if (resource is FuelResource fuelResource)
             {
                 AddFuel(fuelResource.Amount);
             }

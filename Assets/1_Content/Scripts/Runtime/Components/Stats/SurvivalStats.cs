@@ -6,15 +6,15 @@ namespace NJN.Runtime.Components
 {
     public class SurvivalStats : Health, ISurvivalStats
     {
-        [FoldoutGroup("Food"), SerializeField, HideLabel]
-        private Stat _foodStat;
-        [FoldoutGroup("Food"), SerializeField]
-        private float _foodLossRate;
+        [FoldoutGroup("Hunger"), SerializeField, HideLabel]
+        private Stat _hungerStat;
+        [FoldoutGroup("Hunger"), SerializeField]
+        private float _hungerLossRate;
         
-        [FoldoutGroup("Water"), SerializeField, HideLabel]
-        private Stat _waterStat;
-        [FoldoutGroup("Water"), SerializeField]
-        private float _waterLossRate;
+        [FoldoutGroup("Thirst"), SerializeField, HideLabel]
+        private Stat _thirstStat;
+        [FoldoutGroup("Thirst"), SerializeField]
+        private float _thirstLossRate;
         
         [FoldoutGroup("Damage Rate"), SerializeField]
         private float _damageRate;
@@ -25,22 +25,22 @@ namespace NJN.Runtime.Components
         [Button(ButtonSizes.Large)]
         private void Reset()
         {
-            _foodStat.Reset();
-            _waterStat.Reset();
+            _hungerStat.Reset();
+            _thirstStat.Reset();
         }
         
         protected override void Awake()
         {
             base.Awake();
             
-            _foodStat.Reset();
-            _waterStat.Reset();
+            _hungerStat.Reset();
+            _thirstStat.Reset();
         }
         
         private void Update()
         {
-            StatLossOvertime(_foodStat, _foodLossRate, FoodChangedEvent);
-            StatLossOvertime(_waterStat, _waterLossRate, WaterChangedEvent);
+            StatLossOvertime(_hungerStat, _hungerLossRate, FoodChangedEvent);
+            StatLossOvertime(_thirstStat, _thirstLossRate, WaterChangedEvent);
         }
 
         private void StatLossOvertime(Stat stat, float lossRate, Action<float, float> changedEvent)
@@ -59,12 +59,12 @@ namespace NJN.Runtime.Components
 
         public void AddFood(float amount)
         {
-            _foodStat.Current = Mathf.Min(_foodStat.Current + amount, _foodStat.Max);
+            _hungerStat.Current = Mathf.Min(_hungerStat.Current + amount, _hungerStat.Max);
         }
         
         public void AddWater(float amount)
         {
-            _waterStat.Current = Mathf.Min(_waterStat.Current + amount, _waterStat.Max);
+            _thirstStat.Current = Mathf.Min(_thirstStat.Current + amount, _thirstStat.Max);
         }
     }
 }
