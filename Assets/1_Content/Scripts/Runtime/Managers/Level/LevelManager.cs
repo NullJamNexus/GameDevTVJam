@@ -94,7 +94,7 @@ namespace NJN.Runtime.Managers
         
         private void OnResourceCollected(ResourceCollectedSignal signal)
         {
-            LevelInventory.AddResource(signal.Resource);
+            LevelInventory.AddResources(signal.FoodAmount, signal.FuelAmount, signal.ScrapsAmount);
         }
     }
 }

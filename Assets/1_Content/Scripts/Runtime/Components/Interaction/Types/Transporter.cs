@@ -6,42 +6,20 @@ using Zenject;
 
 namespace NJN.Runtime.Components
 {
-    public class Transporter : BaseComponent, IInteractable
+    public class Transporter : InteractableComponent
     {
         [BoxGroup("Teleport Settings"), SerializeField]
         private Transform _target;
         [BoxGroup("Teleport Settings"), SerializeField]
         private Vector2 _offset;
-
-        [BoxGroup("Interaction"), SerializeField]
-        private string _promptText = "Press [E]";
-        [BoxGroup("Interaction"), SerializeField]
-        private Vector2 _promptOffset;
         
-        private InteractionPrompt _interactionPrompt;
-        
-        [Inject]
-        private void Construct(InteractionPrompt interactionPrompt)
+        public override void Interact(PlayerController player)
         {
-            _interactionPrompt = interactionPrompt;
-        }
-        
-        public void Interact(PlayerController player)
-        {
+            base.Interact(player);
+            
             if (_target == null) return;
 
             player.transform.position = TransportLocation();
-        }
-
-        public void ShowInteractPrompt()
-        {
-            Vector2 position = transform.position + (Vector3)_promptOffset;
-            _interactionPrompt.ShowPrompt(_promptText, position);
-        }
-
-        public void HideInteractPrompt()
-        {
-            _interactionPrompt.HidePrompt();
         }
 
         private Vector2 TransportLocation()

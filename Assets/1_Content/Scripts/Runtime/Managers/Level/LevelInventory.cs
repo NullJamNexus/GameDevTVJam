@@ -31,20 +31,11 @@ namespace NJN.Runtime.Managers
             Scraps.Value += amount;
         }
         
-        public void AddResource(Resource resource)
+        public void AddResources(int food, int fuel, int scraps)
         {
-            if (resource is FoodResource foodResource)
-            {
-                AddFuel(foodResource.Amount);
-            }
-            else if (resource is FuelResource fuelResource)
-            {
-                AddFuel(fuelResource.Amount);
-            }
-            else if (resource is ScrapResource scrapResource)
-            {
-                AddScraps(scrapResource.Amount);
-            }
+            AddFood(food);
+            AddFuel(fuel);
+            AddScraps(scraps);
         }
     }
 }

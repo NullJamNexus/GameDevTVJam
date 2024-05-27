@@ -32,6 +32,8 @@ namespace NJN.Runtime.Installers
             // Signals
             Container.DeclareSignal<PlayerDiedSignal>();
             Container.DeclareSignal<ResourceCollectedSignal>();
+            Container.DeclareSignal<CookedFoodSignal>();
+            Container.DeclareSignal<DrankWaterSignal>();
 
             //Managers
             Container.BindInterfacesAndSelfTo<LevelManager>().FromComponentsInHierarchy().AsSingle().NonLazy();

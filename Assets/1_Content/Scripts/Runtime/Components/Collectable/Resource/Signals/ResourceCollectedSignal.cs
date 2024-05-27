@@ -2,11 +2,15 @@
 {
     public struct ResourceCollectedSignal
     {
-        public Resource Resource { get; private set; }
+        public int FoodAmount { get; }
+        public int FuelAmount { get; }
+        public int ScrapsAmount { get; }
         
-        public ResourceCollectedSignal(Resource resource)
+        public ResourceCollectedSignal(int foodAmount, int fuelAmount, int scrapsAmount)
         {
-            Resource = resource;
+            FoodAmount = foodAmount;
+            FuelAmount = fuelAmount;
+            ScrapsAmount = scrapsAmount;
         }
     }
 }

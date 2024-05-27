@@ -1,6 +1,7 @@
 ﻿using System;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using Zenject;
 
 namespace NJN.Runtime.Components
 {
@@ -19,14 +20,19 @@ namespace NJN.Runtime.Components
         [FoldoutGroup("Damage Rate"), SerializeField]
         private float _damageRate;
         
-        //public event Action<float, float> FoodChangedEvent;
-        //public event Action<float, float> WaterChangedEvent;
+        private SignalBus _signalBus;
 
         [Button(ButtonSizes.Large)]
         private void Reset()
         {
             HungerStat.Reset();
             ThirstStat.Reset();
+        }
+        
+        [Inject]
+        private void Construct(SignalBus signalBus)
+        {
+            _signalBus = signalBus;
         }
         
         protected override void Awake()
@@ -36,19 +42,30 @@ namespace NJN.Runtime.Components
             HungerStat.Reset();
             ThirstStat.Reset();
         }
-        
-        private void Update()
+
+        private void OnEnable()
         {
-            StatLossOvertime(HungerStat, _hungerLossRate); //, FoodChangedEvent);
-            StatLossOvertime(ThirstStat, _thirstLossRate); //, WaterChangedEvent);
+            _signalBus.Subscribe<CookedFoodSignal>(OnCookedFood);
+            _signalBus.Subscribe<DrankWaterSignal>(OnDrankWater);
         }
 
-        private void StatLossOvertime(Stat stat, float lossRate) //, Action<float, float> changedEvent)
+        private void Update()
+        {
+            StatLossOvertime(HungerStat, _hungerLossRate);
+            StatLossOvertime(ThirstStat, _thirstLossRate);
+        }
+
+        private void OnDisable()
+        {
+            _signalBus.TryUnsubscribe<CookedFoodSignal>(OnCookedFood);
+            _signalBus.TryUnsubscribe<DrankWaterSignal>(OnDrankWater);
+        }
+
+        private void StatLossOvertime(Stat stat, float lossRate)
         {
             if (stat.Current.Value > 0)
             {
                 stat.Current.Value = Mathf.Max(0, stat.Current.Value - lossRate * Time.deltaTime);
-                //changedEvent?.Invoke(stat.Current, stat.Max);
             }
             else
             {
@@ -65,6 +82,16 @@ namespace NJN.Runtime.Components
         public void AddWater(float amount)
         {
             ThirstStat.Current.Value = Mathf.Min(ThirstStat.Current.Value + amount, ThirstStat.Max.Value);
+        }
+        
+        private void OnCookedFood(CookedFoodSignal signal)
+        {
+            AddFood(signal.Amount);
+        }
+        
+        private void OnDrankWater(DrankWaterSignal signal)
+        {
+            AddWater(signal.Amount);
         }
     }
 }

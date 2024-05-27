@@ -6,7 +6,7 @@ namespace NJN.Runtime.Components
     {
         public override void Collect(ISurvivalStats player)
         {
-            _signalBus.Fire(new ResourceCollectedSignal(this));
+            _signalBus.Fire(new ResourceCollectedSignal(0, 0, Amount));
             Destroy(gameObject);
         }
     }
