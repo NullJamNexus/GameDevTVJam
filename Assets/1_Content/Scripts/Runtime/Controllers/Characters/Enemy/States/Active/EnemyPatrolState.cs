@@ -28,8 +28,6 @@ namespace NJN.Runtime.Controllers.Enemy
         public override void LogicUpdate()
         {
             base.LogicUpdate();
-            
-            _enemy.Movement.Move(_direction, _enemy.PatrolSpeed);
 
             if (ShouldIdle())
             {
@@ -41,11 +39,15 @@ namespace NJN.Runtime.Controllers.Enemy
         public override void PhysicsUpdate()
         {
             base.PhysicsUpdate();
+            
+            _enemy.Movement.PhysicsHorizontalMove(_direction, false, _enemy.PatrolSpeed);
         }
 
         public override void Exit()
         {
             base.Exit();
+            
+            _enemy.Movement.PhysicsStop();
         }
         
         private void GetMoveDirection()

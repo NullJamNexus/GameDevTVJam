@@ -28,6 +28,9 @@ namespace NJN.Runtime.Controllers.Player
         public override void PhysicsUpdate()
         {
             base.PhysicsUpdate();
+            
+            // if (_player.IsGrounded)
+            //     _player.Movement.PhysicsStop();
         }
 
         public override void Exit()

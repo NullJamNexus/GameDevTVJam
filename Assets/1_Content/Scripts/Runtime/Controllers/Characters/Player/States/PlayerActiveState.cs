@@ -26,6 +26,12 @@ namespace NJN.Runtime.Controllers.Player
         {
             base.LogicUpdate();
             
+            if (ShouldInteract())
+            {
+                _player.Interactor.Interactable.Interact(_player);
+                return;
+            }
+            
             if (_stateMachine.CurrentState != _player.ClimbState && ShouldClimb(_player.Movement.Climbable))
             {
                 _stateMachine.ChangeState(_player.ClimbState);
@@ -41,10 +47,13 @@ namespace NJN.Runtime.Controllers.Player
             {
                 collectable.Collect(_player.Stats);
             }
-            
-            if (collider.gameObject.TryGetComponent(out IClimbable climbable))
+            else if (collider.gameObject.TryGetComponent(out IClimbable climbable))
             {
                 _player.Movement.Climbable = climbable;
+            }
+            else if (collider.gameObject.TryGetComponent(out IInteractable interactable))
+            {
+                _player.Interactor.Interactable = interactable;
             }
         }
         
@@ -56,6 +65,18 @@ namespace NJN.Runtime.Controllers.Player
             {
                 _player.Movement.Climbable = null;
             }
+            else if (collider.TryGetComponent(out IInteractable interactable) && interactable == _player.Interactor.Interactable)
+            {
+                _player.Interactor.Interactable = null;
+            }
+        }
+        
+        protected virtual bool ShouldInteract()
+        {
+            if (!_player.InputProvider.InteractInput.Pressed)
+                return false;
+
+            return _player.Interactor.Interactable != null;
         }
         
         protected virtual bool ShouldClimb(IClimbable climbable)

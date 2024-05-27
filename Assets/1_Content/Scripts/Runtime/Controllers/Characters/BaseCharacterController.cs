@@ -6,18 +6,28 @@ namespace NJN.Runtime.Controllers
     [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
     public abstract class BaseCharacterController : BaseController<BaseCharacterController, CharacterState>, IDamagable
     {
-        [field: BoxGroup("Stats"), SerializeField]
-        public float MovementSpeed { get; private set; } = 5f;
-        [field: BoxGroup("Stats"), SerializeField]
+        [field: BoxGroup("Temp Stats"), SerializeField]
         public int BaseDamage { get; private set; } = 10;
         
+        [field: FoldoutGroup("Physics"), SerializeField, ReadOnly]
         public Rigidbody2D Rigidbody { get; private set; }
+        [field: FoldoutGroup("Physics"), SerializeField, ReadOnly]
         public Collider2D Collider { get; private set; }
+        [field: FoldoutGroup("Physics"), SerializeField, ReadOnly]
+        public bool IsGrounded { get; protected set; }
+        [field: FoldoutGroup("Physics"), SerializeField]
+        private LayerMask _groundLayers;
+        [field: FoldoutGroup("Physics"), SerializeField]
+        private float _groundCheckDistance = 0.2f;
+        [field: FoldoutGroup("Physics"), SerializeField]
+        private bool _showDebugLine = false;
+        
         public Animator Animator { get; private set; }
         
         protected override void Awake()
         {
             base.Awake();
+            
             Rigidbody = GetComponent<Rigidbody2D>();
             Collider = GetComponent<Collider2D>();
             Animator = GetComponentInChildren<Animator>();
@@ -25,6 +35,20 @@ namespace NJN.Runtime.Controllers
             {
                 Debug.LogError("[CharacterController] Animator not found in: " + name);
             }
+        }
+        
+        protected override void Update()
+        {
+            base.Update();
+            
+            CheckIfGrounded();
+        }
+
+        private void CheckIfGrounded()
+        {
+            Vector2 colliderBoundsBottomCenter = new (Collider.bounds.center.x, Collider.bounds.min.y);
+            RaycastHit2D hit = Physics2D.Raycast(colliderBoundsBottomCenter, Vector2.down, _groundCheckDistance, _groundLayers);
+            IsGrounded = hit.collider != null;
         }
 
         public virtual void TakeDamage(int damage)
@@ -39,5 +63,17 @@ namespace NJN.Runtime.Controllers
         private void OnTriggerEnter2D(Collider2D other) => StateMachine.CurrentState.OnTriggerEnter(other);
         private void OnTriggerStay2D(Collider2D other) => StateMachine.CurrentState.OnTriggerStay(other);
         private void OnTriggerExit2D(Collider2D other) => StateMachine.CurrentState.OnTriggerExit(other);
+
+#if UNITY_EDITOR
+        protected virtual void OnDrawGizmosSelected()
+        {
+            if (!_showDebugLine) return;
+            
+            Gizmos.color = IsGrounded ? Color.green : Color.red;
+            Collider ??= GetComponent<Collider2D>();
+            Vector2 colliderBoundsBottomCenter = new (Collider.bounds.center.x, Collider.bounds.min.y);
+            Gizmos.DrawLine(colliderBoundsBottomCenter, colliderBoundsBottomCenter + Vector2.down * _groundCheckDistance);
+        }
+#endif
     }
 }

@@ -20,6 +20,7 @@ namespace NJN.Runtime.Controllers.Player
 
         public IMovement Movement { get; private set; }
         public ISurvivalStats Stats { get; private set; }
+        public IInteractor Interactor { get; private set; }
 
         #endregion
         
@@ -61,6 +62,7 @@ namespace NJN.Runtime.Controllers.Player
 
             Movement = VerifyComponent<IMovement>();
             Stats = VerifyComponent<ISurvivalStats>();
+            Interactor = VerifyComponent<IInteractor>();
         }
 
         private void OnEnable()

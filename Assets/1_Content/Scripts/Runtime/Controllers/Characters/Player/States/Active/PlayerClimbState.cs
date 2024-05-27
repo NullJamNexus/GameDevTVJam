@@ -28,8 +28,7 @@ namespace NJN.Runtime.Controllers.Player
         {
             base.LogicUpdate();
 
-            Vector2 climbInput = new (0f, _player.InputProvider.MoveInput.y);
-            _player.Movement.Move(climbInput, _player.MovementSpeed);
+            
             
             if (!ShouldClimb(_player.Movement.Climbable))
             {
@@ -37,10 +36,19 @@ namespace NJN.Runtime.Controllers.Player
             }
         }
 
+        public override void PhysicsUpdate()
+        {
+            base.PhysicsUpdate();
+            
+            Vector2 climbInput = new (0f, _player.InputProvider.MoveInput.y);
+            _player.Movement.PhysicsMove(climbInput, false);
+        }
+
         public override void Exit()
         {
             base.Exit();
             
+            _player.Movement.PhysicsStop();
             _player.Rigidbody.gravityScale = _originalGravity;
             _player.Collider.isTrigger = false;
         }

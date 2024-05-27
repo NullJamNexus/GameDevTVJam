@@ -10,6 +10,7 @@ namespace NJN.Runtime.Input
         
         // Buttons
         public InputState InteractInput { get;}
+        public InputState SprintInput { get; }
 
         // Action Maps
         public void EnablePlayerControls();
