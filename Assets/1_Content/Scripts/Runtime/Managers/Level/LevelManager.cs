@@ -30,6 +30,16 @@ namespace NJN.Runtime.Managers
         
         public PlayerController Player { get; private set; }
 
+        private void OnEnable()
+        {
+            _signalBus.Subscribe<PlayerDiedSignal>(OnPlayerDied);
+            _signalBus.Subscribe<ResourceCollectedSignal>(OnResourceCollected);
+        }
+
+        private void Start(){
+            SpawnPlayer();
+        }
+
         [Inject]
         private void Construct(ICharacterFactory characterFactory, IEnemySpawner enemySpawner, IItemSpawner itemSpawner,
             IInputProvider inputProvider, SignalBus signalBus, [Inject(Id = "HUD")] PlayerHUD playerHUD)
