@@ -1,5 +1,4 @@
-﻿using ModestTree;
-using NJN.Runtime.Components;
+﻿using NJN.Runtime.Components;
 using NJN.Runtime.Controllers.States;
 using NJN.Runtime.StateMachines;
 using UnityEngine;
@@ -51,10 +50,6 @@ namespace NJN.Runtime.Controllers.Player
             {
                 _player.Movement.Climbable = climbable;
             }
-            else if (collider.gameObject.TryGetComponent(out IInteractable interactable))
-            {
-                _player.Interactor.Interactable = interactable;
-            }
         }
         
         public override void OnTriggerExit(Collider2D collider)
@@ -64,10 +59,6 @@ namespace NJN.Runtime.Controllers.Player
             if (collider.TryGetComponent(out IClimbable climbable) && climbable == _player.Movement.Climbable)
             {
                 _player.Movement.Climbable = null;
-            }
-            else if (collider.TryGetComponent(out IInteractable interactable) && interactable == _player.Interactor.Interactable)
-            {
-                _player.Interactor.Interactable = null;
             }
         }
         

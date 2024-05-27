@@ -16,6 +16,9 @@ namespace NJN.Runtime.Installers
         [BoxGroup("Level Settings"), SerializeField]
         private LevelSettingsSO _levelSettingsData;
         
+        [BoxGroup("Gloabl UI"), SerializeField]
+        private InteractionPrompt _interactionPrompt;
+        
         public override void InstallBindings()
         {
             // Factories
@@ -32,6 +35,9 @@ namespace NJN.Runtime.Installers
 
             //Managers
             Container.BindInterfacesAndSelfTo<LevelManager>().FromComponentsInHierarchy().AsSingle().NonLazy();
+            
+            //UI
+            Container.Bind<InteractionPrompt>().FromComponentInNewPrefab(_interactionPrompt).UnderTransform(transform).AsSingle().NonLazy();
         }
     }
 }

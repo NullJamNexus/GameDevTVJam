@@ -5,5 +5,7 @@ namespace NJN.Runtime.Components
     public interface IInteractable
     {
         public void Interact(PlayerController player);
+        public void ShowInteractPrompt();
+        public void HideInteractPrompt();
     }
 }
