@@ -1,14 +1,20 @@
-using NJN.Runtime.Controllers.Player;
-using NJN.Runtime.Factories;
-using NJN.Runtime.Input;
+
+using NJN.Runtime.Managers;
 using UnityEngine;
 using Zenject;
-using Sirenix.OdinInspector;
 
-namespace NJN.Runtime.Testing
-{
-    public class HawkyTest : MonoBehaviour
+
+public class HawkyTest : MonoBehaviour
     {
+
+    private LevelManager _levelManager;
+
+    [Inject]
+    private void Construct(LevelManager levelManager)
+    {
+        _levelManager = levelManager;
+    }
+
         
     }
-}
+
