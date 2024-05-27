@@ -28,18 +28,23 @@ namespace NJN.Runtime.Installers
             // Spawners
             Container.BindInterfacesTo<EnemySpawner>().AsSingle().NonLazy();
             Container.BindInterfacesTo<ItemSpawner>().AsSingle().NonLazy();
-            
-            // Signals
-            Container.DeclareSignal<PlayerDiedSignal>();
-            Container.DeclareSignal<ResourceCollectedSignal>();
-            Container.DeclareSignal<CookedFoodSignal>();
-            Container.DeclareSignal<DrankWaterSignal>();
 
             //Managers
             Container.BindInterfacesAndSelfTo<LevelManager>().FromComponentsInHierarchy().AsSingle().NonLazy();
             
             //UI
             Container.Bind<InteractionPrompt>().FromComponentInNewPrefab(_interactionPrompt).UnderTransform(transform).AsSingle().NonLazy();
+            
+            BindLevelSignals();
+        }
+        
+        private void BindLevelSignals()
+        {
+            Container.DeclareSignal<PlayerDiedSignal>();
+            Container.DeclareSignal<ResourceCollectedSignal>();
+            Container.DeclareSignal<CookedFoodSignal>();
+            Container.DeclareSignal<DrankWaterSignal>();
+            Container.DeclareSignal<ReadNoteSignal>();
         }
     }
 }
