@@ -16,5 +16,9 @@ namespace NJN.Runtime.Controllers
         public virtual void OnTriggerEnter(Collider2D collider) { }
         public virtual void OnTriggerStay(Collider2D collider) { }
         public virtual void OnTriggerExit(Collider2D collider) { }
+
+        public virtual void HasLineOfSightToPlayer() { }
+        public virtual void NoLineOfSightToPlayer(Vector3 LastKnownPosition) { }
+        public virtual void TryToDistract() { }
     }
 }
