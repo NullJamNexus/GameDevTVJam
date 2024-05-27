@@ -47,12 +47,23 @@ namespace NJN.Runtime.Controllers.Enemy
         {
             base.Exit();
         }
-        
+        public override void HasLineOfSightToPlayer()
+        {
+            base.HasLineOfSightToPlayer();
+            _enemy.StateMachine.ChangeState(_enemy.ChaseState);
+        }
+        public override void TryToDistract()
+        {
+            base.TryToDistract();
+            _enemy.StateMachine.ChangeState(_enemy.DistractedState);
+        }
+
         private void GetMoveDirection()
         {
             _patrolDestination = _enemy.PatrolPoints[_patrolPointIndex];
             Vector2 direction = _patrolDestination - (Vector2)_enemy.transform.position;
             _direction = direction.x > 0 ? Vector2.right : Vector2.left;
+            _enemy.ChangeFaceDirection(direction.x);
         }
         
         private bool ShouldIdle()
