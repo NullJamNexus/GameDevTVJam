@@ -9,7 +9,7 @@ using UnityEngine;
 namespace NJN.Runtime.Controllers.Enemy
 {
     public enum E_FaceDirection {right, left};
-    public class EnemyController : BaseCharacterController, I_Distractable
+    public class EnemyController : BaseCharacterController
     {
         [field: BoxGroup("Settings"), SerializeField]
         public List<Vector2> PatrolPoints { get; private set; }
@@ -19,13 +19,17 @@ namespace NJN.Runtime.Controllers.Enemy
         [field: BoxGroup("Settings"), SerializeField]
         public float PatrolSpeed { get; private set; } = 5f;
 
-        public E_FaceDirection _faceDirection { get; private set; }
+
+        public E_FaceDirection FaceDirection { get; private set; }
         
         #region Components
 
         public IMovement Movement { get; private set; }
         public IDamageProcessor DamageProcessor { get; private set; }
         public IHealth Health { get; private set; }
+        public IAttack Attack { get; private set; }
+        public IDistractable Distractable { get; private set; }
+        public IChase Chase { get; private set; }
 
         #endregion
         
@@ -61,6 +65,9 @@ namespace NJN.Runtime.Controllers.Enemy
             Movement = VerifyComponent<IMovement>();
             DamageProcessor = VerifyComponent<IDamageProcessor>();
             Health = VerifyComponent<IHealth>();
+            Attack = VerifyComponent<IAttack>();
+            Distractable = VerifyComponent<IDistractable>();
+            Chase = VerifyComponent<IChase>();
         }
         
         private void Start()
@@ -70,17 +77,25 @@ namespace NJN.Runtime.Controllers.Enemy
 
         public void ChangeFaceDirection(E_FaceDirection newDirection)
         {
-            _faceDirection = newDirection;
+            FaceDirection = newDirection;
         }
-        public void Distraction(Vector3 position, float distractionTime)
+        public void ChangeFaceDirection(float direction)
         {
-            if (StateMachine.CurrentState == ChaseState)
-                return;
-            if (StateMachine.CurrentState == AttackState)
-                return;
+            if(direction < 0)
+            {
+                ChangeFaceDirection(E_FaceDirection.left);
+            }
+            else
+            {
+                ChangeFaceDirection(E_FaceDirection.right);
+            }
+        }
 
-            DistractedState.Distraction(position, distractionTime);
-            StateMachine.ChangeState(DistractedState);
+        public int GetFaceDirectionAsValue()
+        {
+            if (FaceDirection == E_FaceDirection.right)
+                return 1;
+            return -1;
         }
     }
 }

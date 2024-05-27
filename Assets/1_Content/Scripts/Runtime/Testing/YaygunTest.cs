@@ -29,19 +29,11 @@ namespace NJN.Runtime.Testing
             DistractionSystem.FireDistraction(transform.position, _radius, _time, LayerMask.GetMask(_selectedLayer));          
         }
         [Button(ButtonSizes.Large)]
-        private void ChasePlayer()
+        private void TeleportPlayer()
         {
             EnemyController enemy = GameObject.FindAnyObjectByType<EnemyController>();
             GameObject player = GameObject.FindGameObjectWithTag("Player");
-            enemy.ChaseState.StartChasing(player);
-        }
-
-        [Button(ButtonSizes.Large)]
-        private void LostPlayer()
-        {
-            EnemyController enemy = GameObject.FindAnyObjectByType<EnemyController>();
-            GameObject player = GameObject.FindGameObjectWithTag("Player");
-            enemy.ChaseState.LostLineOfSightToPlayer(player.transform.position);
+            player.transform.position = Vector3.zero;
         }
 
     }

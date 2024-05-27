@@ -1,6 +1,7 @@
 using NJN.Runtime.Controllers;
 using NJN.Runtime.Controllers.Enemy;
 using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,6 +22,8 @@ namespace NJN.Runtime.Components
         private Transform _damagableTransform;
 
         private Vector3 _lastKnownPosition;
+
+        public event Action<Transform> EventPlayerSeeChanged;
 
         private IEnumerable<string> GetLayerNames()
         {
@@ -50,7 +53,7 @@ namespace NJN.Runtime.Components
         }
         private void Detection()
         {
-            _enemyController.SetTargets(_damagableTransform);
+            EventPlayerSeeChanged?.Invoke(_damagableTransform);
             _enemyController.StateMachine.CurrentState.HasLineOfSightToPlayer();
         }
         private void NoDetection()
@@ -58,6 +61,7 @@ namespace NJN.Runtime.Components
             if (_damagable == null)
                 return;
 
+            EventPlayerSeeChanged?.Invoke(null);
             _enemyController.StateMachine.CurrentState.NoLineOfSightToPlayer(_lastKnownPosition);
             _damagable = null;
             _damagableTransform = null;
