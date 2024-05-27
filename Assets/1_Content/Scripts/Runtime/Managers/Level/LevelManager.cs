@@ -5,6 +5,7 @@ using NJN.Runtime.Factories;
 using NJN.Runtime.Input;
 using NJN.Runtime.Systems;
 using NJN.Runtime.Systems.Spawners;
+using NJN.Runtime.UI;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using Zenject;
@@ -24,18 +25,21 @@ namespace NJN.Runtime.Managers
         private IItemSpawner _itemSpawner;
         private IInputProvider _inputProvider;
         private SignalBus _signalBus;
+        // TODO: Too many dependencies, should refactor if have time...
+        private PlayerHUD _playerHUD;
         
         public PlayerController Player { get; private set; }
 
         [Inject]
         private void Construct(ICharacterFactory characterFactory, IEnemySpawner enemySpawner, IItemSpawner itemSpawner,
-            IInputProvider inputProvider, SignalBus signalBus)
+            IInputProvider inputProvider, SignalBus signalBus, [Inject(Id = "HUD")] PlayerHUD playerHUD)
         {
             _characterFactory = characterFactory;
             _enemySpawner = enemySpawner;
             _itemSpawner = itemSpawner;
             _inputProvider = inputProvider;
             _signalBus = signalBus;
+            _playerHUD = playerHUD;
         }
         
         private void OnEnable()
@@ -59,9 +63,13 @@ namespace NJN.Runtime.Managers
         private void SpawnPlayer()
         {
             if (Player != null)
+            {
                 Player.transform.position = Vector2.zero;
-            
+                return;
+            }
+
             Player = _characterFactory.CreatePlayer();
+            _playerHUD.SetUp(Player.Stats, LevelInventory);
             Player.transform.position = Vector2.zero;
             _inputProvider.EnablePlayerControls();
         }

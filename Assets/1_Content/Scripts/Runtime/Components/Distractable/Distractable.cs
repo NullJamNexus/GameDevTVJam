@@ -9,7 +9,7 @@ namespace NJN.Runtime.Components
         EnemyController _enemyController;
         private Vector3 _distractionPosition;
         private float _distractionTime;
-        private Vector2 _direction;
+        public Vector2 Direction { get; private set; }
         private Action _endFunction;
         private float _closeEnough = 0.2f;
         private bool _isDistracted;
@@ -52,18 +52,22 @@ namespace NJN.Runtime.Components
                     _endFunction();
                 }
             }
-            else
+        }
+        
+        public void UpdatePhysics()
+        {
+            if (!HasReachedDistractionPosition())
             {
-                _enemyController.Movement.Move(_direction, _enemyController.PatrolSpeed);
+                _enemyController.Movement.PhysicsHorizontalMove(Direction, false);
             }
         }
 
         private void GetMoveDirection()
         {
             Vector2 direction = (Vector2)_distractionPosition - (Vector2)transform.position;
-            _direction = direction.x > 0 ? Vector2.right : Vector2.left;
+            Direction = direction.x > 0 ? Vector2.right : Vector2.left;
 
-            _enemyController.ChangeFaceDirection(_direction.x);
+            _enemyController.ChangeFaceDirection(Direction.x);
         }
 
         private bool HasReachedDistractionPosition()

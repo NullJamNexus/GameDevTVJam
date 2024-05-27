@@ -1,6 +1,7 @@
 ﻿using System;
 using NJN.Runtime.Components;
 using Sirenix.OdinInspector;
+using UniRx;
 using UnityEngine;
 
 namespace NJN.Runtime.Managers
@@ -8,26 +9,26 @@ namespace NJN.Runtime.Managers
     [Serializable]
     public class LevelInventory
     {
-        [field: SerializeField, ReadOnly]
-        public float Food { get; private set; }
-        [field: SerializeField, ReadOnly]
-        public float Fuel { get; private set; }
-        [field: SerializeField, ReadOnly]
-        public int Scraps { get; private set; }
+        [field: SerializeField, ReadOnly, InlineProperty]
+        public ReactiveProperty<int> Food { get; private set; }
+        [field: SerializeField, ReadOnly, InlineProperty]
+        public ReactiveProperty<int> Fuel { get; private set; }
+        [field: SerializeField, ReadOnly, InlineProperty]
+        public ReactiveProperty<int> Scraps { get; private set; }
         
-        public void AddFood(float amount)
+        public void AddFood(int amount)
         {
-            Food += amount;
+            Food.Value += amount;
         }
         
-        public void AddFuel(float amount)
+        public void AddFuel(int amount)
         {
-            Fuel += amount;
+            Fuel.Value += amount;
         }
         
         public void AddScraps(int amount)
         {
-            Scraps += amount;
+            Scraps.Value += amount;
         }
         
         public void AddResource(Resource resource)

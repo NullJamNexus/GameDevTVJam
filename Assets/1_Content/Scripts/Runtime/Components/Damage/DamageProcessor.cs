@@ -1,12 +1,16 @@
 ﻿using NJN.Runtime.Controllers;
+using UnityEngine;
 
 namespace NJN.Runtime.Components
 {
     public class DamageProcessor : BaseComponent, IDamageProcessor
     {
-        public void DealDamage(IDamagable damagable, int damageAmount)
+        [SerializeField]
+        private float _damage = 10f;
+        
+        public void DealDamage(IDamagable damagable, float damageAmount = -1f)
         {
-            damagable.TakeDamage(damageAmount);
+            damagable.TakeDamage(Mathf.Approximately(damageAmount, -1f) ? _damage : damageAmount);
         }
     }
 }

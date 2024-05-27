@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace NJN.Runtime.Components
 {
-    public class Ladder : BaseComponent, IComponent, IClimbable
+    public class Ladder : BaseComponent, IClimbable
     {
         [BoxGroup("Settings"), SerializeField]
         private Vector2 _topPosition;

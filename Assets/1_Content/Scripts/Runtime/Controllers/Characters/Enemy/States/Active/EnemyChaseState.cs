@@ -25,6 +25,8 @@ namespace NJN.Runtime.Controllers.Enemy
         public override void PhysicsUpdate()
         {
             base.PhysicsUpdate();
+            
+            _enemy.Movement.PhysicsHorizontalMove(_enemy.Chase.Direction, false);
         }
 
         public override void Exit()

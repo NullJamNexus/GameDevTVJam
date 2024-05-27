@@ -12,7 +12,7 @@ namespace NJN.Runtime.Components
         Vision _vision;
 
         [SerializeField] float _NecesseryDistance;
-        private Vector2 _direction;
+        public Vector2 Direction { get; private set; }
         private float _playerLostWaitTime = 2;
         private bool _isChasing;
         private Transform _target;
@@ -45,18 +45,14 @@ namespace NJN.Runtime.Components
             }
             else
             {
-                Move();
+                GetMoveDirection();
             }
         }
-        private void Move()
-        {
-            GetMoveDirection();
-            _enemyController.Movement.Move(_direction, _enemyController.PatrolSpeed);
-        }
+        
         private void GetMoveDirection()
         {
             Vector2 direction = (Vector2)_targetPos - (Vector2)transform.position;
-            _direction = direction.x > 0 ? Vector2.right : Vector2.left;
+            Direction = direction.x > 0 ? Vector2.right : Vector2.left;
 
             E_FaceDirection enemyDirection = direction.x > 0 ? E_FaceDirection.right : E_FaceDirection.left;
             _enemyController.ChangeFaceDirection(enemyDirection);

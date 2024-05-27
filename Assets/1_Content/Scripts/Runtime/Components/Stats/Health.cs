@@ -8,25 +8,25 @@ namespace NJN.Runtime.Components
     {
         [FoldoutGroup("Health"), SerializeField]
         private bool _isInvincible;
-        [FoldoutGroup("Health"), SerializeField, HideLabel]
-        private Stat _healthStat;
+        [field: FoldoutGroup("Health"), SerializeField, HideLabel]
+        public Stat HealthStat { get; private set; }
 
-        public event Action<float, float> HealthChangedEvent;
+        //public event Action<float, float> HealthChangedEvent;
         public event Action DiedEvent;
         
         protected virtual void Awake()
         {
-            _healthStat.Reset();
+            HealthStat.Reset();
         }
         
         public void TakeDamage(float amount)
         {
             if (_isInvincible) return;
             
-            _healthStat.Current = Math.Max(0, _healthStat.Current - amount);
-            HealthChangedEvent?.Invoke(_healthStat.Current, _healthStat.Max);
+            HealthStat.Current.Value = Math.Max(0, HealthStat.Current.Value - amount);
+            //HealthChangedEvent?.Invoke(HealthStat.Current, HealthStat.Max);
             
-            if (_healthStat.Current <= 0)
+            if (HealthStat.Current.Value <= 0)
             {
                 DiedEvent?.Invoke();
             }

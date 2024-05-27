@@ -12,7 +12,7 @@ namespace NJN.Runtime.Controllers
         where TController : BaseController<TController, TState>
         where TState : BaseControllerState<TState, TController>
     {
-        [field: FoldoutGroup("General"), SerializeField]
+        [field: FoldoutGroup("General"), SerializeField, ReadOnly]
         public string StateName { get; set; }
         
         private List<IComponent> _components = new();

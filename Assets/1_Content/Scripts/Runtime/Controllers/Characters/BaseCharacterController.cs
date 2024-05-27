@@ -9,9 +9,9 @@ namespace NJN.Runtime.Controllers
         [field: BoxGroup("Temp Stats"), SerializeField]
         public int BaseDamage { get; private set; } = 10;
         
-        [field: FoldoutGroup("Physics"), SerializeField, ReadOnly]
+        [field: FoldoutGroup("Physics"), SerializeField]
         public Rigidbody2D Rigidbody { get; private set; }
-        [field: FoldoutGroup("Physics"), SerializeField, ReadOnly]
+        [field: FoldoutGroup("Physics"), SerializeField]
         public Collider2D Collider { get; private set; }
         [field: FoldoutGroup("Physics"), SerializeField, ReadOnly]
         public bool IsGrounded { get; protected set; }
@@ -28,8 +28,8 @@ namespace NJN.Runtime.Controllers
         {
             base.Awake();
             
-            Rigidbody = GetComponent<Rigidbody2D>();
-            Collider = GetComponent<Collider2D>();
+            Rigidbody ??= GetComponent<Rigidbody2D>();
+            Collider ??= GetComponent<Collider2D>();
             Animator = GetComponentInChildren<Animator>();
             if (Animator == null)
             {
@@ -51,7 +51,7 @@ namespace NJN.Runtime.Controllers
             IsGrounded = hit.collider != null;
         }
 
-        public virtual void TakeDamage(int damage)
+        public virtual void TakeDamage(float damage)
         {
             // TODO: proper implementation
             Destroy(gameObject);
