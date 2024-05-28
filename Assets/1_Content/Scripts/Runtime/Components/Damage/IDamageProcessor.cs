@@ -4,6 +4,6 @@ namespace NJN.Runtime.Components
 {
     public interface IDamageProcessor : IComponent
     {
-        public void DealDamage(IDamagable damagable, float damageAmount);
+        public void DealDamage(IDamagable damagable, float damageAmount = -1f);
     }
 }

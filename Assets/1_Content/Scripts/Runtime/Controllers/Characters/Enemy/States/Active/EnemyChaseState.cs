@@ -13,26 +13,26 @@ namespace NJN.Runtime.Controllers.Enemy
         public override void Enter()
         {
             base.Enter();
-            _enemy.Chase.StartChase();
+            //_enemy.Chase.StartChase();
         }
 
         public override void LogicUpdate()
         {
             base.LogicUpdate();
-            _enemy.Chase.UpdateChase();
+            //_enemy.Chase.UpdateChase();
         }
 
         public override void PhysicsUpdate()
         {
             base.PhysicsUpdate();
             
-            _enemy.Movement.PhysicsHorizontalMove(_enemy.Chase.Direction, false);
+            //_enemy.Movement.PhysicsHorizontalMove(_enemy.Chase.Direction, false);
         }
 
         public override void Exit()
         {
             base.Exit();
-            _enemy.Chase.CancellChase();
+            //_enemy.Chase.CancellChase();
         }
 
     }

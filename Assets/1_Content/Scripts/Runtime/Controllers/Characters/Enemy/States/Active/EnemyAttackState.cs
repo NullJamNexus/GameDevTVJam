@@ -15,7 +15,7 @@ namespace NJN.Runtime.Controllers.Enemy
         public override void Enter()
         {
             base.Enter();
-            _enemy.Attack.StartAttack(AttackEnded);
+            // _enemy.Attack.StartAttack(AttackEnded);
             _isAttacking = true;
         }
 
@@ -27,7 +27,7 @@ namespace NJN.Runtime.Controllers.Enemy
         public override void LogicUpdate()
         {
             base.LogicUpdate();
-            _enemy.Attack.UpdateAttack();
+            // _enemy.Attack.UpdateAttack();
         }
 
         public override void PhysicsUpdate()
@@ -41,7 +41,7 @@ namespace NJN.Runtime.Controllers.Enemy
             if (_isAttacking)
             {
                 _isAttacking = false;
-                _enemy.Attack.CancellAttack();
+                // _enemy.Attack.CancellAttack();
             }
         }
     }

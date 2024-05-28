@@ -14,14 +14,14 @@ namespace NJN.Runtime.Controllers.Enemy
         {
             base.Enter();
 
-            _enemy.Distractable.StartDistraction(DistractionEnded);
+            //_enemy.Distractable.StartDistraction(DistractionEnded);
         }
 
         public override void LogicUpdate()
         {
             base.LogicUpdate();
             
-            _enemy.Distractable.UpdateLogic();
+            //_enemy.Distractable.UpdateLogic();
         }
         public override void PhysicsUpdate()
         {
@@ -36,7 +36,7 @@ namespace NJN.Runtime.Controllers.Enemy
         public override void Exit()
         {
             base.Exit();
-            _enemy.Distractable.CancellDistraction();
+            //_enemy.Distractable.CancellDistraction();
         }
         public override void HasLineOfSightToPlayer()
         {

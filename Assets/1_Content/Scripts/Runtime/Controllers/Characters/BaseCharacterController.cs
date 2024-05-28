@@ -6,15 +6,14 @@ namespace NJN.Runtime.Controllers
     [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
     public abstract class BaseCharacterController : BaseController<BaseCharacterController, CharacterState>, IDamagable
     {
-        [field: BoxGroup("Temp Stats"), SerializeField]
-        public int BaseDamage { get; private set; } = 10;
-        
         [field: FoldoutGroup("Physics"), SerializeField]
         public Rigidbody2D Rigidbody { get; private set; }
         [field: FoldoutGroup("Physics"), SerializeField]
         public Collider2D Collider { get; private set; }
         [field: FoldoutGroup("Physics"), SerializeField, ReadOnly]
         public bool IsGrounded { get; protected set; }
+        [field: FoldoutGroup("Physics"), SerializeField, ReadOnly]
+        public bool IsFacingRight { get; protected set; } = true;
         [field: FoldoutGroup("Physics"), SerializeField]
         private LayerMask _groundLayers;
         [field: FoldoutGroup("Physics"), SerializeField]
@@ -23,6 +22,7 @@ namespace NJN.Runtime.Controllers
         private bool _showDebugLine = false;
         
         public Animator Animator { get; private set; }
+        public Transform Transform => transform;
         
         protected override void Awake()
         {
@@ -50,11 +50,22 @@ namespace NJN.Runtime.Controllers
             RaycastHit2D hit = Physics2D.Raycast(colliderBoundsBottomCenter, Vector2.down, _groundCheckDistance, _groundLayers);
             IsGrounded = hit.collider != null;
         }
+        
+        public void Flip()
+        {
+            IsFacingRight = !IsFacingRight;
+            transform.localScale = new Vector3(IsFacingRight ? 1 : -1, 1, 1);
+        }
+        
+        public void Flip(Vector2 direction)
+        {
+            IsFacingRight = direction.x > 0;
+            transform.localScale = new Vector3(IsFacingRight ? 1 : -1, 1, 1);
+        }
 
         public virtual void TakeDamage(float damage)
         {
-            // TODO: proper implementation
-            Destroy(gameObject);
+            // No-Op
         } 
 
         private void OnCollisionEnter2D(Collision2D other) => StateMachine.CurrentState.OnCollisionEnter(other);

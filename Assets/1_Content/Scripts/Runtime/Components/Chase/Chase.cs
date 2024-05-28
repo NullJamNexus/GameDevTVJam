@@ -53,9 +53,7 @@ namespace NJN.Runtime.Components
         {
             Vector2 direction = (Vector2)_targetPos - (Vector2)transform.position;
             Direction = direction.x > 0 ? Vector2.right : Vector2.left;
-
-            E_FaceDirection enemyDirection = direction.x > 0 ? E_FaceDirection.right : E_FaceDirection.left;
-            _enemyController.ChangeFaceDirection(enemyDirection);
+            _enemyController.Flip(Direction);
         }
         private bool IsInAttackRange()
         {

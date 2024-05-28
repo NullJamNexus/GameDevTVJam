@@ -68,7 +68,8 @@ namespace NJN.Runtime.Components
         }
         private bool LookForDamagable()
         {
-            Vector2 rayDirection = new Vector2(_enemyController.GetFaceDirectionAsValue(), 0);
+            float direction = _enemyController.IsFacingRight ? 1 : -1;
+            Vector2 rayDirection = new (direction, 0);
             RaycastHit2D hit = Physics2D.Raycast(transform.position, rayDirection, _visionDistance, LayerMask.GetMask(_selectedLayer));
             if (hit.collider == null)
             {
