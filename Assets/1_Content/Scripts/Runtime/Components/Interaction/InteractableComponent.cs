@@ -36,7 +36,8 @@ namespace NJN.Runtime.Components
 
         public virtual void HideInteractPrompt()
         {
-            _interactionPrompt.HidePrompt();
+            if (_interactionPrompt != null)
+                _interactionPrompt.HidePrompt();
         }
     }
 }

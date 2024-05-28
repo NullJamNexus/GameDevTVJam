@@ -4,6 +4,7 @@ using NJN.Runtime.Factories;
 using NJN.Runtime.Managers;
 using NJN.Runtime.Systems;
 using NJN.Runtime.Systems.Spawners;
+using NJN.Runtime.UI.Panels;
 using NJN.Scriptables.Settings;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -24,6 +25,7 @@ namespace NJN.Runtime.Installers
             // Factories
             Container.Bind<ICharacterFactory>().To<CharacterFactory>().AsSingle().WithArguments(_levelSettingsData).NonLazy();
             Container.BindInterfacesTo<ItemFactory>().AsSingle().NonLazy();
+            Container.BindInterfacesTo<DestinationsFactory>().AsSingle().NonLazy();
             
             // Spawners
             Container.BindInterfacesTo<EnemySpawner>().AsSingle().NonLazy();
@@ -45,6 +47,8 @@ namespace NJN.Runtime.Installers
             Container.DeclareSignal<CookedFoodSignal>();
             Container.DeclareSignal<DrankWaterSignal>();
             Container.DeclareSignal<ReadNoteSignal>();
+            Container.DeclareSignal<PickDestinationSignal>();
+            Container.DeclareSignal<DestinationSelectedSignal>();
         }
     }
 }

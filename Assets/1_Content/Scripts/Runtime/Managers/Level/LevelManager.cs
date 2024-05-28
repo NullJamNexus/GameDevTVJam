@@ -6,6 +6,7 @@ using NJN.Runtime.Input;
 using NJN.Runtime.Systems;
 using NJN.Runtime.Systems.Spawners;
 using NJN.Runtime.UI;
+using NJN.Runtime.UI.Panels;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using Zenject;
@@ -46,6 +47,7 @@ namespace NJN.Runtime.Managers
         {
             _signalBus.Subscribe<PlayerDiedSignal>(OnPlayerDied);
             _signalBus.Subscribe<ResourceCollectedSignal>(OnResourceCollected);
+            _signalBus.Subscribe<DestinationSelectedSignal>(OnDestinationSelected);
         }
 
         private void Start()
@@ -57,6 +59,7 @@ namespace NJN.Runtime.Managers
         {
             _signalBus.TryUnsubscribe<PlayerDiedSignal>(OnPlayerDied);
             _signalBus.TryUnsubscribe<ResourceCollectedSignal>(OnResourceCollected);
+            _signalBus.TryUnsubscribe<DestinationSelectedSignal>(OnDestinationSelected);
         }
         
         [Button(ButtonSizes.Large)]
@@ -95,6 +98,12 @@ namespace NJN.Runtime.Managers
         private void OnResourceCollected(ResourceCollectedSignal signal)
         {
             LevelInventory.AddResources(signal.FoodAmount, signal.FuelAmount, signal.ScrapsAmount);
+        }
+        
+        private void OnDestinationSelected(DestinationSelectedSignal signal)
+        {
+            LevelInventory.AddFuel(-signal.DestinationData.FuelCost);
+            Debug.Log("Selected destination: " + signal.DestinationData.DestinationName);
         }
     }
 }
