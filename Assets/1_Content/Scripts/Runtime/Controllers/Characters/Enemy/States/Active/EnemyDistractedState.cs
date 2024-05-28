@@ -4,44 +4,60 @@ using UnityEngine;
 
 namespace NJN.Runtime.Controllers.Enemy
 {
-    public class EnemyDistractedState : EnemyActiveState
-    {        
+    public class EnemyDistractedState : CharacterBusyState
+    {
+        protected EnemyController _enemy;
+        private Vector2 _direction;
+        
         public EnemyDistractedState(EnemyController controller, ControllerStateMachine<CharacterState, BaseCharacterController> stateMachine) : base(controller, stateMachine)
         {
+            _enemy = controller;
         }
 
         public override void Enter()
         {
             base.Enter();
 
-            //_enemy.Distractable.StartDistraction(DistractionEnded);
+            GetDirection();
         }
 
         public override void LogicUpdate()
         {
             base.LogicUpdate();
             
-            //_enemy.Distractable.UpdateLogic();
+            if (ShouldIdle())
+            {
+                _stateMachine.ChangeState(_enemy.IdleState);
+                return;
+            }
         }
         public override void PhysicsUpdate()
         {
             base.PhysicsUpdate();
-        }
-
-        private void DistractionEnded()
-        {
-            _enemy.StateMachine.ChangeState(_enemy.IdleState);
+            
+            _enemy.Movement.PhysicsHorizontalMove(_direction, true);
         }
 
         public override void Exit()
         {
             base.Exit();
-            //_enemy.Distractable.CancellDistraction();
+            
+            _enemy.Movement.PhysicsStop();
         }
-        public override void HasLineOfSightToPlayer()
+        
+        private void GetDirection()
         {
-            base.HasLineOfSightToPlayer();
-            _enemy.StateMachine.ChangeState(_enemy.ChaseState);
+            Vector2 target = _enemy.DistractionProcessor.DistractionLocation;
+            Vector2 aiPosition = _enemy.transform.position;
+            Vector2 direction = target - aiPosition;
+            _direction = direction.x > 0 ? Vector2.right : Vector2.left;
+            _enemy.Flip(_direction);
+        }
+        
+        private bool ShouldIdle()
+        {
+            float xDistance = Mathf.Abs(_enemy.DistractionProcessor.DistractionLocation.x - _enemy.transform.position.x);
+            return xDistance < _enemy.DistractionProcessor.CloseEnough;
         }
     }
 }

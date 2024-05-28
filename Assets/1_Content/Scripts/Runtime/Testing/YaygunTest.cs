@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using NJN.Runtime.Controllers.Enemy;
-using NJN.Runtime.Systems.Distraction;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using Vit.Utilities;
@@ -26,7 +25,7 @@ namespace NJN.Runtime.Testing
         [Button(ButtonSizes.Large)]
         private void FireDistraction()
         {
-            DistractionSystem.FireDistraction(transform.position, _radius, _time, LayerMask.GetMask(_selectedLayer));          
+            //DistractionSystem.FireDistraction(transform.position, _radius, _time, LayerMask.GetMask(_selectedLayer));          
         }
         [Button(ButtonSizes.Large)]
         private void TeleportPlayer()

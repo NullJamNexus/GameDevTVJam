@@ -1,6 +1,4 @@
-﻿using NJN.Runtime.Controllers.States;
-using NJN.Runtime.StateMachines;
-using UnityEngine;
+﻿using NJN.Runtime.StateMachines;
 
 namespace NJN.Runtime.Controllers.Enemy
 {
@@ -10,11 +8,6 @@ namespace NJN.Runtime.Controllers.Enemy
         {
         }
 
-        public override void Enter()
-        {
-            base.Enter();
-        }
-
         public override void LogicUpdate()
         {
             base.LogicUpdate();
@@ -22,30 +15,9 @@ namespace NJN.Runtime.Controllers.Enemy
             if (ShouldPatrol())
             {
                 _stateMachine.ChangeState(_enemy.PatrolState);
+                return;
             }
         }
-
-        public override void PhysicsUpdate()
-        {
-            base.PhysicsUpdate();
-        }
-        
-        public override void Exit()
-        {
-            base.Exit();
-        }
-
-        // public override void HasLineOfSightToPlayer()
-        // {
-        //     base.HasLineOfSightToPlayer();
-        //     _enemy.StateMachine.ChangeState(_enemy.ChaseState);
-        // }
-        //
-        // public override void TryToDistract()
-        // {
-        //     base.TryToDistract();
-        //     _enemy.StateMachine.ChangeState(_enemy.DistractedState);
-        // }
 
         private bool ShouldPatrol()
         {
