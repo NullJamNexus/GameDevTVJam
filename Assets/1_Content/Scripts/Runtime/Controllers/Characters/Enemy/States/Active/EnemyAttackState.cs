@@ -1,13 +1,14 @@
-﻿using NJN.Runtime.Controllers.States;
-using NJN.Runtime.StateMachines;
-using System;
+﻿using NJN.Runtime.StateMachines;
 using UnityEngine;
 
 namespace NJN.Runtime.Controllers.Enemy
 {
     public class EnemyAttackState : EnemyActiveState
     {
-        bool _isAttacking;
+        // TODO: This will be dictated by animator.
+        private float _attackDuration = 0.5f;
+        private float _attackTimer;
+        
         public EnemyAttackState(EnemyController controller, ControllerStateMachine<CharacterState, BaseCharacterController> stateMachine) : base(controller, stateMachine)
         {
         }
@@ -15,34 +16,29 @@ namespace NJN.Runtime.Controllers.Enemy
         public override void Enter()
         {
             base.Enter();
-            // _enemy.Attack.StartAttack(AttackEnded);
-            _isAttacking = true;
+            
+            _attackTimer = Time.time;
+            // TODO: Timing of damage might need to change
+            if (_enemy.LineOfSight.DamagableTarget != null)
+            {
+                _enemy.DamageProcessor.DealDamage(_enemy.LineOfSight.DamagableTarget);
+            }
         }
 
-        private void AttackEnded()
-        {
-            _isAttacking = false;
-            _enemy.StateMachine.ChangeState(_enemy.IdleState);
-        }
         public override void LogicUpdate()
         {
             base.LogicUpdate();
-            // _enemy.Attack.UpdateAttack();
-        }
-
-        public override void PhysicsUpdate()
-        {
-            base.PhysicsUpdate();
-        }
-
-        public override void Exit()
-        {
-            base.Exit();
-            if (_isAttacking)
+            
+            if (ShouldChase())
             {
-                _isAttacking = false;
-                // _enemy.Attack.CancellAttack();
+                _stateMachine.ChangeState(_enemy.ChaseState);
+                return;
             }
+        }
+        
+        private bool ShouldChase()
+        {
+            return Time.time >= _attackTimer + _attackDuration;
         }
     }
 }
