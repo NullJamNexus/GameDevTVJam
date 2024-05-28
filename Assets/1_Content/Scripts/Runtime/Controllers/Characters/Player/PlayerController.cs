@@ -1,10 +1,8 @@
-﻿using System;
-using NJN.Runtime.Components;
+﻿using NJN.Runtime.Components;
+using NJN.Runtime.Controllers.Player.Dead;
 using NJN.Runtime.Controllers.States;
 using NJN.Runtime.Input;
-using Sirenix.OdinInspector;
 using Unity.Cinemachine;
-using UnityEngine;
 using Zenject;
 
 namespace NJN.Runtime.Controllers.Player
@@ -14,7 +12,7 @@ namespace NJN.Runtime.Controllers.Player
         public IInputProvider InputProvider { get; private set; }
         public CinemachineCamera Camera { get; private set; }
 
-        private SignalBus _signalBus;
+        public SignalBus SignalBus { get; private set; }
         
         #region Components
 
@@ -30,7 +28,7 @@ namespace NJN.Runtime.Controllers.Player
         public PlayerMoveState MoveState { get; private set; }
         public PlayerClimbState ClimbState {get; private set;}
         public CharacterBusyState BusyState { get; private set; }
-        public CharacterDeadState DeadState { get; private set; }
+        public PlayerDeadState DeadState { get; private set; }
 
         #endregion
 
@@ -39,7 +37,7 @@ namespace NJN.Runtime.Controllers.Player
             [Inject(Id = "FollowCamera")] CinemachineCamera vmCamera)
         {
             InputProvider = inputProvider;
-            _signalBus = signalBus;
+            SignalBus = signalBus;
             Camera = vmCamera;
         }
         
@@ -49,7 +47,7 @@ namespace NJN.Runtime.Controllers.Player
             MoveState = new PlayerMoveState(this, StateMachine);
             ClimbState = new PlayerClimbState(this, StateMachine);
             BusyState = new CharacterBusyState(this, StateMachine);
-            DeadState = new CharacterDeadState(this, StateMachine);
+            DeadState = new PlayerDeadState(this, StateMachine);
             
             StateMachine.Initialize(BusyState);
         }
@@ -83,9 +81,14 @@ namespace NJN.Runtime.Controllers.Player
 
         #endregion
         
+        public override void TakeDamage(float damage)
+        {
+            Stats.TakeDamage(damage);
+        }
+        
         private void OnDeath()
         {
-            _signalBus.Fire(new PlayerDiedSignal());
+            StateMachine.ChangeState(DeadState);
         }
     }
 }

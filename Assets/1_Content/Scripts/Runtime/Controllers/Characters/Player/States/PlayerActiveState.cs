@@ -62,6 +62,13 @@ namespace NJN.Runtime.Controllers.Player
             }
         }
         
+        public override void Exit()
+        {
+            base.Exit();
+
+            _player.StateName = "";
+        }
+        
         protected virtual bool ShouldInteract()
         {
             if (!_player.InputProvider.InteractInput.Pressed)

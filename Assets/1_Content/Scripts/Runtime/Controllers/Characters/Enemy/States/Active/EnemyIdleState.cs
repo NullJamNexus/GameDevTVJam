@@ -35,17 +35,17 @@ namespace NJN.Runtime.Controllers.Enemy
             base.Exit();
         }
 
-        public override void HasLineOfSightToPlayer()
-        {
-            base.HasLineOfSightToPlayer();
-            _enemy.StateMachine.ChangeState(_enemy.ChaseState);
-        }
-
-        public override void TryToDistract()
-        {
-            base.TryToDistract();
-            _enemy.StateMachine.ChangeState(_enemy.DistractedState);
-        }
+        // public override void HasLineOfSightToPlayer()
+        // {
+        //     base.HasLineOfSightToPlayer();
+        //     _enemy.StateMachine.ChangeState(_enemy.ChaseState);
+        // }
+        //
+        // public override void TryToDistract()
+        // {
+        //     base.TryToDistract();
+        //     _enemy.StateMachine.ChangeState(_enemy.DistractedState);
+        // }
 
         private bool ShouldPatrol()
         {

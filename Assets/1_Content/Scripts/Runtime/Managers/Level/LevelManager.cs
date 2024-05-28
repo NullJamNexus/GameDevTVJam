@@ -77,7 +77,10 @@ namespace NJN.Runtime.Managers
         {
             if (Player != null)
             {
+                // TODO: We don't really want to respawn the player, this is just for testing...
                 Player.transform.position = Vector2.zero;
+                Player.gameObject.SetActive(true);
+                Player.StateMachine.ChangeState(Player.IdleState);
                 return;
             }
 
@@ -107,7 +110,7 @@ namespace NJN.Runtime.Managers
         
         private void OnPlayerDied(PlayerDiedSignal signal)
         {
-            Destroy(Player.gameObject);
+            Player.gameObject.SetActive(false);
         }
         
         private void OnResourceCollected(ResourceCollectedSignal signal)

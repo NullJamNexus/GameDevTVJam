@@ -74,7 +74,7 @@ namespace NJN.Runtime.Components
 
                 if (damagable != null)
                 {
-                    _enemyController.DamageProcessor.DealDamage(damagable, _enemyController.BaseDamage);
+                    _enemyController.DamageProcessor.DealDamage(damagable);
                 }
             }
         }

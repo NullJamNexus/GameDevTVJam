@@ -6,8 +6,6 @@ namespace NJN.Runtime.Controllers.Enemy
 {
     public class EnemyPatrolState : EnemyActiveState
     {
-        private float _closeEnough = 0.5f;
-        private int _patrolPointIndex = 0;
         private Vector2 _direction;
         private Vector2 _patrolDestination;
         
@@ -19,10 +17,7 @@ namespace NJN.Runtime.Controllers.Enemy
         {
             base.Enter();
 
-            if (_enemy.PatrolPoints.Count > 0)
-                GetMoveDirection();
-            else
-                _stateMachine.ChangeState(_enemy.IdleState);
+            SetMoveDirection();
         }
 
         public override void LogicUpdate()
@@ -31,7 +26,6 @@ namespace NJN.Runtime.Controllers.Enemy
 
             if (ShouldIdle())
             {
-                _patrolPointIndex = (_patrolPointIndex + 1) % _enemy.PatrolPoints.Count;
                 _stateMachine.ChangeState(_enemy.IdleState);
             }
         }
@@ -40,7 +34,7 @@ namespace NJN.Runtime.Controllers.Enemy
         {
             base.PhysicsUpdate();
             
-            _enemy.Movement.PhysicsHorizontalMove(_direction, false, _enemy.PatrolSpeed);
+            _enemy.Movement.PhysicsHorizontalMove(_direction, false);
         }
 
         public override void Exit()
@@ -49,33 +43,27 @@ namespace NJN.Runtime.Controllers.Enemy
             
             _enemy.Movement.PhysicsStop();
         }
-        public override void HasLineOfSightToPlayer()
-        {
-            base.HasLineOfSightToPlayer();
-            _enemy.StateMachine.ChangeState(_enemy.ChaseState);
-        }
-        public override void TryToDistract()
-        {
-            base.TryToDistract();
-            _enemy.StateMachine.ChangeState(_enemy.DistractedState);
-        }
+        // public override void HasLineOfSightToPlayer()
+        // {
+        //     base.HasLineOfSightToPlayer();
+        //     _enemy.StateMachine.ChangeState(_enemy.ChaseState);
+        // }
+        // public override void TryToDistract()
+        // {
+        //     base.TryToDistract();
+        //     _enemy.StateMachine.ChangeState(_enemy.DistractedState);
+        // }
 
-        private void GetMoveDirection()
+        private void SetMoveDirection()
         {
-            _patrolDestination = _enemy.PatrolPoints[_patrolPointIndex];
-            Vector2 direction = _patrolDestination - (Vector2)_enemy.transform.position;
+            Vector2 direction = _enemy.Patrol.GetNextPointDirection(_enemy.transform.position);
             _direction = direction.x > 0 ? Vector2.right : Vector2.left;
-            _enemy.ChangeFaceDirection(direction.x);
+            _enemy.Flip(_direction);
         }
         
         private bool ShouldIdle()
         {
-            float distance = Mathf.Abs(_patrolDestination.x - _enemy.transform.position.x);
-            
-            if (distance < _closeEnough)
-                return true;
-
-            return false;
+            return _enemy.Patrol.HasArrivedAtPoint(_enemy.transform.position);
         }
     }
 }

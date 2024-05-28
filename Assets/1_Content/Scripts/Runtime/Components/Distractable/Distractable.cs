@@ -67,7 +67,7 @@ namespace NJN.Runtime.Components
             Vector2 direction = (Vector2)_distractionPosition - (Vector2)transform.position;
             Direction = direction.x > 0 ? Vector2.right : Vector2.left;
 
-            _enemyController.ChangeFaceDirection(Direction.x);
+            _enemyController.Flip(Direction);
         }
 
         private bool HasReachedDistractionPosition()
