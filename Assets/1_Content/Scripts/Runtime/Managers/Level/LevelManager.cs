@@ -1,5 +1,6 @@
 ﻿using System;
 using NJN.Runtime.Components;
+using NJN.Runtime.Controllers.Destination;
 using NJN.Runtime.Controllers.Player;
 using NJN.Runtime.Factories;
 using NJN.Runtime.Input;
@@ -7,6 +8,7 @@ using NJN.Runtime.Systems;
 using NJN.Runtime.Systems.Spawners;
 using NJN.Runtime.UI;
 using NJN.Runtime.UI.Panels;
+using NJN.Scriptables;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using Zenject;
@@ -18,26 +20,33 @@ namespace NJN.Runtime.Managers
         [field: FoldoutGroup("Level Inventory"), SerializeField, HideLabel]
         public LevelInventory LevelInventory { get; private set; }
 
-        [field: BoxGroup("Items"), SerializeField]
-        private int _itemsToSpawn = 10;
+        // [field: BoxGroup("Items"), SerializeField]
+        // private int _itemsToSpawn = 10;
+
+        [field: BoxGroup("Destinations"), SerializeField]
+        private DestinationOptionSO _startingDestination;
         
         private ICharacterFactory _characterFactory;
+        // TODO: Not using some of these spawners here...
         private IEnemySpawner _enemySpawner;
         private IItemSpawner _itemSpawner;
+        private IDestinationsFactory _destinationsFactory;
         private IInputProvider _inputProvider;
         private SignalBus _signalBus;
         // TODO: Too many dependencies, should refactor if have time...
         private PlayerHUD _playerHUD;
         
         public PlayerController Player { get; private set; }
+        public DestinationController CurrentDestination { get; private set; }
 
         [Inject]
-        private void Construct(ICharacterFactory characterFactory, IEnemySpawner enemySpawner, IItemSpawner itemSpawner,
-            IInputProvider inputProvider, SignalBus signalBus, [Inject(Id = "HUD")] PlayerHUD playerHUD)
+        private void Construct(ICharacterFactory characterFactory, IEnemySpawner enemySpawner, IItemSpawner itemSpawner, 
+            IDestinationsFactory destinationsFactory, IInputProvider inputProvider, SignalBus signalBus, [Inject(Id = "HUD")] PlayerHUD playerHUD)
         {
             _characterFactory = characterFactory;
             _enemySpawner = enemySpawner;
             _itemSpawner = itemSpawner;
+            _destinationsFactory = destinationsFactory;
             _inputProvider = inputProvider;
             _signalBus = signalBus;
             _playerHUD = playerHUD;
@@ -53,6 +62,7 @@ namespace NJN.Runtime.Managers
         private void Start()
         {
             SpawnPlayer();
+            SpawnStartingDestination();
         }
 
         private void OnDisable()
@@ -77,18 +87,23 @@ namespace NJN.Runtime.Managers
             _inputProvider.EnablePlayerControls();
         }
         
-        [Button(ButtonSizes.Large)]
-        private void StartEnemySpawner()
+        private void SpawnStartingDestination()
         {
-            _enemySpawner.StartSpawner();
+            CurrentDestination = _destinationsFactory.CreateDestination(_startingDestination);
         }
         
-        [Button(ButtonSizes.Large)]
-        private void SpawnItems()
-        {
-            for (int i = 0; i < _itemsToSpawn; i++)
-                _itemSpawner.SpawnItem();
-        }
+        // [Button(ButtonSizes.Large)]
+        // private void StartEnemySpawner()
+        // {
+        //     _enemySpawner.StartSpawner();
+        // }
+        //
+        // [Button(ButtonSizes.Large)]
+        // private void SpawnItems()
+        // {
+        //     for (int i = 0; i < _itemsToSpawn; i++)
+        //         _itemSpawner.SpawnItem();
+        // }
         
         private void OnPlayerDied(PlayerDiedSignal signal)
         {
@@ -103,7 +118,8 @@ namespace NJN.Runtime.Managers
         private void OnDestinationSelected(DestinationSelectedSignal signal)
         {
             LevelInventory.AddFuel(-signal.DestinationData.FuelCost);
-            Debug.Log("Selected destination: " + signal.DestinationData.DestinationName);
+            Destroy(CurrentDestination.gameObject);
+            CurrentDestination = _destinationsFactory.CreateDestination(signal.DestinationData);
         }
     }
 }

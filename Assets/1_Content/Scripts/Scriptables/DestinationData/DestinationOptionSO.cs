@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using NJN.Runtime.Controllers.Destination;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace NJN.Scriptables
@@ -9,7 +10,7 @@ namespace NJN.Scriptables
         [field: BoxGroup("Destination Option"), SerializeField]
         public string DestinationName { get; private set; }
         [field: BoxGroup("Destination Option"), SerializeField]
-        public GameObject DestinationPrefab { get; private set; }
+        public DestinationController DestinationPrefab { get; private set; }
         [field: BoxGroup("Destination Option"), SerializeField]
         public int FuelCost { get; private set; }
         [field: BoxGroup("Destination Option"), SerializeField, TextArea]

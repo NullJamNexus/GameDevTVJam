@@ -45,8 +45,8 @@ namespace NJN.Runtime.Factories
 
         public DestinationController CreateDestination(DestinationOptionSO destinationData)
         {
-            // TODO: Implement
-            return null;
+            DestinationController destinationController = _container.InstantiatePrefabForComponent<DestinationController>(destinationData.DestinationPrefab);
+            return destinationController;
         }
     }
 }
