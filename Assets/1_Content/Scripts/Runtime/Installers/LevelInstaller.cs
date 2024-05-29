@@ -49,6 +49,10 @@ namespace NJN.Runtime.Installers
             Container.DeclareSignal<ReadNoteSignal>();
             Container.DeclareSignal<PickDestinationSignal>();
             Container.DeclareSignal<DestinationSelectedSignal>();
+            Container.DeclareSignal<EnterTruckSignal>();
+            Container.DeclareSignal<ExitTruckSignal>();
+            Container.DeclareSignal<AddFuelSignal>();
+            Container.DeclareSignal<FuelOverSignal>();
         }
     }
 }

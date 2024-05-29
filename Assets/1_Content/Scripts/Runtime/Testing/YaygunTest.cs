@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using NJN.Runtime.Components;
 using NJN.Runtime.Controllers.Enemy;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using Vit.Utilities;
-
+using Zenject;
 
 namespace NJN.Runtime.Testing
 {
@@ -18,21 +19,31 @@ namespace NJN.Runtime.Testing
             return Tools.GetLayerNames();
         }
 
-        [SerializeField] private bool _fireDistraction;
-        [SerializeField] private float _radius;
-        [SerializeField] private float _time;
-
-        [Button(ButtonSizes.Large)]
-        private void FireDistraction()
+        private SignalBus _signalBus;
+        [Inject]
+        private void Construct(SignalBus signalBus)
         {
-            //DistractionSystem.FireDistraction(transform.position, _radius, _time, LayerMask.GetMask(_selectedLayer));          
+            _signalBus = signalBus;
         }
+
+
         [Button(ButtonSizes.Large)]
         private void TeleportPlayer()
         {
             EnemyController enemy = GameObject.FindAnyObjectByType<EnemyController>();
             GameObject player = GameObject.FindGameObjectWithTag("Player");
             player.transform.position = Vector3.zero;
+        }
+
+        [Button(ButtonSizes.Large)]
+        private void Entertruck()
+        {
+            _signalBus.Fire(new EnterTruckSignal());
+        }
+        [Button(ButtonSizes.Large)]
+        private void Exittruck()
+        {
+            _signalBus.Fire(new ExitTruckSignal());
         }
 
     }
