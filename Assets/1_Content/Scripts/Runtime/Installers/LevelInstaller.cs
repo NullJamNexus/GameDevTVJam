@@ -54,6 +54,8 @@ namespace NJN.Runtime.Installers
             Container.DeclareSignal<EnteredTruckSignal>();
             Container.DeclareSignal<ExitedTruckSignal>();
             Container.DeclareSignal<PlayerDamageSignal>();
+            Container.DeclareSignal<HideSignal>();
+            Container.DeclareSignal<EndHideSignal>();
         }
     }
 }
