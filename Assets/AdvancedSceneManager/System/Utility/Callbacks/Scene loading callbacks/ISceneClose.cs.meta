@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: e369cce9a0e929145beabd7ab6e55d5d
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 174152
+  packageName: Advanced Scene Manager
+  packageVersion: 2.1.0
+  assetPath: Assets/AdvancedSceneManager/System/Utility/Callbacks/Scene loading callbacks/ISceneClose.cs
+  uploadId: 643038

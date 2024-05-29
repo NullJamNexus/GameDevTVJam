@@ -31,8 +31,9 @@ namespace NJN.Runtime.Installers
             Container.BindInterfacesTo<EnemySpawner>().AsSingle().NonLazy();
             Container.BindInterfacesTo<ItemSpawner>().AsSingle().NonLazy();
 
-            //Managers
-            Container.BindInterfacesAndSelfTo<LevelManager>().FromComponentsInHierarchy().AsSingle().NonLazy();
+            // Level
+            Container.BindInterfacesAndSelfTo<LevelManager>().FromComponentInHierarchy().AsSingle().NonLazy();
+            Container.BindInterfacesTo<LevelInventory>().FromComponentInHierarchy().AsSingle().NonLazy();
             
             //UI
             Container.Bind<InteractionPrompt>().FromComponentInNewPrefab(_interactionPrompt).UnderTransform(transform).AsSingle().NonLazy();
@@ -49,6 +50,10 @@ namespace NJN.Runtime.Installers
             Container.DeclareSignal<ReadNoteSignal>();
             Container.DeclareSignal<PickDestinationSignal>();
             Container.DeclareSignal<DestinationSelectedSignal>();
+            Container.DeclareSignal<FuelDepletedSignal>();
+            Container.DeclareSignal<EnteredTruckSignal>();
+            Container.DeclareSignal<ExitedTruckSignal>();
+            Container.DeclareSignal<PlayerDamageSignal>();
         }
     }
 }

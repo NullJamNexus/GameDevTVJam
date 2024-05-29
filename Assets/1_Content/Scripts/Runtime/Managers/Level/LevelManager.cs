@@ -17,11 +17,10 @@ namespace NJN.Runtime.Managers
 {
     public class LevelManager : MonoBehaviour, ILevelStateHandler
     {
-        [field: FoldoutGroup("Level Inventory"), SerializeField, HideLabel]
-        public LevelInventory LevelInventory { get; private set; }
-
         // [field: BoxGroup("Items"), SerializeField]
         // private int _itemsToSpawn = 10;
+        [field: BoxGroup("Player"), SerializeField]
+        private Vector2 _playerSpawnPosition = new (4.19f, 2.11f);
 
         [field: BoxGroup("Destinations"), SerializeField]
         private DestinationOptionSO _startingDestination;
@@ -55,7 +54,6 @@ namespace NJN.Runtime.Managers
         private void OnEnable()
         {
             _signalBus.Subscribe<PlayerDiedSignal>(OnPlayerDied);
-            _signalBus.Subscribe<ResourceCollectedSignal>(OnResourceCollected);
             _signalBus.Subscribe<DestinationSelectedSignal>(OnDestinationSelected);
         }
 
@@ -68,7 +66,6 @@ namespace NJN.Runtime.Managers
         private void OnDisable()
         {
             _signalBus.TryUnsubscribe<PlayerDiedSignal>(OnPlayerDied);
-            _signalBus.TryUnsubscribe<ResourceCollectedSignal>(OnResourceCollected);
             _signalBus.TryUnsubscribe<DestinationSelectedSignal>(OnDestinationSelected);
         }
         
@@ -85,8 +82,8 @@ namespace NJN.Runtime.Managers
             }
 
             Player = _characterFactory.CreatePlayer();
-            _playerHUD.SetUp(Player.Stats, LevelInventory);
-            Player.transform.position = Vector2.zero;
+            _playerHUD.SetUp(Player.Stats);
+            Player.transform.position = _playerSpawnPosition;
             _inputProvider.EnablePlayerControls();
         }
         
@@ -113,14 +110,8 @@ namespace NJN.Runtime.Managers
             Player.gameObject.SetActive(false);
         }
         
-        private void OnResourceCollected(ResourceCollectedSignal signal)
-        {
-            LevelInventory.AddResources(signal.FoodAmount, signal.FuelAmount, signal.ScrapsAmount);
-        }
-        
         private void OnDestinationSelected(DestinationSelectedSignal signal)
         {
-            LevelInventory.AddFuel(-signal.DestinationData.FuelCost);
             Destroy(CurrentDestination.gameObject);
             CurrentDestination = _destinationsFactory.CreateDestination(signal.DestinationData);
         }

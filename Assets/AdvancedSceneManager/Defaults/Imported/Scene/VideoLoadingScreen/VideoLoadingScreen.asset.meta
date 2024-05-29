@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 233a6e17ab2aa3a4aa8c3f6835768954
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 174152
+  packageName: Advanced Scene Manager
+  packageVersion: 2.1.0
+  assetPath: Assets/AdvancedSceneManager/Defaults/Imported/Scene/VideoLoadingScreen/VideoLoadingScreen.asset
+  uploadId: 643038

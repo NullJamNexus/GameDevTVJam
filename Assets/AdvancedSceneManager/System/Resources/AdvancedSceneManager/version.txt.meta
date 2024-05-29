@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: f98b31c1c8c1abd4f846d2ffe3714ad7
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 174152
+  packageName: Advanced Scene Manager
+  packageVersion: 2.1.0
+  assetPath: Assets/AdvancedSceneManager/System/Resources/AdvancedSceneManager/version.txt
+  uploadId: 643038

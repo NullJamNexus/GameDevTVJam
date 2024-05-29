@@ -2,6 +2,7 @@
 using NJN.Runtime.Controllers.Player.Dead;
 using NJN.Runtime.Controllers.States;
 using NJN.Runtime.Input;
+using NJN.Runtime.Managers;
 using Unity.Cinemachine;
 using Zenject;
 
@@ -65,6 +66,8 @@ namespace NJN.Runtime.Controllers.Player
 
         private void OnEnable()
         {
+            SignalBus.Subscribe<PlayerDamageSignal>(OnGlobalDamage);
+            
             Stats.DiedEvent += OnDeath;
         }
 
@@ -76,6 +79,8 @@ namespace NJN.Runtime.Controllers.Player
 
         private void OnDisable()
         {
+            SignalBus.TryUnsubscribe<PlayerDamageSignal>(OnGlobalDamage);
+            
             Stats.DiedEvent -= OnDeath;
         }
 
@@ -84,6 +89,11 @@ namespace NJN.Runtime.Controllers.Player
         public override void TakeDamage(float damage)
         {
             Stats.TakeDamage(damage);
+        }
+        
+        private void OnGlobalDamage(PlayerDamageSignal signal)
+        {
+            TakeDamage(signal.Amount);
         }
         
         private void OnDeath()
