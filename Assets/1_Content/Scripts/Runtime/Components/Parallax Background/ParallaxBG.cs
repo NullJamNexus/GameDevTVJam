@@ -4,7 +4,7 @@ using Zenject;
 using NJN.Runtime.Managers;
 using System.Collections.Generic;
 using MEC;
-using System.Security.Cryptography;
+
 
 public class ParallaxBG : MonoBehaviour
 {
@@ -41,7 +41,7 @@ public class ParallaxBG : MonoBehaviour
     public bool _autoScroll;
     [SerializeField] private float _autoScrollIncrement;
     private float _currentScrollPos;
-    private GameObject _centreObj;
+    [SerializeField] private GameObject _centreObj;
 
     // TODO: Change LevelManager to its interface
     [Inject]
@@ -53,15 +53,17 @@ public class ParallaxBG : MonoBehaviour
     private void OnEnable()
     {
         InitializeLayers();
-        ToggleParallax();
-        SetUpAutoScroll();
+        ForceParallaxOn();
+        if(_autoScroll)
+        {
+            SetUpAutoScroll();
+        }
+        //Debug.Log(_parallaxActive);
         
     }
 
     private void SetUpAutoScroll()
     {
-            _centreObj = transform.GetChild(3).gameObject;
-            _parallaxActive = true;
             _startY = gameObject.transform.position.y;
     }
 
@@ -102,9 +104,11 @@ public class ParallaxBG : MonoBehaviour
         }
         else if (_parallaxActive && _autoScroll)
         {
-            _centreObj.transform.position = new Vector2(0,_startY);
-            ScrollLayersTransition(_currentScrollPos);
-            _currentScrollPos+=_autoScrollIncrement;
+            if(_centreObj != null){
+                _centreObj.transform.position = new Vector2(0,_startY);
+                ScrollLayersTransition(_currentScrollPos);
+                _currentScrollPos+=_autoScrollIncrement;
+            }
         }
     }
 
@@ -147,7 +151,20 @@ public class ParallaxBG : MonoBehaviour
         {
             float distanceToCentreObj;
             if(!_autoScroll) distanceToCentreObj = child.transform.position.x - _levelManager.Player.transform.position.x;
-            else distanceToCentreObj = child.transform.position.x - _centreObj.transform.position.x;
+
+            else
+            {
+                if(_centreObj!=null)
+                {
+                    distanceToCentreObj = child.transform.position.x - _centreObj.transform.position.x;
+                }
+                else
+                {
+                    distanceToCentreObj = 0;
+                    Debug.Log($"{gameObject} is trying to access a centre object which is null!");
+                }
+                
+            } 
 
             if (distanceToCentreObj > _distanceDifferential)
             {
@@ -176,8 +193,16 @@ public class ParallaxBG : MonoBehaviour
         }
         else
         {
-            _coroutineHandler = Timing.RunCoroutine(MovingSpritesCoroutine().CancelWith(gameObject));
+            _coroutineHandler = Timing.RunCoroutine(MovingSpritesCoroutine());
             _parallaxActive = true;
+        }
+    }
+
+    private void ForceParallaxOn()
+    {
+        if(!_parallaxActive)
+        {
+            ToggleParallax();
         }
     }
 }

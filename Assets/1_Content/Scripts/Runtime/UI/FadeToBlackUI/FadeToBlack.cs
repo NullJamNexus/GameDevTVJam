@@ -40,10 +40,17 @@ public class FadeToBlack : MonoBehaviour
         _transitionCamera = transform.GetChild(0).transform.GetChild(1).gameObject;
         _parallaxObj = transform.GetChild(1).gameObject;
 
-        _transitionCamera.gameObject.SetActive(false);
-        _parallaxObj.SetActive(false);
 
+        _transitionCamera.gameObject.SetActive(false);
+
+        Timing.RunCoroutine(DisableTransitionParallax());
         ResetAlpha();
+    }
+
+    private IEnumerator<float> DisableTransitionParallax()
+    {
+        yield return Timing.WaitForSeconds(0.5f);
+        _parallaxObj.SetActive(false);
     }
 
 
