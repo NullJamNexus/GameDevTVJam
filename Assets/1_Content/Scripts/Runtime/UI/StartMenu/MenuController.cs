@@ -2,6 +2,7 @@ using NJN.Runtime.Components;
 using UnityEngine;
 using Sirenix.OdinInspector;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 
 namespace NJN.Runtime.UI.StartMenu
@@ -47,7 +48,8 @@ namespace NJN.Runtime.UI.StartMenu
 
         private void OnPlay()
         {
-            print("Start Game");
+            string startscene = "3_Level";
+            SceneManager.LoadScene(startscene);
         }
 
         private void OnSettings()
