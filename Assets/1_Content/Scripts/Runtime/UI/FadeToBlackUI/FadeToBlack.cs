@@ -24,6 +24,7 @@ public class FadeToBlack : MonoBehaviour
     private CinemachineBrain _cmBrain;
     private PlayerHUD _hudObj;
     private GameObject _parallaxObj;
+    private GameObject _blackBars;
 
 
     [Inject]
@@ -39,9 +40,11 @@ public class FadeToBlack : MonoBehaviour
         _spriteColor = _blackSquareSprite.color;
         _transitionCamera = transform.GetChild(0).transform.GetChild(1).gameObject;
         _parallaxObj = transform.GetChild(1).gameObject;
+        _blackBars = transform.GetChild(0).transform.GetChild(2).gameObject;
 
 
-        _transitionCamera.gameObject.SetActive(false);
+        _transitionCamera.SetActive(false);
+        _blackBars.SetActive(false);
 
         Timing.RunCoroutine(DisableTransitionParallax());
         ResetAlpha();
@@ -53,7 +56,17 @@ public class FadeToBlack : MonoBehaviour
         _parallaxObj.SetActive(false);
     }
 
-
+    private void ToggleBlackBars()
+    {
+        if(_blackBars.activeSelf)
+        {
+            _blackBars.SetActive(false);
+        }
+        else
+        {
+            _blackBars.SetActive(true);
+        }
+    }
 
 
     [Button(ButtonSizes.Gigantic)]
@@ -135,6 +148,7 @@ public class FadeToBlack : MonoBehaviour
             _isFading = false;
             Timing.KillCoroutines(_fadeToBlackCoroutineHandle);
             TransitionToggle();
+
             ChangeCamera();
         }
         else if(_spriteColor.a<0)
@@ -155,6 +169,7 @@ public class FadeToBlack : MonoBehaviour
         _hudObj.gameObject.SetActive(false);
         _camera.transform.gameObject.SetActive(false);
         _transitionCamera.gameObject.SetActive(true);
+        ToggleBlackBars();
         _isTransitioning=true;
         }
 
@@ -164,6 +179,7 @@ public class FadeToBlack : MonoBehaviour
         _camera.transform.gameObject.SetActive(true);
         _transitionCamera.gameObject.SetActive(false);
         _parallaxObj.SetActive(false);
+        ToggleBlackBars();
         _isTransitioning=false;            
         }
 

@@ -42,6 +42,7 @@ public class ParallaxBG : MonoBehaviour
     [SerializeField] private float _autoScrollIncrement;
     private float _currentScrollPos;
     [SerializeField] private GameObject _centreObj;
+    private float _rampUpDown;
 
     // TODO: Change LevelManager to its interface
     [Inject]
