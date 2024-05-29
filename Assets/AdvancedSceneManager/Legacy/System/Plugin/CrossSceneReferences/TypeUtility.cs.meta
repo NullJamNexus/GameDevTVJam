@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 3fb80ad801a7e464b9620ae7db0ba51f
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 174152
+  packageName: Advanced Scene Manager
+  packageVersion: 2.1.0
+  assetPath: Assets/AdvancedSceneManager/Legacy/System/Plugin/CrossSceneReferences/TypeUtility.cs
+  uploadId: 643038

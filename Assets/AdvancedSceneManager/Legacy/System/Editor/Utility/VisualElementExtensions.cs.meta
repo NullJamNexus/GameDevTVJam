@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: f87acdd5035feb74491f6cf56b758635
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 174152
+  packageName: Advanced Scene Manager
+  packageVersion: 2.1.0
+  assetPath: Assets/AdvancedSceneManager/Legacy/System/Editor/Utility/VisualElementExtensions.cs
+  uploadId: 643038

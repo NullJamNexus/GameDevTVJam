@@ -5,6 +5,7 @@ using TMPro;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace NJN.Runtime.UI
 {
@@ -31,12 +32,17 @@ namespace NJN.Runtime.UI
         private TMP_Text _scrapsText;
         
         private ISurvivalStats _survivalStats;
-        private LevelInventory _levelInventory;
+        private ILevelInventory _levelInventory;
         
-        public void SetUp(ISurvivalStats survivalStats, LevelInventory levelInventory)
+        [Inject]
+        private void Construct(ILevelInventory levelInventory)
+        {
+            _levelInventory = levelInventory;
+        }
+        
+        public void SetUp(ISurvivalStats survivalStats)
         {
             _survivalStats = survivalStats;
-            _levelInventory = levelInventory;
             BindProperties();
         }
         

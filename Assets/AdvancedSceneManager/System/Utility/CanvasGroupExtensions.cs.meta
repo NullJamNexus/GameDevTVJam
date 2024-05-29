@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: df205fcca7c5f5c4485c8e7878b7986c
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 174152
+  packageName: Advanced Scene Manager
+  packageVersion: 2.1.0
+  assetPath: Assets/AdvancedSceneManager/System/Utility/CanvasGroupExtensions.cs
+  uploadId: 643038

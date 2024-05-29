@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 213c65134e6d4204bbad27729fec169f
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 174152
+  packageName: Advanced Scene Manager
+  packageVersion: 2.1.0
+  assetPath: Assets/AdvancedSceneManager/Legacy/System/Plugin/Addressables/SceneLoadOverride.cs
+  uploadId: 643038

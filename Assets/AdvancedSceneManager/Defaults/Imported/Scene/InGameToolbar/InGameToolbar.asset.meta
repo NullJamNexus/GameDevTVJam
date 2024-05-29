@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: b2103fc68aa76264f9fecd6322d5fabe
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 174152
+  packageName: Advanced Scene Manager
+  packageVersion: 2.1.0
+  assetPath: Assets/AdvancedSceneManager/Defaults/Imported/Scene/InGameToolbar/InGameToolbar.asset
+  uploadId: 643038

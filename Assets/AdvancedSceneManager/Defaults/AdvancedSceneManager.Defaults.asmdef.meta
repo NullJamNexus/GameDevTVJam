@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 4422576e8b7e19e48a6a6608f79f1a9f
+AssemblyDefinitionImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 174152
+  packageName: Advanced Scene Manager
+  packageVersion: 2.1.0
+  assetPath: Assets/AdvancedSceneManager/Defaults/AdvancedSceneManager.Defaults.asmdef
+  uploadId: 643038

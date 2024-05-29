@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 65d8824226488dc4080c93ef6565c3f4
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 174152
+  packageName: Advanced Scene Manager
+  packageVersion: 2.1.0
+  assetPath: Assets/AdvancedSceneManager/Legacy/System/Utility/DictionaryUtility.cs
+  uploadId: 643038

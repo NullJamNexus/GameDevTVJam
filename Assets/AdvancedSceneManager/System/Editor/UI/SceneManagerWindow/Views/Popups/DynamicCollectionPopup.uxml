@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:GroupBox>
+        <ui:Label tabindex="-1" text="Dynamic collections guarantee that all scenes contained in a folder (and subfolders) are included in build, even if blacklisted.\n\nScenes do not have to be imported into ASM." display-tooltip-when-elided="true" class="wrap" style="margin-bottom: 12px;" />
+        <ui:TextField picking-mode="Ignore" label="Title:" name="text-title" />
+        <ui:TextField picking-mode="Ignore" label="Path:" name="text-path" />
+    </ui:GroupBox>
+</ui:UXML>
