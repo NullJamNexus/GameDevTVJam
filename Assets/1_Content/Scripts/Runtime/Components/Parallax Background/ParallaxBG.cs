@@ -4,6 +4,7 @@ using Zenject;
 using NJN.Runtime.Managers;
 using System.Collections.Generic;
 using MEC;
+using System.Security.Cryptography;
 
 public class ParallaxBG : MonoBehaviour
 {
@@ -26,7 +27,9 @@ public class ParallaxBG : MonoBehaviour
     [SerializeField, BoxGroup("Tweak Values (Read Tooltips)"), Tooltip("How far the sprite needs to be teleported, usually works well with ( (spritewidth +10) * 2)")]
     private int _distanceToMoveSprite;
     [SerializeField, BoxGroup("Tweak Values (Read Tooltips)"), Tooltip("Lower number makes effect stronger and faster, recommended to keep around 10")]
-    private float speedOffset = 10f;
+    private float _speedOffset = 10f;
+    [SerializeField, BoxGroup("Tweak Values (Read Tooltips)"), Tooltip("How frequently sprites are translated when player reaches outer bounds (in seconds)")]
+    private float _updateFrequency = 0.7f;
 
     private LevelManager _levelManager;
     private bool _parallaxActive;
@@ -34,6 +37,11 @@ public class ParallaxBG : MonoBehaviour
     private List<GameObject> _layerBackChildren;
     private List<GameObject> _layerMiddleChildren;
     private List<GameObject> _layerFrontChildren;
+    private float _startY;
+    public bool _autoScroll;
+    [SerializeField] private float _autoScrollIncrement;
+    private float _currentScrollPos;
+    private GameObject _centreObj;
 
     // TODO: Change LevelManager to its interface
     [Inject]
@@ -42,10 +50,19 @@ public class ParallaxBG : MonoBehaviour
         _levelManager = levelManager;
     }
 
-    private void Start()
+    private void OnEnable()
     {
         InitializeLayers();
         ToggleParallax();
+        SetUpAutoScroll();
+        
+    }
+
+    private void SetUpAutoScroll()
+    {
+            _centreObj = transform.GetChild(3).gameObject;
+            _parallaxActive = true;
+            _startY = gameObject.transform.position.y;
     }
 
     private void InitializeLayers()
@@ -57,6 +74,7 @@ public class ParallaxBG : MonoBehaviour
         _layerBackChildren = GetLayerChildren(_layerBack);
         _layerMiddleChildren = GetLayerChildren(_layerMiddle);
         _layerFrontChildren = GetLayerChildren(_layerFront);
+        
     }
 
     private List<GameObject> GetLayerChildren(GameObject layer)
@@ -78,19 +96,35 @@ public class ParallaxBG : MonoBehaviour
 
     private void Update()
     {
-        if (_parallaxActive)
+        if (_parallaxActive && !_autoScroll)
         {
             ScrollLayers();
+        }
+        else if (_parallaxActive && _autoScroll)
+        {
+            _centreObj.transform.position = new Vector2(0,_startY);
+            ScrollLayersTransition(_currentScrollPos);
+            _currentScrollPos+=_autoScrollIncrement;
         }
     }
 
     private void ScrollLayers()
     {
         //TODO: Does this need delta time because its being called in update?
+
         float playerPosX = _levelManager.Player.transform.position.x;
-        _layerBack.transform.position = -(new Vector2(playerPosX, 0) / speedOffset);
-        _layerMiddle.transform.position = -(new Vector2(playerPosX, 0) / (speedOffset / 2));
-        _layerFront.transform.position = -(new Vector2(playerPosX, 0) / (speedOffset / 4));
+        _layerBack.transform.position = -(new Vector2(playerPosX, 0) / _speedOffset);
+        _layerMiddle.transform.position = -(new Vector2(playerPosX, 0) / (_speedOffset / 2));
+        _layerFront.transform.position = -(new Vector2(playerPosX, 0) / (_speedOffset / 4));
+
+
+    }
+
+    private void ScrollLayersTransition(float increment)
+    {
+        _layerBack.transform.position = new Vector2(increment / _speedOffset, _startY) ;
+        _layerMiddle.transform.position = new Vector2(increment / (_speedOffset / 2) , _startY) ;
+        _layerFront.transform.position = new Vector2(increment / (_speedOffset / 4), _startY) ;
     }
 
     private IEnumerator<float> MovingSpritesCoroutine()
@@ -103,7 +137,7 @@ public class ParallaxBG : MonoBehaviour
             AdjustSpritePositions(_layerMiddleChildren);
             AdjustSpritePositions(_layerFrontChildren);
 
-            yield return Timing.WaitForSeconds(1f);
+            yield return Timing.WaitForSeconds(_updateFrequency);
         }
     }
 
@@ -111,12 +145,15 @@ public class ParallaxBG : MonoBehaviour
     {
         foreach (GameObject child in layerChildren)
         {
-            float distanceToPlayer = child.transform.position.x - _levelManager.Player.transform.position.x;
-            if (distanceToPlayer > _distanceDifferential)
+            float distanceToCentreObj;
+            if(!_autoScroll) distanceToCentreObj = child.transform.position.x - _levelManager.Player.transform.position.x;
+            else distanceToCentreObj = child.transform.position.x - _centreObj.transform.position.x;
+
+            if (distanceToCentreObj > _distanceDifferential)
             {
                 MoveSprite(SideOfSprite.Left, child);
             }
-            else if (distanceToPlayer < -_distanceDifferential)
+            else if (distanceToCentreObj < -_distanceDifferential)
             {
                 MoveSprite(SideOfSprite.Right, child);
             }
