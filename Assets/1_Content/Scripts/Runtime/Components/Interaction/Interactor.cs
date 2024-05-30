@@ -11,7 +11,7 @@ namespace NJN.Runtime.Components
         [BoxGroup("Settings"), SerializeField]
         private LayerMask _interactableLayer;
         
-        public IInteractable Interactable { get; set; }
+        public IInteractable Interactable { get; private set; }
 
         public void OnTriggerEnter2D(Collider2D other)
         {
@@ -31,6 +31,11 @@ namespace NJN.Runtime.Components
                 Interactable = null;
                 interactable.HideInteractPrompt();
             }
+        }
+        
+        public void Interact()
+        {
+            Interactable?.Interact(this);
         }
     }
 }

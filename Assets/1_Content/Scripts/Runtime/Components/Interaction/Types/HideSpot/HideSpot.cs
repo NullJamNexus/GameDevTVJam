@@ -6,23 +6,20 @@ namespace NJN.Runtime.Components
 {
     public class HideSpot : HideSpotInteractableComponent
     {
-        [BoxGroup("Hide Style"), SerializeField]
-        private EHideStyle _hideStyle;
-
-        public override void Interact(PlayerController player)
+        public override void Interact(IInteractor interactor)
         {
-            base.Interact(player);
+            base.Interact(interactor);
 
             IsHiding = !IsHiding;
             ShowInteractPrompt();
 
             if(IsHiding)
             {
-                _signalBus.Fire(new HideSignal(_hideStyle));
+                _signalBus.Fire(new PlayerHideSignal());
             }
             else
             {
-                _signalBus.Fire(new EndHideSignal());
+                _signalBus.Fire(new PlayerUnhideSignal());
             }
         }
     }

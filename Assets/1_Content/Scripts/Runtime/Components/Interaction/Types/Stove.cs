@@ -23,9 +23,9 @@ namespace NJN.Runtime.Components
             _levelInventory = levelInventory;
         }
         
-        public override void Interact(PlayerController player)
+        public override void Interact(IInteractor interactor)
         {
-            base.Interact(player);
+            base.Interact(interactor);
 
             if (!HasEnoughResources()) return;
             

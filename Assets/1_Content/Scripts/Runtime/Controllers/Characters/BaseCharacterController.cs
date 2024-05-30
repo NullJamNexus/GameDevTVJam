@@ -21,6 +21,7 @@ namespace NJN.Runtime.Controllers
         [field: FoldoutGroup("Physics"), SerializeField]
         private bool _showDebugLine = false;
         
+        public SpriteRenderer Model { get; private set; }
         public Animator Animator { get; private set; }
         public Transform Transform => transform;
         
@@ -34,6 +35,11 @@ namespace NJN.Runtime.Controllers
             if (Animator == null)
             {
                 Debug.LogError("[CharacterController] Animator not found in: " + name);
+            }
+            Model = GetComponentInChildren<SpriteRenderer>();
+            if (Model == null)
+            {
+                Debug.LogError("[CharacterController] Model (SpriteRenderer) not found in: " + name);
             }
         }
         

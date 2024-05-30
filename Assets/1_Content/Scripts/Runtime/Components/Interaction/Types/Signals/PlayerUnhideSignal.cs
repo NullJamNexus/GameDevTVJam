@@ -1,6 +1,6 @@
 namespace NJN.Runtime.Components
 {
-    public struct EndHideSignal
+    public struct PlayerUnhideSignal
     {
     }
 }

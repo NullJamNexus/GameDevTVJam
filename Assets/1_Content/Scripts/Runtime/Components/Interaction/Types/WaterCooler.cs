@@ -9,9 +9,9 @@ namespace NJN.Runtime.Components
         [BoxGroup("Water Cooler"), SerializeField]
         private float _waterToAdd = 100f;
         
-        public override void Interact(PlayerController player)
+        public override void Interact(IInteractor interactor)
         {
-            base.Interact(player);
+            base.Interact(interactor);
             
             _signalBus.Fire(new DrankWaterSignal(_waterToAdd));
         }

@@ -20,9 +20,9 @@ namespace NJN.Runtime.Components
                 OpenDoorNoAnim();
         }
 
-        public override void Interact(PlayerController player)
+        public override void Interact(IInteractor interactor)
         {
-            base.Interact(player);
+            base.Interact(interactor);
 
             IsOpen = !IsOpen;
             ShowInteractPrompt();

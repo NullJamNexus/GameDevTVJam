@@ -11,9 +11,9 @@ namespace NJN.Runtime.Components
         [BoxGroup("Note"), SerializeField, TextArea]
         private string _noteBody = "- Something \n - Something \n - Something";
         
-        public override void Interact(PlayerController player)
+        public override void Interact(IInteractor interactor)
         {
-            base.Interact(player);
+            base.Interact(interactor);
             
             _signalBus.Fire(new ReadNoteSignal(_noteHeader, _noteBody));
         }

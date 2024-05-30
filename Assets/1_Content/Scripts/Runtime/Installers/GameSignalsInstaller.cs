@@ -13,6 +13,10 @@ namespace NJN.Runtime.Installers
             SignalBusInstaller.Install(Container);
             
             Container.DeclareSignal<PlayerDiedSignal>();
+            Container.DeclareSignal<PlayerTeleportSignal>();
+            Container.DeclareSignal<PlayerDamageSignal>();
+            Container.DeclareSignal<PlayerHideSignal>();
+            Container.DeclareSignal<PlayerUnhideSignal>();
             Container.DeclareSignal<ResourceCollectedSignal>();
             Container.DeclareSignal<CookedFoodSignal>();
             Container.DeclareSignal<DrankWaterSignal>();
@@ -22,9 +26,6 @@ namespace NJN.Runtime.Installers
             Container.DeclareSignal<FuelDepletedSignal>();
             Container.DeclareSignal<EnteredTruckSignal>();
             Container.DeclareSignal<ExitedTruckSignal>();
-            Container.DeclareSignal<PlayerDamageSignal>();
-            Container.DeclareSignal<HideSignal>();
-            Container.DeclareSignal<EndHideSignal>();
         }
     }
 }

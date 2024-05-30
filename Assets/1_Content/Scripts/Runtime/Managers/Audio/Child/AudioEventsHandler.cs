@@ -18,18 +18,18 @@ namespace AudioManager.Player
 
         public void SubscribeSignals()
         {
-            _signalBus.Subscribe<HideSignal>(OnHide);
+            _signalBus.Subscribe<PlayerHideSignal>(OnHide);
             // Other signals
         }
         
         public void UnsubscribeSignals()
         {
-            _signalBus.TryUnsubscribe<HideSignal>(OnHide);
+            _signalBus.TryUnsubscribe<PlayerHideSignal>(OnHide);
             // Other signals
         }
 
         // Audio events
-        private void OnHide(HideSignal signal)
+        private void OnHide(PlayerHideSignal signal)
         {
             RuntimeManager.PlayOneShot(_data.Hide);
         }
