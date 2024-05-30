@@ -23,7 +23,7 @@ namespace NJN.Runtime.Components
             _signalBus = signalBus;
         }
         
-        public virtual void Interact(PlayerController player)
+        public virtual void Interact(IInteractor interactor)
         {
             // No-op
         }

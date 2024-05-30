@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: b5a38b0cea8d14d459ba4b09a3646f15
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 174152
+  packageName: Advanced Scene Manager
+  packageVersion: 2.1.0
+  assetPath: Assets/AdvancedSceneManager/Example scripts/ScenePreload.cs
+  uploadId: 643038

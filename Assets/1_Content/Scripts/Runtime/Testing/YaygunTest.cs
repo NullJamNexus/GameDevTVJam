@@ -38,12 +38,12 @@ namespace NJN.Runtime.Testing
         [Button(ButtonSizes.Large)]
         private void Entertruck()
         {
-            _signalBus.Fire(new EnterTruckSignal());
+            _signalBus.Fire(new EnteredTruckSignal());
         }
         [Button(ButtonSizes.Large)]
         private void Exittruck()
         {
-            _signalBus.Fire(new ExitTruckSignal());
+            _signalBus.Fire(new ExitedTruckSignal());
         }
 
     }

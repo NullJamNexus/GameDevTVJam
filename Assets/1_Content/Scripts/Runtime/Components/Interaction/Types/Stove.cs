@@ -15,22 +15,21 @@ namespace NJN.Runtime.Components
         [BoxGroup("Stove"), SerializeField]
         private string _notEnoughResourcesPrompt = "Need More Food";
         
-        private LevelManager _levelManager;
+        private ILevelInventory _levelInventory;
         
-        // TODO: Interface level manager...
         [Inject]
-        private void Construct(LevelManager levelManager)
+        private void Construct(ILevelInventory levelInventory)
         {
-            _levelManager = levelManager;
+            _levelInventory = levelInventory;
         }
         
-        public override void Interact(PlayerController player)
+        public override void Interact(IInteractor interactor)
         {
-            base.Interact(player);
+            base.Interact(interactor);
 
             if (!HasEnoughResources()) return;
             
-            _levelManager.LevelInventory.AddFood(-_foodCost);
+            _levelInventory.AddFood(-_foodCost);
             _signalBus.Fire(new CookedFoodSignal(_hungerPerFood));
             ShowInteractPrompt();
         }
@@ -50,7 +49,7 @@ namespace NJN.Runtime.Components
         
         private bool HasEnoughResources()
         {
-            return _levelManager.LevelInventory.Food.Value >= _foodCost;
+            return _levelInventory.Food.Value >= _foodCost;
         }
     }
 }

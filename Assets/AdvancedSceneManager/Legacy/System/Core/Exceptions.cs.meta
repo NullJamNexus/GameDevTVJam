@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: b6e03a8d2dec93940a049388b79c30b5
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 174152
+  packageName: Advanced Scene Manager
+  packageVersion: 2.1.0
+  assetPath: Assets/AdvancedSceneManager/Legacy/System/Core/Exceptions.cs
+  uploadId: 643038

@@ -2,6 +2,7 @@
 {
     public interface IInteractor : IComponent
     {
-        public IInteractable Interactable { get; set; }
+        public IInteractable Interactable { get; }
+        public void Interact();
     }
 }

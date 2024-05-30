@@ -26,13 +26,13 @@ namespace NJN.Runtime.UI.Panels
         private List<DestinationOptionVisual> _destinationOptions = new();
         private bool _hasAllOptions;
         private IDestinationsFactory _destinationsFactory;
-        private LevelManager _levelManager;
+        private ILevelInventory _levelInventory;
         
         [Inject]
-        private void Construct(IDestinationsFactory destinationsFactory, LevelManager levelManager)
+        private void Construct(IDestinationsFactory destinationsFactory, ILevelInventory levelInventory)
         {
             _destinationsFactory = destinationsFactory;
-            _levelManager = levelManager;
+            _levelInventory = levelInventory;
         }
 
         public override void SetUpPanel(GameUI gameUI, SignalBus signalBus)
@@ -94,7 +94,7 @@ namespace NJN.Runtime.UI.Panels
         private void ValidateOption(DestinationOptionVisual destinationOption)
         {
             int fuelCost = destinationOption.DestinationData.FuelCost;
-            destinationOption.SetInteractable(fuelCost <= _levelManager.LevelInventory.Fuel.Value);
+            destinationOption.SetInteractable(fuelCost <= _levelInventory.Fuel.Value);
         }
         
         private void OnOptionSelected(DestinationOptionVisual destinationOption)

@@ -27,7 +27,7 @@ namespace NJN.Runtime.Controllers.Player
             
             if (ShouldInteract())
             {
-                _player.Interactor.Interactable.Interact(_player);
+                _player.Interactor.Interact();
                 return;
             }
             

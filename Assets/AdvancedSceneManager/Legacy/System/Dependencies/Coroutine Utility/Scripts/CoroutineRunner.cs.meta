@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: b3c6f728db946a4418a72aba06840c8b
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 174152
+  packageName: Advanced Scene Manager
+  packageVersion: 2.1.0
+  assetPath: Assets/AdvancedSceneManager/Legacy/System/Dependencies/Coroutine Utility/Scripts/CoroutineRunner.cs
+  uploadId: 643038

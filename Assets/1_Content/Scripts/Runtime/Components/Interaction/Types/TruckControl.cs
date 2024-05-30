@@ -4,9 +4,9 @@ namespace NJN.Runtime.Components
 {
     public class TruckControl : InteractableComponent
     {
-        public override void Interact(PlayerController player)
+        public override void Interact(IInteractor interactor)
         {
-            base.Interact(player);
+            base.Interact(interactor);
             
             _signalBus.Fire(new PickDestinationSignal());
         }

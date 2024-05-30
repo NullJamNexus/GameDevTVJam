@@ -58,16 +58,8 @@ namespace NJN.Runtime.Controllers.Enemy
             _losCheckTimer = Time.time;
             
             Vector2 direction = _enemy.IsFacingRight ? Vector2.right : Vector2.left;
-            if (_enemy.LineOfSight.TryGetVisibleDamagable(direction, out IDamagable damagable))
-            {
-                _enemy.LineOfSight.DamagableTarget = damagable;
-                if (_stateMachine.CurrentState != _enemy.ChaseState && _stateMachine.CurrentState != _enemy.AttackState)
-                    _stateMachine.ChangeState(_enemy.ChaseState);
-            }
-            else
-            {
-                _enemy.LineOfSight.DamagableTarget = null;
-            }
+            _enemy.LineOfSight.DamagableTarget = 
+                _enemy.LineOfSight.TryGetVisibleDamagable(direction, out IDamagable damagable) ? damagable : null;
         }
         
         private bool ShouldAttack()

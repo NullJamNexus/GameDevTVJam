@@ -13,13 +13,13 @@ namespace NJN.Runtime.Components
         [BoxGroup("Teleport Settings"), SerializeField]
         private Vector2 _offset;
         
-        public override void Interact(PlayerController player)
+        public override void Interact(IInteractor interactor)
         {
-            base.Interact(player);
+            base.Interact(interactor);
             
             if (_target == null) return;
 
-            player.transform.position = TransportLocation();
+            _signalBus.Fire(new PlayerTeleportSignal(TransportLocation()));
         }
 
         private Vector2 TransportLocation()

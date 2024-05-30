@@ -1,10 +1,8 @@
 ﻿using NJN.Runtime.Components;
-using NJN.Runtime.Controllers.Player;
 using NJN.Runtime.Factories;
 using NJN.Runtime.Managers;
 using NJN.Runtime.Systems;
 using NJN.Runtime.Systems.Spawners;
-using NJN.Runtime.UI.Panels;
 using NJN.Scriptables.Settings;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -31,28 +29,12 @@ namespace NJN.Runtime.Installers
             Container.BindInterfacesTo<EnemySpawner>().AsSingle().NonLazy();
             Container.BindInterfacesTo<ItemSpawner>().AsSingle().NonLazy();
 
-            //Managers
-            Container.BindInterfacesAndSelfTo<LevelManager>().FromComponentsInHierarchy().AsSingle().NonLazy();
+            // Level
+            Container.BindInterfacesAndSelfTo<LevelManager>().FromComponentInHierarchy().AsSingle().NonLazy();
+            Container.BindInterfacesTo<LevelInventory>().FromComponentInHierarchy().AsSingle().NonLazy();
             
             //UI
             Container.Bind<InteractionPrompt>().FromComponentInNewPrefab(_interactionPrompt).UnderTransform(transform).AsSingle().NonLazy();
-            
-            BindLevelSignals();
-        }
-        
-        private void BindLevelSignals()
-        {
-            Container.DeclareSignal<PlayerDiedSignal>();
-            Container.DeclareSignal<ResourceCollectedSignal>();
-            Container.DeclareSignal<CookedFoodSignal>();
-            Container.DeclareSignal<DrankWaterSignal>();
-            Container.DeclareSignal<ReadNoteSignal>();
-            Container.DeclareSignal<PickDestinationSignal>();
-            Container.DeclareSignal<DestinationSelectedSignal>();
-            Container.DeclareSignal<EnterTruckSignal>();
-            Container.DeclareSignal<ExitTruckSignal>();
-            Container.DeclareSignal<AddFuelSignal>();
-            Container.DeclareSignal<FuelOverSignal>();
         }
     }
 }

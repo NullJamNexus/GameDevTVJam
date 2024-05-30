@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 24a885c466be9c44b819adfdf271ee13
+AssemblyDefinitionImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 174152
+  packageName: Advanced Scene Manager
+  packageVersion: 2.1.0
+  assetPath: Assets/AdvancedSceneManager/Legacy/System/Editor/AdvancedSceneManager.Legacy.Editor.asmdef
+  uploadId: 643038

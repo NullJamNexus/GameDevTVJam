@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 394bfabae44442c4fa32654a4ee38d97
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 174152
+  packageName: Advanced Scene Manager
+  packageVersion: 2.1.0
+  assetPath: Assets/AdvancedSceneManager/Legacy/System/Core/Scene Actions/Open/SceneLoadAction.cs
+  uploadId: 643038
