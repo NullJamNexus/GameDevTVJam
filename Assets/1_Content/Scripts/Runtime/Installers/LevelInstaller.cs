@@ -1,10 +1,8 @@
 ﻿using NJN.Runtime.Components;
-using NJN.Runtime.Controllers.Player;
 using NJN.Runtime.Factories;
 using NJN.Runtime.Managers;
 using NJN.Runtime.Systems;
 using NJN.Runtime.Systems.Spawners;
-using NJN.Runtime.UI.Panels;
 using NJN.Scriptables.Settings;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -37,23 +35,6 @@ namespace NJN.Runtime.Installers
             
             //UI
             Container.Bind<InteractionPrompt>().FromComponentInNewPrefab(_interactionPrompt).UnderTransform(transform).AsSingle().NonLazy();
-            
-            BindLevelSignals();
-        }
-        
-        private void BindLevelSignals()
-        {
-            Container.DeclareSignal<PlayerDiedSignal>();
-            Container.DeclareSignal<ResourceCollectedSignal>();
-            Container.DeclareSignal<CookedFoodSignal>();
-            Container.DeclareSignal<DrankWaterSignal>();
-            Container.DeclareSignal<ReadNoteSignal>();
-            Container.DeclareSignal<PickDestinationSignal>();
-            Container.DeclareSignal<DestinationSelectedSignal>();
-            Container.DeclareSignal<FuelDepletedSignal>();
-            Container.DeclareSignal<EnteredTruckSignal>();
-            Container.DeclareSignal<ExitedTruckSignal>();
-            Container.DeclareSignal<PlayerDamageSignal>();
         }
     }
 }
