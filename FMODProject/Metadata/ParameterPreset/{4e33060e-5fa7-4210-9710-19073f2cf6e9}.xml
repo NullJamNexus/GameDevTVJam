@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="ParameterPreset" id="{4e33060e-5fa7-4210-9710-19073f2cf6e9}">
+		<property name="name">
+			<value>Walking_Speed</value>
+		</property>
+		<relationship name="folder">
+			<destination>{35e0575c-d61c-4453-a22c-0893de470320}</destination>
+		</relationship>
+		<relationship name="parameter">
+			<destination>{a600050d-5b9c-4946-9c07-89ccf9d64604}</destination>
+		</relationship>
+	</object>
+	<object class="GameParameter" id="{a600050d-5b9c-4946-9c07-89ccf9d64604}">
+		<property name="parameterType">
+			<value>2</value>
+		</property>
+		<property name="maximum">
+			<value>3</value>
+		</property>
+		<property name="enumerationLabels">
+			<value>Walking</value>
+			<value>Running</value>
+			<value>Value C</value>
+		</property>
+		<property name="initialValue">
+			<value>0</value>
+		</property>
+	</object>
+</objects>

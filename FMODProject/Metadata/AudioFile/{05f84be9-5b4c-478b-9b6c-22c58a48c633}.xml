@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{05f84be9-5b4c-478b-9b6c-22c58a48c633}">
+		<property name="assetPath">
+			<value>Water_Cooler_SFX.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>48</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>1.4542083333333333</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{8930589d-1d2f-4daa-a446-a95391355dee}</destination>
+		</relationship>
+	</object>
+</objects>
