@@ -1,54 +1,20 @@
+using System;
 using AudioManager.Player;
-using NJN.Runtime.Components;
-using NJN.Scriptables.Audio.Player;
-using UnityEngine;
+using NJN.Scriptables;
 using Zenject;
 
-namespace AudioManager
+namespace NJN.Runtime.Managers
 {
-    public class AudioManager : BaseComponent
+    public class AudioManager : IInitializable, IDisposable
     {
-        #region Instantiate
-        private SignalBus _signalBus;
-        [Inject]
-        private void Construct(SignalBus signalBus)
-        {
-            _signalBus = signalBus;
-        }
-        private static AudioManager _instance;
-        private void Awake()
-        {
-            if(_instance == null )
-            {
-                _instance = this;
-                DontDestroyOnLoad(gameObject);
-                Initialize();
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
-        }
-        #endregion
+        private readonly AudioEventsHandler _audioEventsHandler;
 
-        #region Managers
-        private PlayerAudioManager _playerAudioManager;
-        #endregion
-
-        #region EventData
-        [SerializeField] private PlayerAudioEvents _playerAudioEvents;
-        #endregion
-        private void Initialize()
+        public AudioManager(SignalBus signalBus, AudioEventBindingSO audioEventBindingSo)
         {
-            _playerAudioManager = new PlayerAudioManager(_signalBus, _playerAudioEvents);
+            _audioEventsHandler = new AudioEventsHandler(signalBus, audioEventBindingSo);
         }
 
-        private void OnDestroy()
-        {
-            if (_playerAudioManager == null)
-                return;
-            _playerAudioManager.Destroy();
-            
-        }
+        public void Initialize() => _audioEventsHandler.SubscribeSignals();
+        public void Dispose() => _audioEventsHandler.UnsubscribeSignals();
     }
 }
