@@ -1,37 +1,39 @@
 using FMODUnity;
 using NJN.Runtime.Components;
+using NJN.Runtime.Fmod;
 using NJN.Scriptables;
 using Zenject;
 
-namespace AudioManager.Player
+namespace AudioManager.Music
 {
-    public class AudioEventsHandler 
+    public class MusicAudioEventsHandler 
     {
         private readonly SignalBus _signalBus;
         private readonly AudioEventBindingSO _data;
+        private readonly FmodCommunication _com;
         
-        public AudioEventsHandler(SignalBus signalBus, AudioEventBindingSO audioEventBindingSo)
+        public MusicAudioEventsHandler(SignalBus signalBus, AudioEventBindingSO audioEventBindingSo, FmodCommunication fmodCommunication)
         {
             _signalBus = signalBus;
             _data = audioEventBindingSo;
+            _com = fmodCommunication;
         }
 
         public void SubscribeSignals()
         {
-            _signalBus.Subscribe<PlayerHideSignal>(OnHide);
             // Other signals
         }
         
-        public void UnsubscribeSignals()
+        public void Dispose()
         {
-            _signalBus.TryUnsubscribe<PlayerHideSignal>(OnHide);
+            ReleaseAllInstances();
             // Other signals
         }
 
-        // Audio events
-        private void OnHide(PlayerHideSignal signal)
+        private void ReleaseAllInstances()
         {
-            RuntimeManager.PlayOneShot(_data.Hide);
+            //releaseallinstances
         }
+
     }
 }
