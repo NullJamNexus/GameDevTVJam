@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="MixerMaster" id="{e246c72f-e9cf-44c3-8f6a-da6ddd664845}">
+		<property name="name">
+			<value>Master Bus</value>
+		</property>
+		<relationship name="masters">
+			<destination>{991ce800-a71f-4a98-a560-bb1a217d0b60}</destination>
+		</relationship>
+		<relationship name="effectChain">
+			<destination>{b9fef761-70f8-429c-9c2e-1781fab6b81d}</destination>
+		</relationship>
+		<relationship name="panner">
+			<destination>{af6644e2-7971-4127-b5cd-8860c7dbe547}</destination>
+		</relationship>
+		<relationship name="mixer">
+			<destination>{53d26762-aabb-4037-aa2f-973288e7156d}</destination>
+		</relationship>
+	</object>
+	<object class="MixerBusEffectChain" id="{b9fef761-70f8-429c-9c2e-1781fab6b81d}">
+		<relationship name="effects">
+			<destination>{366420b3-0850-4b15-9820-1719ec133e82}</destination>
+			<destination>{b43d0ac1-80dd-4bdf-8289-d43611379fd5}</destination>
+		</relationship>
+	</object>
+	<object class="MixerBusPanner" id="{af6644e2-7971-4127-b5cd-8860c7dbe547}">
+		<property name="overridingOutputFormat">
+			<value>2</value>
+		</property>
+	</object>
+	<object class="LowpassEffect" id="{366420b3-0850-4b15-9820-1719ec133e82}">
+		<relationship name="automators">
+			<destination>{9938d6a0-039e-471c-a5e5-7a730c8cb627}</destination>
+		</relationship>
+	</object>
+	<object class="MixerBusFader" id="{b43d0ac1-80dd-4bdf-8289-d43611379fd5}" />
+	<object class="Automator" id="{9938d6a0-039e-471c-a5e5-7a730c8cb627}">
+		<property name="nameOfPropertyBeingAutomated">
+			<value>cutoff</value>
+		</property>
+		<relationship name="automationCurves">
+			<destination>{5b5ff858-a28b-4246-98ea-3ffc9a48048a}</destination>
+		</relationship>
+	</object>
+	<object class="AutomationCurve" id="{5b5ff858-a28b-4246-98ea-3ffc9a48048a}">
+		<relationship name="parameter">
+			<destination>{929048bf-80ea-48d2-99f7-9dfe90e22231}</destination>
+		</relationship>
+		<relationship name="automationPoints">
+			<destination>{9ec31ff1-3f48-4eb0-a1ef-bee65c9f9c35}</destination>
+			<destination>{3c5d7481-b5d3-4a60-8add-638ff6db7c8b}</destination>
+		</relationship>
+	</object>
+	<object class="AutomationPoint" id="{9ec31ff1-3f48-4eb0-a1ef-bee65c9f9c35}">
+		<property name="position">
+			<value>0</value>
+		</property>
+		<property name="value">
+			<value>22000</value>
+		</property>
+	</object>
+	<object class="AutomationPoint" id="{3c5d7481-b5d3-4a60-8add-638ff6db7c8b}">
+		<property name="position">
+			<value>1</value>
+		</property>
+		<property name="value">
+			<value>2000</value>
+		</property>
+	</object>
+</objects>
