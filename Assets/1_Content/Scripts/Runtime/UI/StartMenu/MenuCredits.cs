@@ -20,7 +20,10 @@ namespace NJN.Runtime.UI.StartMenu
 
         private void OnButtonPressed(string url)
         {
-            Application.OpenURL(url);
+            if (url != "")
+                Application.OpenURL(url);
+            else
+                print("No Url Detected");
         }
     }
 
