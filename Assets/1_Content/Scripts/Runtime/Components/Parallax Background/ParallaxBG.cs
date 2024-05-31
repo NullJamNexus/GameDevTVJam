@@ -38,10 +38,10 @@ public class ParallaxBG : MonoBehaviour
     private List<GameObject> _layerMiddleChildren;
     private List<GameObject> _layerFrontChildren;
     private float _startY;
-    public bool _autoScroll;
-    [SerializeField] private float _autoScrollIncrement;
+    private bool _autoScroll = true;
+    [SerializeField, ReadOnly] public float _autoScrollIncrement;
     private float _currentScrollPos;
-    [SerializeField] private GameObject _centreObj;
+    [SerializeField, ReadOnly] private GameObject _centreObj;
     private float _rampUpDown;
 
     // TODO: Change LevelManager to its interface
@@ -51,22 +51,47 @@ public class ParallaxBG : MonoBehaviour
         _levelManager = levelManager;
     }
 
-    private void OnEnable()
+    private void Start()
     {
         InitializeLayers();
+        Timing.RunCoroutine(InitializeCentreObject());
+        
+    }
+
+    private IEnumerator<float> InitializeCentreObject()
+    {
+        while(_centreObj == null)
+        {
+            try
+            {
+                _centreObj = _levelManager.Player.gameObject;
+            }
+            catch
+            {
+                Debug.Log("Parallax centre object not found, this is most likely due to the player not yet being instantiated.");
+            }
+            
+            yield return Timing.WaitForSeconds(0.1f);
+        }
+        
+    }
+
+    private void OnEnable()
+    {
         ForceParallaxOn();
-        if(_autoScroll)
+
+/*         if(_autoScroll)
         {
             SetUpAutoScroll();
-        }
+        } */
         //Debug.Log(_parallaxActive);
         
     }
 
-    private void SetUpAutoScroll()
+/*     private void SetUpAutoScroll()
     {
             _startY = gameObject.transform.position.y;
-    }
+    } */
 
     private void InitializeLayers()
     {
@@ -106,7 +131,7 @@ public class ParallaxBG : MonoBehaviour
         else if (_parallaxActive && _autoScroll)
         {
             if(_centreObj != null){
-                _centreObj.transform.position = new Vector2(0,_startY);
+                /* _centreObj.transform.position = new Vector2(0,_startY); */
                 ScrollLayersTransition(_currentScrollPos);
                 _currentScrollPos+=_autoScrollIncrement;
             }
@@ -116,20 +141,22 @@ public class ParallaxBG : MonoBehaviour
     private void ScrollLayers()
     {
         //TODO: Does this need delta time because its being called in update?
+        //THIS IS NOW OBSOLETE KEEPING FOR TROUBLESHOOTING
 
         float playerPosX = _levelManager.Player.transform.position.x;
         _layerBack.transform.position = -(new Vector2(playerPosX, 0) / _speedOffset);
-        _layerMiddle.transform.position = -(new Vector2(playerPosX, 0) / (_speedOffset / 2));
-        _layerFront.transform.position = -(new Vector2(playerPosX, 0) / (_speedOffset / 4));
+        _layerMiddle.transform.position = -(new Vector2(playerPosX, 0) / (_speedOffset / 3));
+        _layerFront.transform.position = -(new Vector2(playerPosX, 0) / (_speedOffset / 6));
 
 
     }
 
     private void ScrollLayersTransition(float increment)
     {
-        _layerBack.transform.position = new Vector2(increment / _speedOffset, _startY) ;
-        _layerMiddle.transform.position = new Vector2(increment / (_speedOffset / 2) , _startY) ;
-        _layerFront.transform.position = new Vector2(increment / (_speedOffset / 4), _startY) ;
+        float playerPosX = _levelManager.Player.transform.position.x;
+        _layerBack.transform.position = new Vector2((-playerPosX + increment) / _speedOffset, _layerBack.transform.position.y) ;
+        _layerMiddle.transform.position = new Vector2((-playerPosX + increment) / (_speedOffset / 2) , _layerMiddle.transform.position.y) ;
+        _layerFront.transform.position = new Vector2((-playerPosX + increment) / (_speedOffset / 4), _layerFront.transform.position.y) ;
     }
 
     private IEnumerator<float> MovingSpritesCoroutine()
@@ -162,7 +189,7 @@ public class ParallaxBG : MonoBehaviour
                 else
                 {
                     distanceToCentreObj = 0;
-                    Debug.Log($"{gameObject} is trying to access a centre object which is null!");
+                    Debug.Log($"{gameObject} is trying to access a centre object which is null! If the player is not yet instantiated, this is normal");
                 }
                 
             } 
