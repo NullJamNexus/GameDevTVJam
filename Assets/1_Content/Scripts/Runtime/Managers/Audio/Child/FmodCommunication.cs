@@ -14,6 +14,11 @@ namespace NJN.Runtime.Fmod
             RelaeseInstance(ref eventInstance);
             eventInstance = RuntimeManager.CreateInstance(eventReference);
         }
+        public void SetInstanceAndPlay(ref EventInstance eventInstance, EventReference eventReference)
+        {
+            SetInstance(ref eventInstance, eventReference);
+            PlayInstance(ref eventInstance);
+        }
 
         public void PlayInstance(ref EventInstance eventInstance)
         {

@@ -2,6 +2,7 @@
 using NJN.Runtime.Controllers.Player;
 using NJN.Runtime.Managers;
 using NJN.Runtime.UI.Panels;
+using NJN.Runtime.SoundSignal;
 using Zenject;
 
 namespace NJN.Runtime.Installers
@@ -26,6 +27,8 @@ namespace NJN.Runtime.Installers
             Container.DeclareSignal<FuelDepletedSignal>();
             Container.DeclareSignal<EnteredTruckSignal>();
             Container.DeclareSignal<ExitedTruckSignal>();
+            Container.DeclareSignal<StopAmbianceSignal>();
+            Container.DeclareSignal<MusicSignal>();
         }
     }
 }

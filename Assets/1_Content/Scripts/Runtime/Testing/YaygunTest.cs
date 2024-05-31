@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NJN.Runtime.Components;
 using NJN.Runtime.Controllers.Enemy;
+using NJN.Runtime.SoundSignal;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using Vit.Utilities;
@@ -11,13 +12,9 @@ namespace NJN.Runtime.Testing
 {
     public class YaygunTest : MonoBehaviour
     {
-        [SerializeField, ValueDropdown("GetLayerNames")]
-        private string _selectedLayer;
+        [SerializeField]
+        private EMusic _music;
 
-        private IEnumerable<string> GetLayerNames()
-        {
-            return Tools.GetLayerNames();
-        }
 
         private SignalBus _signalBus;
         [Inject]
@@ -33,6 +30,11 @@ namespace NJN.Runtime.Testing
             EnemyController enemy = GameObject.FindAnyObjectByType<EnemyController>();
             GameObject player = GameObject.FindGameObjectWithTag("Player");
             player.transform.position = Vector3.zero;
+        }
+        [Button(ButtonSizes.Large)]
+        private void PlayMusic()
+        {
+            _signalBus.Fire<MusicSignal>(new MusicSignal(_music));
         }
 
         [Button(ButtonSizes.Large)]
