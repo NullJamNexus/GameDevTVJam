@@ -22,6 +22,14 @@ namespace AudioManager.Player
         public void SubscribeSignals()
         {
             _signalBus.Subscribe<PlayerHideSignal>(OnHide);
+            _signalBus.Subscribe<ResourceCollectedSignal>(Collect);
+            _signalBus.Subscribe<DrankWaterSignal>(Drank);
+            _signalBus.Subscribe<ReadNoteSignal>(ReadNote);
+            _signalBus.Subscribe<PlayerUnhideSignal>(OffHide);
+            _signalBus.Subscribe<CookedFoodSignal>(Cooking);
+            //_signalBus.Subscribe<ResourceCollectedSignal>(Collect);
+            //_signalBus.Subscribe<ResourceCollectedSignal>(Collect);
+
             // Other signals
         }
         
@@ -29,6 +37,15 @@ namespace AudioManager.Player
         {
             ReleaseAllInstances();
             _signalBus.TryUnsubscribe<PlayerHideSignal>(OnHide);
+            _signalBus.TryUnsubscribe<ResourceCollectedSignal>(Collect);
+            _signalBus.TryUnsubscribe<DrankWaterSignal>(Drank);
+            _signalBus.TryUnsubscribe<ReadNoteSignal>(ReadNote);
+            _signalBus.TryUnsubscribe<PlayerUnhideSignal>(OffHide);
+            _signalBus.TryUnsubscribe<CookedFoodSignal>(Cooking);
+            //_signalBus.TryUnsubscribe<ResourceCollectedSignal>(Collect);
+            //_signalBus.TryUnsubscribe<ResourceCollectedSignal>(Collect);
+            //_signalBus.TryUnsubscribe<ResourceCollectedSignal>(Collect);
+
             // Other signals
         }
 
@@ -42,5 +59,26 @@ namespace AudioManager.Player
         {
             _com.PlayOneShot(_data.Hide);
         }
+        private void Collect(ResourceCollectedSignal signal)
+        {
+            RuntimeManager.PlayOneShot(_data.GatherResource);
+        }
+        private void Drank(DrankWaterSignal signal)
+        {
+            RuntimeManager.PlayOneShot(_data.DrinkingWater);
+        }
+        private void ReadNote(ReadNoteSignal signal)
+        {
+            RuntimeManager.PlayOneShot(_data.PickUpANote);
+        }
+        private void OffHide(PlayerUnhideSignal signal)
+        {
+            RuntimeManager.PlayOneShot(_data.EndHide);
+        }
+        private void Cooking(CookedFoodSignal signal)
+        {
+           RuntimeManager.PlayOneShot(_data.CookingOnStove);
+        }
+
     }
 }
