@@ -8,7 +8,7 @@ namespace NJN.Runtime.Controllers.Player
 {
     public class PlayerClimbState : PlayerActiveState
     {
-        private float _originalGravity;
+        private float _originalGravity = 666;
         
         public PlayerClimbState(PlayerController controller, ControllerStateMachine<CharacterState, 
             BaseCharacterController> stateMachine) : base(controller, stateMachine)
@@ -18,8 +18,8 @@ namespace NJN.Runtime.Controllers.Player
         public override void Enter()
         {
             base.Enter();
-
-            _originalGravity = _player.Rigidbody.gravityScale;
+            if(_originalGravity == 666)
+                _originalGravity = _player.Rigidbody.gravityScale;
             _player.Rigidbody.gravityScale = 0f;
             _player.Collider.isTrigger = true;
         }
