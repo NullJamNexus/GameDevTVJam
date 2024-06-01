@@ -235,7 +235,7 @@ namespace NJN.Runtime.Controllers
         {
             if (((1 << other.gameObject.layer) & _playerLayer) != 0)
             {
-                _signalBus.Fire(new ExitedTruckSignal());
+                _signalBus.TryFire(new ExitedTruckSignal());
             }
         }
     }

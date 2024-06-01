@@ -68,13 +68,13 @@ namespace NJN.Runtime.Managers
         private void OnExitTruck()
         {
             Timing.KillCoroutines(_oxygenCoroutineHandle);
-            _oxygenCoroutineHandle = Timing.RunCoroutine(LoseOxygen());
+            _oxygenCoroutineHandle = Timing.RunCoroutine(LoseOxygen().CancelWith(this));
         }
 
         private void OnEnterTruck()
         {
             Timing.KillCoroutines(_oxygenCoroutineHandle);
-            _oxygenCoroutineHandle = Timing.RunCoroutine(RegainOxygen());
+            _oxygenCoroutineHandle = Timing.RunCoroutine(RegainOxygen().CancelWith(this));
         }
 
         private void OnReachDestination()
@@ -88,7 +88,7 @@ namespace NJN.Runtime.Managers
         private void StartDamage()
         {
             Timing.KillCoroutines(_damageCoroutineHandle);
-            _damageCoroutineHandle = Timing.RunCoroutine(ApplyDamage());
+            _damageCoroutineHandle = Timing.RunCoroutine(ApplyDamage().CancelWith(this));
         }
 
         private IEnumerator<float> LoseOxygen()
