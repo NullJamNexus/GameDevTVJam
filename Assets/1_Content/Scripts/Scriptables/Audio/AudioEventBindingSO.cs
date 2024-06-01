@@ -13,7 +13,10 @@ namespace NJN.Scriptables
         public EventReference Mus_Menu { get; private set; }
 
         [field: FoldoutGroup("Music"), SerializeField]
-        public EventReference Mus_Level{ get; private set; }
+        public EventReference Mus_Level { get; private set; }
+
+        [field: FoldoutGroup("Music"), SerializeField]
+        public EventReference Mus_Truck { get; private set; }
 
         #endregion
         #region Ambience

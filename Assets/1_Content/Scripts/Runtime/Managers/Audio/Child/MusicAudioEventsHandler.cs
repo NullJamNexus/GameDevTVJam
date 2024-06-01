@@ -5,6 +5,7 @@ using NJN.Runtime.Components;
 using NJN.Runtime.Fmod;
 using NJN.Runtime.SoundSignal;
 using NJN.Scriptables;
+using System;
 using Zenject;
 
 namespace AudioManager.Music
@@ -31,7 +32,7 @@ namespace AudioManager.Music
         {
             _signalBus.Subscribe<MusicSignal>(ChangeMusic);
         }
-        
+
         public void Dispose()
         {
             _signalBus.TryUnsubscribe<MusicSignal>(ChangeMusic);
@@ -44,14 +45,13 @@ namespace AudioManager.Music
             _com.RelaeseInstance(ref _menuInstance);
             _com.RelaeseInstance(ref _levelInstance);
         }
-
         private void ChangeMusic(MusicSignal signal)
         {
             if (signal.Music == _currentMusic)
                 return;
 
             if(_currentMusic != EMusic.stop)
-                _com.RelaeseInstance(ref GetCurrentInstance());
+                _com.StopInstance(ref GetCurrentInstance());
 
             _currentMusic = signal.Music;
             if (_currentMusic != EMusic.stop)
@@ -78,8 +78,10 @@ namespace AudioManager.Music
                     return _data.Mus_Menu;
                 case EMusic.level:
                     return _data.Mus_Level;
+                case EMusic.truck:
+                    return _data.Mus_Truck;
                 default:
-                    return _data.Mus_Level;
+                    return _data.Mus_Truck;
             }
         }
 
