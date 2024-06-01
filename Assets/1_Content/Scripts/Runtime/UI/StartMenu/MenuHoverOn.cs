@@ -1,6 +1,7 @@
 using NJN.Runtime.Components;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace NJN.Runtime.UI.StartMenu
 {
@@ -10,14 +11,22 @@ namespace NJN.Runtime.UI.StartMenu
 
         private Vector3 _originalScale;
 
+        Button button;
+
         void Start()
         {
             _originalScale = transform.localScale;
+            button = GetComponent<Button>();
+            button.onClick.AddListener(PointerExit);
+        }
+        private void OnDestroy()
+        {
+            button.onClick.RemoveListener(PointerExit); 
         }
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-                transform.localScale = _originalScale * 1.2f;
+                transform.localScale = _originalScale * _hoverSize;
         }
 
         public void OnPointerExit(PointerEventData eventData)
