@@ -21,6 +21,20 @@ namespace NJN.Runtime.Fmod
             PlayInstance(ref eventInstance);
         }
 
+        public void PlayInstanceIfNotPlaying(ref EventInstance eventInstance, EventReference eventReference)
+        {
+            if(eventInstance.isValid())
+            {
+                if(!IsPlaying(ref eventInstance)) 
+                { 
+                    SetInstanceAndPlay(ref eventInstance, eventReference);
+                }
+            }
+            else
+            {
+                SetInstanceAndPlay(ref eventInstance, eventReference);
+            }
+        }
         public void PlayInstance(ref EventInstance eventInstance)
         {
             if(eventInstance.isValid())
@@ -66,7 +80,7 @@ namespace NJN.Runtime.Fmod
             RuntimeManager.StudioSystem.setParameterByName(parameterName, value);
         }
 
-        private bool IsPlaying(ref EventInstance eventInstance)
+        public bool IsPlaying(ref EventInstance eventInstance)
         {
             if (eventInstance.isValid())
             {

@@ -4,6 +4,7 @@ using NJN.Runtime.Managers;
 using NJN.Runtime.UI.Panels;
 using NJN.Runtime.SoundSignal;
 using Zenject;
+using NJN.Runtime.Controllers;
 
 namespace NJN.Runtime.Installers
 {
@@ -36,7 +37,8 @@ namespace NJN.Runtime.Installers
             Container.DeclareSignal<UseStairsSignal>();
             Container.DeclareSignal<DoorOpenSignal>();
             Container.DeclareSignal<DoorCloseSignal>();
-
+            Container.DeclareSignal<EnemyChaseSignal>();
+            Container.DeclareSignal<EndEnemyChaseSignal>();
         }
     }
 }

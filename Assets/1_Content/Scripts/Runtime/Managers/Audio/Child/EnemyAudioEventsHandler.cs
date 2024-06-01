@@ -1,5 +1,7 @@
+using FMOD.Studio;
 using FMODUnity;
 using NJN.Runtime.Components;
+using NJN.Runtime.Controllers;
 using NJN.Runtime.Fmod;
 using NJN.Scriptables;
 using Zenject;
@@ -21,20 +23,35 @@ namespace AudioManager.Enemy
 
         public void SubscribeSignals()
         {
-            // Other signals
+            _signalBus.Subscribe<EnemyChaseSignal>(StartEnemyChase);
+            _signalBus.Subscribe<EndEnemyChaseSignal>(EndEnemyChase);
         }
         
         public void Dispose()
         {
             ReleaseAllInstances();
-            // Other signals
+
+            _signalBus.TryUnsubscribe<EnemyChaseSignal>(StartEnemyChase);
+            _signalBus.TryUnsubscribe<EndEnemyChaseSignal>(EndEnemyChase);
         }
 
+        #region Instances
+
+        private EventInstance _chaseInstance;
+        #endregion
         private void ReleaseAllInstances()
         {
-            //releaseallinstances
+            _com.RelaeseInstance(ref _chaseInstance);
         }
 
-        // Audio events
+        private void StartEnemyChase()
+        {
+            _com.PlayInstanceIfNotPlaying(ref _chaseInstance ,_data.EnemyAttack);
+        }
+
+        private void EndEnemyChase()
+        {
+            _com.RelaeseInstance(ref _chaseInstance);
+        }
     }
 }
