@@ -20,6 +20,7 @@ namespace NJN.Runtime.Components
             if (_target == null) return;
 
             _signalBus.Fire(new PlayerTeleportSignal(TransportLocation()));
+            _signalBus.Fire(new UseStairsSignal());
         }
 
         private Vector2 TransportLocation()
