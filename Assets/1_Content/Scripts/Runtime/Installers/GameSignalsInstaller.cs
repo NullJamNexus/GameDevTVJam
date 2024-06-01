@@ -5,6 +5,8 @@ using NJN.Runtime.UI.Panels;
 using NJN.Runtime.SoundSignal;
 using Zenject;
 using NJN.Runtime.Controllers;
+using NJN.Runtime.Managers.Scenes.Signals;
+using NJN.Runtime.Managers.Signals;
 
 namespace NJN.Runtime.Installers
 {
@@ -14,11 +16,22 @@ namespace NJN.Runtime.Installers
         {
             SignalBusInstaller.Install(Container);
             
+            // Game Management
+            Container.DeclareSignal<BootstrapperInitializedSignal>();
+            Container.DeclareSignal<SceneLoadStartedSignal>();
+            Container.DeclareSignal<SceneLoadFinishedSignal>();
+            
+            // Player
             Container.DeclareSignal<PlayerDiedSignal>();
             Container.DeclareSignal<PlayerTeleportSignal>();
             Container.DeclareSignal<PlayerDamageSignal>();
             Container.DeclareSignal<PlayerHideSignal>();
             Container.DeclareSignal<PlayerUnhideSignal>();
+            Container.DeclareSignal<PlayerClimbSignal>();
+            Container.DeclareSignal<PlayerEndClimbSignal>();
+            Container.DeclareSignal<PlayerGetDamage>();
+            
+            // Other
             Container.DeclareSignal<ResourceCollectedSignal>();
             Container.DeclareSignal<CookedFoodSignal>();
             Container.DeclareSignal<DrankWaterSignal>();
@@ -30,9 +43,6 @@ namespace NJN.Runtime.Installers
             Container.DeclareSignal<ExitedTruckSignal>();
             Container.DeclareSignal<StopAmbianceSignal>();
             Container.DeclareSignal<MusicSignal>();
-            Container.DeclareSignal<PlayerClimbSignal>();
-            Container.DeclareSignal<PlayerEndClimbSignal>();
-            Container.DeclareSignal<PlayerGetDamage>();
             Container.DeclareSignal<EatFoodSignal>();
             Container.DeclareSignal<UseStairsSignal>();
             Container.DeclareSignal<DoorOpenSignal>();
