@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using NJN.Runtime.Components;
+using NJN.Runtime.Controllers;
 using NJN.Runtime.Controllers.Enemy;
 using NJN.Runtime.SoundSignal;
 using Sirenix.OdinInspector;
@@ -10,7 +11,7 @@ using Zenject;
 
 namespace NJN.Runtime.Testing
 {
-    public class YaygunTest : MonoBehaviour
+    public class AudioTest : MonoBehaviour
     {
         [SerializeField]
         private EMusic _music;
@@ -23,29 +24,32 @@ namespace NJN.Runtime.Testing
             _signalBus = signalBus;
         }
 
-
         [Button(ButtonSizes.Large)]
-        private void TeleportPlayer()
-        {
-            EnemyController enemy = GameObject.FindAnyObjectByType<EnemyController>();
-            GameObject player = GameObject.FindGameObjectWithTag("Player");
-            player.transform.position = Vector3.zero;
-        }
-        [Button(ButtonSizes.Large)]
-        private void PlayMusic()
+        private void PlaySelectedMusic()
         {
             _signalBus.Fire<MusicSignal>(new MusicSignal(_music));
         }
 
         [Button(ButtonSizes.Large)]
-        private void Entertruck()
+        private void EntertruckAmbiance()
         {
             _signalBus.Fire(new EnteredTruckSignal());
         }
         [Button(ButtonSizes.Large)]
-        private void Exittruck()
+        private void ExittruckAmbiance()
         {
             _signalBus.Fire(new ExitedTruckSignal());
+        }
+        [Button(ButtonSizes.Large)]
+        private void StopAmbiance()
+        {
+            _signalBus.Fire(new StopAmbianceSignal());
+        }
+
+        [Button(ButtonSizes.Large)]
+        private void FireDesiredSignal()
+        {
+            _signalBus.Fire(new EatFoodSignal());
         }
 
     }

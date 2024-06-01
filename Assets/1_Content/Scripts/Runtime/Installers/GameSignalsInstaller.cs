@@ -2,7 +2,9 @@
 using NJN.Runtime.Controllers.Player;
 using NJN.Runtime.Managers;
 using NJN.Runtime.UI.Panels;
+using NJN.Runtime.SoundSignal;
 using Zenject;
+using NJN.Runtime.Controllers;
 
 namespace NJN.Runtime.Installers
 {
@@ -26,6 +28,19 @@ namespace NJN.Runtime.Installers
             Container.DeclareSignal<FuelDepletedSignal>();
             Container.DeclareSignal<EnteredTruckSignal>();
             Container.DeclareSignal<ExitedTruckSignal>();
+            Container.DeclareSignal<StopAmbianceSignal>();
+            Container.DeclareSignal<MusicSignal>();
+            Container.DeclareSignal<PlayerClimbSignal>();
+            Container.DeclareSignal<PlayerEndClimbSignal>();
+            Container.DeclareSignal<PlayerGetDamage>();
+            Container.DeclareSignal<EatFoodSignal>();
+            Container.DeclareSignal<UseStairsSignal>();
+            Container.DeclareSignal<DoorOpenSignal>();
+            Container.DeclareSignal<DoorCloseSignal>();
+            Container.DeclareSignal<EnemyChaseSignal>();
+            Container.DeclareSignal<EndEnemyChaseSignal>();
+            Container.DeclareSignal<DrinkCoolerWaterSignal>();
+            Container.DeclareSignal<DrinkOutsideWaterSignal>();
         }
     }
 }

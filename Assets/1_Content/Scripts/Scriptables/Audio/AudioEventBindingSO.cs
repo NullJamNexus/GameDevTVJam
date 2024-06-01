@@ -7,6 +7,15 @@ namespace NJN.Scriptables
     [CreateAssetMenu(fileName = "AudioEventBinding", menuName = "NJN/Audio/New Binding")]
     public class AudioEventBindingSO : ScriptableObject
     {
+        #region Music
+
+        [field: FoldoutGroup("Music"), SerializeField]
+        public EventReference Mus_Menu { get; private set; }
+
+        [field: FoldoutGroup("Music"), SerializeField]
+        public EventReference Mus_Level{ get; private set; }
+
+        #endregion
         #region Ambience
 
         [field: FoldoutGroup("Ambience"), SerializeField]

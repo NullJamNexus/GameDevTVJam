@@ -10,13 +10,19 @@ namespace NJN.Runtime.Controllers.Enemy
         public EnemyChaseState(EnemyController controller, ControllerStateMachine<CharacterState, BaseCharacterController> stateMachine) : base(controller, stateMachine)
         {
         }
+        public override void Enter()
+        {
+            base.Enter();
+            _enemy.SignalBus.Fire(new EnemyChaseSignal());
 
+        }
         public override void LogicUpdate()
         {
             base.LogicUpdate();
             
             if (ShouldIdle())
             {
+                _enemy.SignalBus.Fire(new EndEnemyChaseSignal());
                 _stateMachine.ChangeState(_enemy.IdleState);
                 return;
             }

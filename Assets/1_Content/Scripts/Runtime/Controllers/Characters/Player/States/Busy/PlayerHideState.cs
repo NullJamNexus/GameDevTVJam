@@ -54,7 +54,7 @@ namespace NJN.Runtime.Controllers.Player
             _player.Model.color = _defaultColor;
             _player.Collider.isTrigger = false;
             _player.gameObject.layer = LayerMask.NameToLayer(_defaultLayer);
-            _player.Rigidbody.isKinematic = true;
+            _player.Rigidbody.isKinematic = false;
         }
         
         protected virtual bool ShouldInteract()

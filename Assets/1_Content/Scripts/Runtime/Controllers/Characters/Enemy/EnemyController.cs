@@ -1,11 +1,19 @@
 ﻿using NJN.Runtime.Components;
 using NJN.Runtime.Controllers.States;
 using UnityEngine;
+using Zenject;
 
 namespace NJN.Runtime.Controllers.Enemy
 {
     public class EnemyController : BaseCharacterController, IDistractable
     {
+        public SignalBus SignalBus { get; private set; }
+        [Inject]
+        private void Construct(SignalBus signalBus)
+        {
+            SignalBus = signalBus;
+        }
+
         #region Components
 
         public IMovement Movement { get; private set; }
