@@ -68,6 +68,7 @@ namespace AudioManager.Player
         private void OnHide(PlayerHideSignal signal)
         {
             _com.PlayOneShot(_data.Hide);
+            _com.SetGlobalParameter("Hide_state", 1.0f);
         }
         private void Collect(ResourceCollectedSignal signal)
         {
@@ -83,7 +84,9 @@ namespace AudioManager.Player
         }
         private void OffHide(PlayerUnhideSignal signal)
         {
+            
             RuntimeManager.PlayOneShot(_data.EndHide);
+            _com.SetGlobalParameter("Hide_state", 0.0f);
         }
         private void Cooking(CookedFoodSignal signal)
         {
