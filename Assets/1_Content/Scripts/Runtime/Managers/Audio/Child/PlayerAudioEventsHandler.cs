@@ -34,13 +34,13 @@ namespace AudioManager.Player
             _signalBus.Subscribe<PlayerClimbSignal>(Climb);
             _signalBus.Subscribe<PlayerEndClimbSignal>(EndClimb);
             _signalBus.Subscribe<PlayerGetDamage>(GetDamage);
-
-            // Other signals
+            _signalBus.Subscribe<EatFoodSignal>(EatFood);
         }
         
         public void Dispose()
         {
             ReleaseAllInstances();
+
             _signalBus.TryUnsubscribe<PlayerHideSignal>(OnHide);
             _signalBus.TryUnsubscribe<ResourceCollectedSignal>(Collect);
             _signalBus.TryUnsubscribe<DrankWaterSignal>(Drank);
@@ -50,9 +50,7 @@ namespace AudioManager.Player
             _signalBus.TryUnsubscribe<PlayerClimbSignal>(Climb);
             _signalBus.TryUnsubscribe<PlayerEndClimbSignal>(EndClimb);
             _signalBus.TryUnsubscribe<PlayerGetDamage>(GetDamage);
-            //_signalBus.TryUnsubscribe<ResourceCollectedSignal>(Collect);
-
-            // Other signals
+            _signalBus.TryUnsubscribe<EatFoodSignal>(EatFood);
         }
 
         #region EventInstances
@@ -103,6 +101,11 @@ namespace AudioManager.Player
         private void GetDamage()
         {
             _com.PlayOneShot(_data.TakeDamage);
+        }
+
+        private void EatFood()
+        {
+            _com.PlayOneShot(_data.EatingFood);
         }
     }
 }

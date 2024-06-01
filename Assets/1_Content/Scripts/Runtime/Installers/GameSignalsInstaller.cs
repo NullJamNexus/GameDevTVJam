@@ -32,6 +32,7 @@ namespace NJN.Runtime.Installers
             Container.DeclareSignal<PlayerClimbSignal>();
             Container.DeclareSignal<PlayerEndClimbSignal>();
             Container.DeclareSignal<PlayerGetDamage>();
+            Container.DeclareSignal<EatFoodSignal>();
 
         }
     }
