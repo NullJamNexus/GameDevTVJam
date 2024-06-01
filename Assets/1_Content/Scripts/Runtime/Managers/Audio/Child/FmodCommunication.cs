@@ -1,5 +1,6 @@
 using FMOD.Studio;
 using FMODUnity;
+using UnityEngine;
 
 namespace NJN.Runtime.Fmod
 {
@@ -26,6 +27,25 @@ namespace NJN.Runtime.Fmod
                 eventInstance.start();
         }
 
+        public void ContinueInstance(ref EventInstance eventInstance)
+        {
+            if (!eventInstance.isValid())
+            {
+                Debug.Log("trying to play unvalid sound instance");
+                return;
+            }
+            if(!IsPlaying(ref eventInstance))
+            {
+                eventInstance.start();
+            }
+
+        }
+
+        public void StopInstance(ref EventInstance eventInstance)
+        {
+            if(eventInstance.isValid())
+                eventInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+        }
         public void RelaeseInstance(ref EventInstance eventInstance)
         {
             if (eventInstance.isValid())
@@ -44,6 +64,17 @@ namespace NJN.Runtime.Fmod
         public void SetGlobalParameter(string parameterName, float value)
         {
             RuntimeManager.StudioSystem.setParameterByName(parameterName, value);
+        }
+
+        private bool IsPlaying(ref EventInstance eventInstance)
+        {
+            if (eventInstance.isValid())
+            {
+                PLAYBACK_STATE playbackState;
+                eventInstance.getPlaybackState(out playbackState);
+                return playbackState == PLAYBACK_STATE.PLAYING;
+            }
+            return false;
         }
     }
 }

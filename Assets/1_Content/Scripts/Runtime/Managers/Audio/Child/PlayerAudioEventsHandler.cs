@@ -1,5 +1,7 @@
+using FMOD.Studio;
 using FMODUnity;
 using NJN.Runtime.Components;
+using NJN.Runtime.Controllers.Player;
 using NJN.Runtime.Fmod;
 using NJN.Scriptables;
 using Zenject;
@@ -17,6 +19,8 @@ namespace AudioManager.Player
             _signalBus = signalBus;
             _data = audioEventBindingSo;
             _com = fmodCommunication;
+
+            _com.SetInstance(ref _climbInstance, _data.ClimbingLadder);
         }
 
         public void SubscribeSignals()
@@ -27,8 +31,8 @@ namespace AudioManager.Player
             _signalBus.Subscribe<ReadNoteSignal>(ReadNote);
             _signalBus.Subscribe<PlayerUnhideSignal>(OffHide);
             _signalBus.Subscribe<CookedFoodSignal>(Cooking);
-            //_signalBus.Subscribe<ResourceCollectedSignal>(Collect);
-            //_signalBus.Subscribe<ResourceCollectedSignal>(Collect);
+            _signalBus.Subscribe<PlayerClimbSignal>(Climb);
+            _signalBus.Subscribe<PlayerEndClimbSignal>(EndClimb);
 
             // Other signals
         }
@@ -42,13 +46,17 @@ namespace AudioManager.Player
             _signalBus.TryUnsubscribe<ReadNoteSignal>(ReadNote);
             _signalBus.TryUnsubscribe<PlayerUnhideSignal>(OffHide);
             _signalBus.TryUnsubscribe<CookedFoodSignal>(Cooking);
-            //_signalBus.TryUnsubscribe<ResourceCollectedSignal>(Collect);
-            //_signalBus.TryUnsubscribe<ResourceCollectedSignal>(Collect);
+            _signalBus.TryUnsubscribe<PlayerClimbSignal>(Climb);
+            _signalBus.TryUnsubscribe<PlayerEndClimbSignal>(EndClimb);
             //_signalBus.TryUnsubscribe<ResourceCollectedSignal>(Collect);
 
             // Other signals
         }
 
+        #region EventInstances
+
+        private EventInstance _climbInstance;
+        #endregion
         private void ReleaseAllInstances()
         {
             //releaseallinstances
@@ -80,5 +88,14 @@ namespace AudioManager.Player
            RuntimeManager.PlayOneShot(_data.CookingOnStove);
         }
 
+        private void Climb()
+        {
+            _com.ContinueInstance(ref _climbInstance);
+        }
+
+        private void EndClimb()
+        {
+            _com.StopInstance(ref _climbInstance);
+        }
     }
 }

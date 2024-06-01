@@ -29,6 +29,8 @@ namespace NJN.Runtime.Installers
             Container.DeclareSignal<ExitedTruckSignal>();
             Container.DeclareSignal<StopAmbianceSignal>();
             Container.DeclareSignal<MusicSignal>();
+            Container.DeclareSignal<PlayerClimbSignal>();
+            Container.DeclareSignal<PlayerEndClimbSignal>();
         }
     }
 }
