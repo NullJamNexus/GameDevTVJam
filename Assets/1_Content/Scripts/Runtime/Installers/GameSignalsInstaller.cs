@@ -31,6 +31,8 @@ namespace NJN.Runtime.Installers
             Container.DeclareSignal<MusicSignal>();
             Container.DeclareSignal<PlayerClimbSignal>();
             Container.DeclareSignal<PlayerEndClimbSignal>();
+            Container.DeclareSignal<PlayerGetDamage>();
+
         }
     }
 }

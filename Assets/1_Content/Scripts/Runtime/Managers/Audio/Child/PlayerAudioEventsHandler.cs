@@ -33,6 +33,7 @@ namespace AudioManager.Player
             _signalBus.Subscribe<CookedFoodSignal>(Cooking);
             _signalBus.Subscribe<PlayerClimbSignal>(Climb);
             _signalBus.Subscribe<PlayerEndClimbSignal>(EndClimb);
+            _signalBus.Subscribe<PlayerGetDamage>(GetDamage);
 
             // Other signals
         }
@@ -48,6 +49,7 @@ namespace AudioManager.Player
             _signalBus.TryUnsubscribe<CookedFoodSignal>(Cooking);
             _signalBus.TryUnsubscribe<PlayerClimbSignal>(Climb);
             _signalBus.TryUnsubscribe<PlayerEndClimbSignal>(EndClimb);
+            _signalBus.TryUnsubscribe<PlayerGetDamage>(GetDamage);
             //_signalBus.TryUnsubscribe<ResourceCollectedSignal>(Collect);
 
             // Other signals
@@ -96,6 +98,11 @@ namespace AudioManager.Player
         private void EndClimb()
         {
             _com.StopInstance(ref _climbInstance);
+        }
+
+        private void GetDamage()
+        {
+            _com.PlayOneShot(_data.TakeDamage);
         }
     }
 }
