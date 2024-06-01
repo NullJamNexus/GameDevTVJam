@@ -5,6 +5,7 @@ using NJN.Runtime.UI.Panels;
 using NJN.Runtime.SoundSignal;
 using Zenject;
 using NJN.Runtime.Controllers;
+using NJN.Runtime.Managers.Level.Signals;
 using NJN.Runtime.Managers.Scenes.Signals;
 using NJN.Runtime.Managers.Signals;
 
@@ -36,6 +37,10 @@ namespace NJN.Runtime.Installers
             Container.DeclareSignal<PlayerClimbSignal>();
             Container.DeclareSignal<PlayerEndClimbSignal>();
             Container.DeclareSignal<PlayerGetDamage>();
+            
+            // Level
+            Container.DeclareSignal<DestinationTransitionStartedSignal>();
+            Container.DeclareSignal<DestinationTransitionFinishedSignal>();
             
             // Other
             Container.DeclareSignal<ResourceCollectedSignal>();
