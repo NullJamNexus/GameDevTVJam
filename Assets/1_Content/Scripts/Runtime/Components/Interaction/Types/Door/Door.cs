@@ -34,11 +34,13 @@ namespace NJN.Runtime.Components
         }
         protected virtual void OpenDoor()
         {
+            _signalBus.Fire(new DoorOpenSignal());
             _collider.enabled = false;
             //play open anim
         }
         protected virtual void CloseDoor()
         {
+            _signalBus.Fire(new DoorCloseSignal());
             _collider.enabled = true;
             // play close anim
         }

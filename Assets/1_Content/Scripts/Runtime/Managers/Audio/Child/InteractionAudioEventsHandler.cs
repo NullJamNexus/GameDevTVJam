@@ -1,3 +1,4 @@
+using FMOD.Studio;
 using FMODUnity;
 using NJN.Runtime.Components;
 using NJN.Runtime.Fmod;
@@ -21,21 +22,33 @@ namespace AudioManager.Interaction
 
         public void SubscribeSignals()
         {
-            // Other signals
+            _signalBus.Subscribe<DoorOpenSignal>(DoorOpen);
+            _signalBus.Subscribe<DoorCloseSignal>(DoorClose);
         }
         
         public void Dispose()
         {
             ReleaseAllInstances();
-            // Other signals
+
+            _signalBus.TryUnsubscribe<DoorOpenSignal>(DoorOpen);
+            _signalBus.TryUnsubscribe<DoorCloseSignal>(DoorClose);
         }
 
+        private EventInstance _doorInstance;
         private void ReleaseAllInstances()
         {
-            //releaseallinstances
+            _com.RelaeseInstance(ref _doorInstance);
         }
 
-        // Audio events
+        private void DoorOpen()
+        {
+            _com.SetInstanceAndPlay(ref _doorInstance, _data.OpenDoor);
+        }
+
+        private void DoorClose()
+        {
+            _com.SetInstanceAndPlay(ref _doorInstance, _data.CloseDoor);
+        }
 
     }
 }

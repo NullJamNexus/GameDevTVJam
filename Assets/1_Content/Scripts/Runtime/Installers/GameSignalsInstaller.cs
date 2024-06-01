@@ -34,6 +34,8 @@ namespace NJN.Runtime.Installers
             Container.DeclareSignal<PlayerGetDamage>();
             Container.DeclareSignal<EatFoodSignal>();
             Container.DeclareSignal<UseStairsSignal>();
+            Container.DeclareSignal<DoorOpenSignal>();
+            Container.DeclareSignal<DoorCloseSignal>();
 
         }
     }
