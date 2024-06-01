@@ -1,8 +1,12 @@
 using NJN.Runtime.Components;
+using NJN.Runtime.Managers.Scenes;
+using NJN.Runtime.Managers.Signals;
+using NJN.Scriptables;
 using UnityEngine;
 using Sirenix.OdinInspector;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Zenject;
 
 
 namespace NJN.Runtime.UI.StartMenu
@@ -27,6 +31,14 @@ namespace NJN.Runtime.UI.StartMenu
 
         [BoxGroup("Back Buttons"), SerializeField]
         private Button[] _backButtons;
+        
+        private SignalBus _signalBus;
+        
+        [Inject]
+        private void Construct(SignalBus signalBus)
+        {
+            _signalBus = signalBus;
+        }
 
         private void OnEnable()
         {
@@ -48,8 +60,7 @@ namespace NJN.Runtime.UI.StartMenu
 
         private void OnPlay()
         {
-            string startscene = "3_Level";
-            SceneManager.LoadScene(startscene);
+            _signalBus.Fire<PlayPressedSignal>();
         }
 
         private void OnSettings()

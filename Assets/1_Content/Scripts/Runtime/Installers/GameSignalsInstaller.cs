@@ -20,6 +20,12 @@ namespace NJN.Runtime.Installers
             Container.DeclareSignal<BootstrapperInitializedSignal>();
             Container.DeclareSignal<SceneLoadStartedSignal>();
             Container.DeclareSignal<SceneLoadFinishedSignal>();
+            Container.DeclareSignal<PlayPressedSignal>();
+            Container.DeclareSignal<GameOverSignal>();
+            
+            // Scenes
+            Container.DeclareSignal<LoadingFadeSignal>();
+            Container.DeclareSignal<FadeEndSignal>();
             
             // Player
             Container.DeclareSignal<PlayerDiedSignal>();

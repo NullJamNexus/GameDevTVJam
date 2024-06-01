@@ -11,9 +11,13 @@ namespace NJN.Runtime.Managers.Scenes
 {
     public class SceneLoader
     {
+        private bool _loadingSceneInitialized;
         private bool _isLoadingInProgress;
         private readonly SceneSettingsSO _sceneSettings;
-        private SignalBus _signalBus;
+        private readonly SignalBus _signalBus;
+        
+        private const string BOOTSTRAP_SCENE = "0_Bootstrap";
+        private const string LOADING_SCENE = "1_Load";
 
         public SceneLoader(SceneSettingsSO sceneSettings, SignalBus signalBus)
         {
@@ -55,9 +59,9 @@ namespace NJN.Runtime.Managers.Scenes
             _isLoadingInProgress = true;
             _signalBus.Fire(new SceneLoadStartedSignal());
 
-            if (useLoadingScreen && TryGetSceneBind(SceneType.Loader, out SceneBind loadingSceneBind))
+            if (useLoadingScreen)
             {
-                Timing.RunCoroutine(LoadSceneWithLoadingScreen(loadingSceneBind.SceneName, targetSceneBind.SceneName));
+                Timing.RunCoroutine(LoadSceneWithLoadingScreen(targetSceneBind.SceneName));
             }
             else
             {
@@ -65,39 +69,55 @@ namespace NJN.Runtime.Managers.Scenes
             }
         }
 
-        private IEnumerator<float> LoadSceneWithLoadingScreen(string loadingSceneName, string targetSceneName)
+        private IEnumerator<float> LoadSceneWithLoadingScreen(string targetSceneName)
         {
-            Debug.Log("Started loading scene with loading screen...");
+            if (!_loadingSceneInitialized)
+            {
+                AsyncOperation loadingScreenOperation = InitializeLoadingScreen();
+                yield return Timing.WaitUntilDone(loadingScreenOperation);
+                _loadingSceneInitialized = true;
+            }
+            
+            Scene loadingScene = SceneManager.GetSceneByName(LOADING_SCENE);
+            if (loadingScene.IsValid())
+            {
+                SceneManager.SetActiveScene(loadingScene);
+            }
+            else
+            {
+                Debug.LogError("Loading scene is not valid.");
+            }
 
-            // Unload unused assets before loading new scenes
-            Resources.UnloadUnusedAssets();
-            yield return Timing.WaitForOneFrame;
+            bool fadeInComplete = false;
+            _signalBus.Fire(new LoadingFadeSignal(LoadingFadeSignal.FadeDirection.In, () => fadeInComplete = true));
+            yield return Timing.WaitUntilTrue(() => fadeInComplete);
 
-            // Load the loading screen additively
-            AsyncOperation loadingSceneLoadOperation = SceneManager.LoadSceneAsync(loadingSceneName, LoadSceneMode.Additive);
-            yield return Timing.WaitUntilDone(loadingSceneLoadOperation);
-            Debug.Log("Loading screen scene loaded.");
+            List<AsyncOperation> unloadOperations = UnloadAllScenesExcept(new List<string> { BOOTSTRAP_SCENE, LOADING_SCENE });
+            foreach (AsyncOperation unloadOperation in unloadOperations)
+            {
+                yield return Timing.WaitUntilDone(unloadOperation);
+            }
 
-            // Start loading the target scene additively but don't activate it yet
             AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(targetSceneName, LoadSceneMode.Additive);
             asyncLoad.allowSceneActivation = false;
 
-            Debug.Log("Started loading target scene...");
             while (!asyncLoad.isDone)
             {
+                yield return Timing.WaitForOneFrame;
+
                 if (asyncLoad.progress >= 0.9f)
                 {
-                    Debug.Log("Target scene almost loaded.");
                     asyncLoad.allowSceneActivation = true;
                 }
-
-                yield return Timing.WaitForOneFrame;
             }
+            
+            bool fadeOutComplete = false;
+            _signalBus.Fire(new LoadingFadeSignal(LoadingFadeSignal.FadeDirection.Out, () => fadeOutComplete = true));
+            yield return Timing.WaitUntilTrue(() => fadeOutComplete);
 
             Scene newlyLoadedScene = SceneManager.GetSceneByName(targetSceneName);
             if (newlyLoadedScene.IsValid())
             {
-                Debug.Log("Setting active scene to newly loaded scene");
                 SceneManager.SetActiveScene(newlyLoadedScene);
             }
             else
@@ -105,36 +125,54 @@ namespace NJN.Runtime.Managers.Scenes
                 Debug.LogError("Failed to find or validate newly loaded scene.");
             }
 
-            Debug.Log("Waiting for graphics operations to complete...");
-            yield return Timing.WaitForSeconds(0.5f);
+            _isLoadingInProgress = false;
+            _signalBus.Fire(new SceneLoadFinishedSignal());
+        }
+        
+        private AsyncOperation InitializeLoadingScreen()
+        {
+            if (TryGetSceneBind(SceneType.Loader, out SceneBind loadingSceneBind))
+                return SceneManager.LoadSceneAsync(loadingSceneBind.SceneName, LoadSceneMode.Additive);
+            
+            Debug.LogError("[SceneLoader] Failed to initialize loading screen. Check SceneSettings ScriptableObject...");
+            return null;
+        }
 
-            Debug.Log("Started unloading loading screen...");
-            AsyncOperation loadingSceneUnloadOperation = SceneManager.UnloadSceneAsync(loadingSceneName);
-            yield return Timing.WaitUntilDone(loadingSceneUnloadOperation);
-            Debug.Log("Loading screen scene unloaded.");
+        private IEnumerator<float> LoadScene(string sceneName)
+        {
+            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+            yield return Timing.WaitUntilDone(asyncLoad);
 
-            // Delay to allow graphics operations to complete
-            yield return Timing.WaitForSeconds(0.5f);
-
-            // Force garbage collection to clean up resources
-            System.GC.Collect();
-            Resources.UnloadUnusedAssets();
+            Scene newlyLoadedScene = SceneManager.GetSceneByName(sceneName);
+            if (newlyLoadedScene.IsValid())
+            {
+                SceneManager.SetActiveScene(newlyLoadedScene);
+            }
+            else
+            {
+                Debug.LogError("Failed to find or validate newly loaded scene.");
+            }
 
             _isLoadingInProgress = false;
             _signalBus.Fire(new SceneLoadFinishedSignal());
         }
 
-        private IEnumerator<float> LoadScene(string sceneName)
+        private List<AsyncOperation> UnloadAllScenesExcept(List<string> sceneNamesToKeep)
         {
-            Debug.Log($"Started loading scene: {sceneName}");
-
-            //AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-            SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
-            //yield return Timing.WaitUntilDone(asyncLoad);
-            yield return Timing.WaitForOneFrame;
-            
-            _isLoadingInProgress = false;
-            _signalBus.Fire(new SceneLoadFinishedSignal());
+            List<AsyncOperation> unloadOperations = new List<AsyncOperation>();
+            for (int i = 0; i < SceneManager.sceneCount; i++)
+            {
+                Scene scene = SceneManager.GetSceneAt(i);
+                if (!sceneNamesToKeep.Contains(scene.name))
+                {
+                    AsyncOperation unloadOperation = SceneManager.UnloadSceneAsync(scene);
+                    if (unloadOperation != null)
+                    {
+                        unloadOperations.Add(unloadOperation);
+                    }
+                }
+            }
+            return unloadOperations;
         }
     }
 }

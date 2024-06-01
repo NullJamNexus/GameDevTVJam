@@ -2,7 +2,6 @@
 using NJN.Runtime.Managers.Scenes;
 using NJN.Runtime.Managers.Signals;
 using NJN.Scriptables;
-using UnityEngine.SceneManagement;
 using Zenject;
 
 namespace NJN.Runtime.Managers
@@ -22,20 +21,23 @@ namespace NJN.Runtime.Managers
         public void Initialize()
         {
             _signalBus.Subscribe<BootstrapperInitializedSignal>(OnBootstrapperInitialized);
+            _signalBus.Subscribe<PlayPressedSignal>(OnPlayGame);
+            _signalBus.Subscribe<GameOverSignal>(OnGameOver);
         }
         
         public void Dispose()
         {
             _signalBus.TryUnsubscribe<BootstrapperInitializedSignal>(OnBootstrapperInitialized);
+            _signalBus.TryUnsubscribe<PlayPressedSignal>(OnPlayGame);
+            _signalBus.TryUnsubscribe<GameOverSignal>(OnGameOver);
         }
         
-        private void OnBootstrapperInitialized()
+        private void OnBootstrapperInitialized(BootstrapperInitializedSignal signal)
         {
-            //_sceneLoader.LoadSceneAsync(SceneType.MainMenu, false);
-            SceneManager.LoadScene("2_MainMenu", LoadSceneMode.Single);
+            _sceneLoader.LoadSceneAsync(SceneType.MainMenu);
         }
         
-        private void OnMainMenuPlay()
+        private void OnPlayGame()
         {
             _sceneLoader.LoadSceneAsync(SceneType.Level);
         }
