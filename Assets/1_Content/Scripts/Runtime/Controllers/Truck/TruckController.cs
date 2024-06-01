@@ -15,29 +15,28 @@ namespace NJN.Runtime.Controllers
     {
         [SerializeField]
         private LayerMask _playerLayer;
-        
+
         private SignalBus _signalBus;
-
         private ParallaxBG _mainParallaxScript;
-
         private bool _truckIsMaxSpeed;
         private CoroutineHandle _coHandle;
         private CoroutineHandle _managerCoHandle;
         private int _secondsSpentInTransition;
         private bool _transitionStatus;
-
         private bool _midPointReached;
-
         private int _transitionLength;
 
-        [BoxGroup("TransitionSettings"),SerializeField,Tooltip("Please note that this is multiplied by the fuel cost")] 
+        [BoxGroup("TransitionSettings"), SerializeField, Tooltip("Please note that this is multiplied by the fuel cost")]
         public int _transitionLengthOnceMaxSpeed;
-        [BoxGroup("TransitionSettings"),SerializeField] 
+
+        [BoxGroup("TransitionSettings"), SerializeField]
         private float _maxParallaxSpeed;
-        [BoxGroup("TransitionSettings"),SerializeField,Tooltip("Lower number means faster acceleration")] 
+
+        [BoxGroup("TransitionSettings"), SerializeField, Tooltip("Lower number means faster acceleration")]
         private float _parallaxAccelerationFactor;
+
         private int _fuelCost;
-        
+
         [Inject]
         private void Construct(SignalBus signalBus)
         {
@@ -48,34 +47,29 @@ namespace NJN.Runtime.Controllers
         {
             try
             {
-                _mainParallaxScript = transform.parent.transform.GetChild(0).gameObject.GetComponent<ParallaxBG>();
+                _mainParallaxScript = transform.parent.GetChild(0).GetComponent<ParallaxBG>();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                Debug.Log("Main Parallax Object not found, parallax object must be on top of this parent's hierarchy");
-                Debug.Log("Error output: "+e);
+                Debug.LogError("Main Parallax Object not found, parallax object must be on top of this parent's hierarchy");
+                Debug.LogError("Error output: " + e);
             }
-
-            
         }
 
         private void Update()
         {
-            //HAD TO ADD THIS HACK BECAUSE FLOAT SUBTRACTION/ADDITION ADDS RANDOM NUMBERS TO THE END WHY??!?!?!?
-            if(_mainParallaxScript._autoScrollIncrement<0.001f)
+            // Adjust small auto scroll increment values
+            if (_mainParallaxScript._autoScrollIncrement < 0.001f)
             {
-                _mainParallaxScript._autoScrollIncrement=0;
+                _mainParallaxScript._autoScrollIncrement = 0;
             }
 
-
-
-            //move buildings here
+            // Additional update logic if needed
         }
 
         private void OnEnable()
         {
             _signalBus.Subscribe<DestinationSelectedSignal>(TruckMove);
-            //subscribe to new building spawned signal and set new building variable
         }
 
         private void OnDisable()
@@ -92,38 +86,25 @@ namespace NJN.Runtime.Controllers
         [Button(ButtonSizes.Large)]
         private void TruckMove(DestinationSelectedSignal signal)
         {
-
-            //Debug.Log("TruckController.cs: Called TruckMove() Method with following variables:"+_transitionStatus+_coHandle.IsRunning+_managerCoHandle.IsRunning);
-
-            
-            if(!_transitionStatus)
+            if (!_transitionStatus)
             {
-                //Debug.Log("TruckController.cs: Started transition");
                 _fuelCost = signal.DestinationData.FuelCost;
-                _managerCoHandle = Timing.RunCoroutine(TransitionManager());
-                Debug.Log("Started transition with "+_fuelCost+" fuel consumed");
+                _managerCoHandle = Timing.RunCoroutine(TransitionManager().CancelWith(this));
+                Debug.Log("Started transition with " + _fuelCost + " fuel consumed");
             }
-
-            else if(_transitionStatus && !_coHandle.IsRunning)
+            else
             {
-                Debug.Log("TruckController.cs: Can't start a transition when truck is already transitioning");
-                           
+                Debug.LogWarning("TruckController.cs: Can't start a transition when truck is already transitioning");
             }
-            
-            
         }
-
 
         private IEnumerator<float> IncDecParallaxSpeed(bool direction)
         {
-            if(direction)
+            if (direction)
             {
-                
-                while(! (_mainParallaxScript._autoScrollIncrement >= _maxParallaxSpeed) )
+                while (_mainParallaxScript._autoScrollIncrement < _maxParallaxSpeed)
                 {
-                    //Debug.Log("accelerating");
-                    _mainParallaxScript._autoScrollIncrement+=0.1f;
-                    
+                    _mainParallaxScript._autoScrollIncrement += 0.1f;
                     yield return Timing.WaitForSeconds(_parallaxAccelerationFactor);
                 }
                 _truckIsMaxSpeed = true;
@@ -131,56 +112,34 @@ namespace NJN.Runtime.Controllers
             else
             {
                 _truckIsMaxSpeed = false;
-                
-                while(! (_mainParallaxScript._autoScrollIncrement < 0.1f))
+                while (_mainParallaxScript._autoScrollIncrement > 0.1f)
                 {
-                    //Debug.Log("decelerating");
-                    _mainParallaxScript._autoScrollIncrement-=0.1f;
+                    _mainParallaxScript._autoScrollIncrement -= 0.1f;
                     yield return Timing.WaitForSeconds(_parallaxAccelerationFactor);
                 }
-
                 TransitionFinished();
-                          
             }
-
-            Timing.KillCoroutines(_coHandle);
         }
-
-
 
         private IEnumerator<float> TransitionManager()
         {
             TransitionStart();
-
-            while(_secondsSpentInTransition!=_transitionLength)
+            while (_secondsSpentInTransition < _transitionLength)
             {
-                //Debug.Log("waiting for truck to reach max speed");
-                if(_truckIsMaxSpeed)
+                if (_truckIsMaxSpeed)
                 {
-                    if(!(_transitionLength==1))
+                    if (_transitionLength > 1)
                     {
                         CheckForHalfTransitionLength();
                     }
-
                     else
                     {
-                        Timing.RunCoroutine(IncDecParallaxSpeed(false));
+                        Timing.RunCoroutine(IncDecParallaxSpeed(false).CancelWith(this));
                     }
-                    
                     _secondsSpentInTransition++;
-                    
                 }
-                
-
-                
                 yield return Timing.WaitForSeconds(1);
-
             }
-
-
-            
-            
-            
         }
 
         private void TransitionStart()
@@ -188,54 +147,45 @@ namespace NJN.Runtime.Controllers
             _transitionLength = _transitionLengthOnceMaxSpeed * _fuelCost;
             _transitionStatus = true;
             _secondsSpentInTransition = 0;
-            Timing.RunCoroutine(IncDecParallaxSpeed(true));
+            _coHandle = Timing.RunCoroutine(IncDecParallaxSpeed(true).CancelWith(this));
         }
 
         private void CheckForHalfTransitionLength()
         {
-
-            int halfDuration;
-                //Debug.Log("Checking for halftime...");
-                halfDuration =  _transitionLength/2;
-
-
-            if(_secondsSpentInTransition>=halfDuration)
+            int halfDuration = _transitionLength / 2;
+            if (_secondsSpentInTransition >= halfDuration && !_midPointReached)
             {
-                //Debug.Log("halftime reached");
-                Timing.RunCoroutine(IncDecParallaxSpeed(false));
-                _midPointReached=true;
+                _midPointReached = true;
+                Timing.RunCoroutine(IncDecParallaxSpeed(false).CancelWith(this));
             }
-            //Debug.Log(_secondsSpentInTransition+" "+halfDuration);
         }
 
         private void TransitionFinished()
         {
             _transitionStatus = false;
             _truckIsMaxSpeed = false;
-            _mainParallaxScript._autoScrollIncrement=0;
-            _secondsSpentInTransition=0;
-            _midPointReached=false;
-            Timing.KillCoroutines(_coHandle);
+            _mainParallaxScript._autoScrollIncrement = 0;
+            _secondsSpentInTransition = 0;
+            _midPointReached = false;
             Timing.KillCoroutines(_managerCoHandle);
-            //Debug.Log($"Transition ended... ");
-
+            Debug.Log("Transition ended.");
         }
-        
+
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (((1 << other.gameObject.layer) & _playerLayer) != 0)
             {
-                _signalBus.Fire(new EnteredTruckSignal());
-                _signalBus.Fire<MusicSignal>(new MusicSignal(EMusic.truck));
+                _signalBus?.Fire(new EnteredTruckSignal());
+                _signalBus?.Fire(new MusicSignal(EMusic.truck));
             }
         }
-        
+
         private void OnTriggerExit2D(Collider2D other)
         {
             if (((1 << other.gameObject.layer) & _playerLayer) != 0)
             {
-                _signalBus.TryFire(new ExitedTruckSignal());
-                _signalBus.Fire<MusicSignal>(new MusicSignal(EMusic.stop));
+                _signalBus?.TryFire(new ExitedTruckSignal());
+                _signalBus?.Fire(new MusicSignal(EMusic.stop));
             }
         }
     }

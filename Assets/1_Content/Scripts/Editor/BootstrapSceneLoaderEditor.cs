@@ -8,17 +8,18 @@ namespace NJN.Scripts.Editor
     public static class BootstrapSceneLoaderEditor
     {
         private const string BootstrapSceneName = "0_Bootstrap";
-    
+
         static BootstrapSceneLoaderEditor()
         {
             EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
         }
-        
+
         private static void OnPlayModeStateChanged(PlayModeStateChange state)
         {
             if (state == PlayModeStateChange.ExitingEditMode)
             {
-                if (SceneManager.GetActiveScene().name != BootstrapSceneName)
+                Scene activeScene = SceneManager.GetActiveScene();
+                if (activeScene.name != BootstrapSceneName && IsSceneInBuildSettings(activeScene.name))
                 {
                     EditorSceneManager.playModeStartScene = AssetDatabase.LoadAssetAtPath<SceneAsset>($"Assets/1_Content/Scenes/Game/{BootstrapSceneName}.unity");
                 }
@@ -27,6 +28,18 @@ namespace NJN.Scripts.Editor
             {
                 EditorSceneManager.playModeStartScene = null;
             }
+        }
+
+        private static bool IsSceneInBuildSettings(string sceneName)
+        {
+            foreach (EditorBuildSettingsScene buildScene in EditorBuildSettings.scenes)
+            {
+                if (buildScene.path.Contains(sceneName) && buildScene.enabled)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
