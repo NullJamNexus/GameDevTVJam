@@ -58,13 +58,13 @@ namespace NJN.Runtime.Fmod
         public void StopInstance(ref EventInstance eventInstance)
         {
             if(eventInstance.isValid())
-                eventInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+                eventInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         }
         public void RelaeseInstance(ref EventInstance eventInstance)
         {
             if (eventInstance.isValid())
             {
-                eventInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+                eventInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 eventInstance.release();
             }
         }

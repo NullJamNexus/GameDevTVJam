@@ -6,6 +6,7 @@ using NJN.Runtime.UI.Panels;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using Zenject;
+using NJN.Runtime.SoundSignal;
 
 namespace NJN.Runtime.Controllers
 {
@@ -225,6 +226,7 @@ namespace NJN.Runtime.Controllers
             if (((1 << other.gameObject.layer) & _playerLayer) != 0)
             {
                 _signalBus.Fire(new EnteredTruckSignal());
+                _signalBus.Fire<MusicSignal>(new MusicSignal(EMusic.truck));
             }
         }
         
@@ -233,6 +235,7 @@ namespace NJN.Runtime.Controllers
             if (((1 << other.gameObject.layer) & _playerLayer) != 0)
             {
                 _signalBus.TryFire(new ExitedTruckSignal());
+                _signalBus.Fire<MusicSignal>(new MusicSignal(EMusic.stop));
             }
         }
     }
