@@ -14,6 +14,7 @@ namespace NJN.Runtime.Components
             base.Interact(interactor);
             
             _signalBus.Fire(new DrankWaterSignal(_waterToAdd));
+            _signalBus.Fire(new DrinkCoolerWaterSignal());
         }
     }
 }

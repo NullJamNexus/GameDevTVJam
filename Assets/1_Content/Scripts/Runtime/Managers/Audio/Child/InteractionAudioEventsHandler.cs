@@ -24,6 +24,7 @@ namespace AudioManager.Interaction
         {
             _signalBus.Subscribe<DoorOpenSignal>(DoorOpen);
             _signalBus.Subscribe<DoorCloseSignal>(DoorClose);
+            _signalBus.Subscribe<DrinkCoolerWaterSignal>(DrinkCoolerWater);
         }
         
         public void Dispose()
@@ -32,6 +33,7 @@ namespace AudioManager.Interaction
 
             _signalBus.TryUnsubscribe<DoorOpenSignal>(DoorOpen);
             _signalBus.TryUnsubscribe<DoorCloseSignal>(DoorClose);
+            _signalBus.TryUnsubscribe<DrinkCoolerWaterSignal>(DrinkCoolerWater);
         }
 
         private EventInstance _doorInstance;
@@ -48,6 +50,10 @@ namespace AudioManager.Interaction
         private void DoorClose()
         {
             _com.SetInstanceAndPlay(ref _doorInstance, _data.CloseDoor);
+        }
+        private void DrinkCoolerWater()
+        {
+            _com.PlayOneShot(_data.DrinkingFromCooler);
         }
 
     }

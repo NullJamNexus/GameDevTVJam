@@ -39,6 +39,8 @@ namespace NJN.Runtime.Installers
             Container.DeclareSignal<DoorCloseSignal>();
             Container.DeclareSignal<EnemyChaseSignal>();
             Container.DeclareSignal<EndEnemyChaseSignal>();
+            Container.DeclareSignal<DrinkCoolerWaterSignal>();
+            Container.DeclareSignal<DrinkOutsideWaterSignal>();
         }
     }
 }

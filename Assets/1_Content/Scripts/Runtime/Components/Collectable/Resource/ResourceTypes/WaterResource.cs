@@ -8,6 +8,7 @@ namespace NJN.Runtime.Components
         public override void Collect(ISurvivalStats stats)
         {
             stats.AddWater(Amount);
+            _signalBus.Fire(new DrinkOutsideWaterSignal());
             Destroy(gameObject);
         }
     }

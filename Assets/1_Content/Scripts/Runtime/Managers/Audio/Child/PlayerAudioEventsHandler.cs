@@ -27,7 +27,7 @@ namespace AudioManager.Player
         {
             _signalBus.Subscribe<PlayerHideSignal>(OnHide);
             _signalBus.Subscribe<ResourceCollectedSignal>(Collect);
-            _signalBus.Subscribe<DrankWaterSignal>(Drank);
+            _signalBus.Subscribe<DrinkOutsideWaterSignal>(Drank);
             _signalBus.Subscribe<ReadNoteSignal>(ReadNote);
             _signalBus.Subscribe<PlayerUnhideSignal>(OffHide);
             _signalBus.Subscribe<CookedFoodSignal>(Cooking);
@@ -44,7 +44,7 @@ namespace AudioManager.Player
 
             _signalBus.TryUnsubscribe<PlayerHideSignal>(OnHide);
             _signalBus.TryUnsubscribe<ResourceCollectedSignal>(Collect);
-            _signalBus.TryUnsubscribe<DrankWaterSignal>(Drank);
+            _signalBus.TryUnsubscribe<DrinkOutsideWaterSignal>(Drank);
             _signalBus.TryUnsubscribe<ReadNoteSignal>(ReadNote);
             _signalBus.TryUnsubscribe<PlayerUnhideSignal>(OffHide);
             _signalBus.TryUnsubscribe<CookedFoodSignal>(Cooking);
@@ -73,7 +73,7 @@ namespace AudioManager.Player
         {
             RuntimeManager.PlayOneShot(_data.GatherResource);
         }
-        private void Drank(DrankWaterSignal signal)
+        private void Drank()
         {
             RuntimeManager.PlayOneShot(_data.DrinkingWater);
         }
