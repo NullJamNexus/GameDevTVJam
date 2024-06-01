@@ -1,7 +1,10 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using System.Collections.Generic;
 using MEC;
+using NJN.Runtime.Managers.Signals;
 using UnityEngine.SceneManagement;
+using Zenject;
 
 namespace NJN.Runtime.Managers.Bootstrapper
 {
@@ -9,30 +12,65 @@ namespace NJN.Runtime.Managers.Bootstrapper
     {
         [SerializeField]
         private float _fmodInitializationDelay = 1f;
-        //[SerializeField]
-        //private SceneCollection _nextCollection;
+        
+        private SignalBus _signalBus;
+        private CoroutineHandle _initializeGameHandle;
+        
+        [Inject]
+        private void Construct(SignalBus signalBus)
+        {
+            _signalBus = signalBus;
+        }
 
         private void Start()
         {
-            Timing.RunCoroutine(LoadSceneWhenReady().CancelWith(this));
+            //_initializeGameHandle = Timing.RunCoroutine(InitializeGame().CancelWith(this));
+            //SceneManager.LoadScene("2_MainMenu", LoadSceneMode.Single);
+            StartCoroutine(InitializeGameUnity());
         }
 
-        private IEnumerator<float> LoadSceneWhenReady()
+        private IEnumerator<float> InitializeGame()
         {
             yield return Timing.WaitForSeconds(_fmodInitializationDelay);
 
             FmodLoader fmodLoader = GetComponent<FmodLoader>();
             if (fmodLoader != null)
             {
-                yield return Timing.WaitUntilDone(Timing.RunCoroutine(fmodLoader.LoadBanks().CancelWith(this)));
+                //yield return Timing.WaitUntilDone(Timing.RunCoroutine(fmodLoader.LoadBanks().CancelWith(fmodLoader)));
+                yield return Timing.WaitForOneFrame;
             }
             else
             {
                 Debug.LogWarning("FmodLoader not found.");
             }
 
-            //_nextCollection.Open();
-            SceneManager.LoadScene("3_Level");
+            Timing.KillCoroutines(_initializeGameHandle);
+            _signalBus.Fire(new BootstrapperInitializedSignal());
+        }
+        
+        private IEnumerator InitializeGameUnity()
+        {
+            yield return new WaitForSeconds(_fmodInitializationDelay);
+
+            FmodLoader fmodLoader = GetComponent<FmodLoader>();
+            if (fmodLoader != null)
+            {
+                //yield return Timing.WaitUntilDone(Timing.RunCoroutine(fmodLoader.LoadBanks().CancelWith(fmodLoader)));
+                yield return null;
+            }
+            else
+            {
+                Debug.LogWarning("FmodLoader not found.");
+            }
+
+            KillIt();
+        }
+        
+        private void KillIt()
+        {
+            StopAllCoroutines();
+            SceneManager.LoadScene("2_MainMenu", LoadSceneMode.Single);
+            //_signalBus.Fire(new BootstrapperInitializedSignal());
         }
     }
 }

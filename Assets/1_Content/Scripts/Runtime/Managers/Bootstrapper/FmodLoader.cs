@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using MEC;
 using UnityEngine;
@@ -13,18 +14,18 @@ namespace NJN.Runtime.Managers.Bootstrapper
 
         public IEnumerator<float> LoadBanks()
         {
-            // Iterate all the Studio Banks and start them loading in the background
-            foreach (var bank in Banks)
+            //Iterate all the Studio Banks and start them loading in the background
+            foreach (string bank in Banks)
             {
                 RuntimeManager.LoadBank(bank, true);
             }
-
+            
             // Wait until all the bank loading is done
             while (!RuntimeManager.HaveAllBanksLoaded)
             {
                 yield return Timing.WaitForOneFrame;
             }
-
+            
             // Wait until all the sample data loading is done
             while (RuntimeManager.AnySampleDataLoading())
             {
