@@ -28,6 +28,8 @@ namespace NJN.Runtime.Controllers
         private int _secondsSpentInTransition;
         private bool _transitionStatus;
 
+        private bool _midPointReached;
+
         private int _transitionLength;
 
         [BoxGroup("TransitionSettings"),SerializeField,Tooltip("Please note that this is multiplied by the fuel cost")] 
@@ -66,6 +68,8 @@ namespace NJN.Runtime.Controllers
             {
                 _mainParallaxScript._autoScrollIncrement=0;
             }
+
+
 
             //move buildings here
         }
@@ -121,6 +125,7 @@ namespace NJN.Runtime.Controllers
                 {
                     //Debug.Log("accelerating");
                     _mainParallaxScript._autoScrollIncrement+=0.1f;
+                    
                     yield return Timing.WaitForSeconds(_parallaxAccelerationFactor);
                 }
                 _truckIsMaxSpeed = true;
@@ -200,6 +205,7 @@ namespace NJN.Runtime.Controllers
             {
                 //Debug.Log("halftime reached");
                 Timing.RunCoroutine(IncDecParallaxSpeed(false));
+                _midPointReached=true;
             }
             //Debug.Log(_secondsSpentInTransition+" "+halfDuration);
         }
@@ -210,6 +216,7 @@ namespace NJN.Runtime.Controllers
             _truckIsMaxSpeed = false;
             _mainParallaxScript._autoScrollIncrement=0;
             _secondsSpentInTransition=0;
+            _midPointReached=false;
             Timing.KillCoroutines(_coHandle);
             Timing.KillCoroutines(_managerCoHandle);
             //Debug.Log($"Transition ended... ");
