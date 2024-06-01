@@ -4,6 +4,7 @@ using Zenject;
 using NJN.Runtime.Managers;
 using System.Collections.Generic;
 using MEC;
+using Unity.Cinemachine;
 
 
 public class ParallaxBG : MonoBehaviour
@@ -27,7 +28,7 @@ public class ParallaxBG : MonoBehaviour
     [SerializeField, BoxGroup("Tweak Values (Read Tooltips)"), Tooltip("How far the sprite needs to be teleported, usually works well with ( (spritewidth +10) * 2)")]
     private int _distanceToMoveSprite;
     [SerializeField, BoxGroup("Tweak Values (Read Tooltips)"), Tooltip("Lower number makes effect stronger and faster, recommended to keep around 10")]
-    private float _speedOffset = 10f;
+    public float _speedOffset = 10f;
     [SerializeField, BoxGroup("Tweak Values (Read Tooltips)"), Tooltip("How frequently sprites are translated when player reaches outer bounds (in seconds)")]
     private float _updateFrequency = 0.7f;
 
@@ -44,11 +45,14 @@ public class ParallaxBG : MonoBehaviour
     [SerializeField, ReadOnly] private GameObject _centreObj;
     private float _rampUpDown;
 
+    private CinemachineCamera _followCam;
+
     // TODO: Change LevelManager to its interface
     [Inject]
-    private void Construct(LevelManager levelManager)
+    private void Construct(LevelManager levelManager, [Inject(Id = "FollowCamera")] CinemachineCamera followCam)
     {
         _levelManager = levelManager;
+        _followCam = followCam;
     }
 
     private void Start()
@@ -64,11 +68,11 @@ public class ParallaxBG : MonoBehaviour
         {
             try
             {
-                _centreObj = _levelManager.Player.gameObject;
+                _centreObj = _followCam.gameObject;
             }
             catch
             {
-                Debug.Log("Parallax centre object not found, this is most likely due to the player not yet being instantiated.");
+                Debug.Log("Parallax centre object not found, this is most likely due to the object not yet being instantiated.");
             }
             
             yield return Timing.WaitForSeconds(0.1f);
@@ -143,20 +147,20 @@ public class ParallaxBG : MonoBehaviour
         //TODO: Does this need delta time because its being called in update?
         //THIS IS NOW OBSOLETE KEEPING FOR TROUBLESHOOTING
 
-        float playerPosX = _levelManager.Player.transform.position.x;
-        _layerBack.transform.position = -(new Vector2(playerPosX, 0) / _speedOffset);
-        _layerMiddle.transform.position = -(new Vector2(playerPosX, 0) / (_speedOffset / 3));
-        _layerFront.transform.position = -(new Vector2(playerPosX, 0) / (_speedOffset / 6));
+        float centreObjPosX = _followCam.transform.position.x;
+        _layerBack.transform.position = -(new Vector2(centreObjPosX, 0) / _speedOffset);
+        _layerMiddle.transform.position = -(new Vector2(centreObjPosX, 0) / (_speedOffset / 3));
+        _layerFront.transform.position = -(new Vector2(centreObjPosX, 0) / (_speedOffset / 6));
 
 
     }
 
     private void ScrollLayersTransition(float increment)
     {
-        float playerPosX = _levelManager.Player.transform.position.x;
-        _layerBack.transform.position = new Vector2((-playerPosX + increment) / _speedOffset, _layerBack.transform.position.y) ;
-        _layerMiddle.transform.position = new Vector2((-playerPosX + increment) / (_speedOffset / 2) , _layerMiddle.transform.position.y) ;
-        _layerFront.transform.position = new Vector2((-playerPosX + increment) / (_speedOffset / 4), _layerFront.transform.position.y) ;
+        float centreObjPosX = _followCam.transform.position.x;
+        _layerBack.transform.position = new Vector2((-centreObjPosX + increment) / _speedOffset, _layerBack.transform.position.y) ;
+        _layerMiddle.transform.position = new Vector2((-centreObjPosX + increment) / (_speedOffset / 2) , _layerMiddle.transform.position.y) ;
+        _layerFront.transform.position = new Vector2((-centreObjPosX + increment) / (_speedOffset / 4), _layerFront.transform.position.y) ;
     }
 
     private IEnumerator<float> MovingSpritesCoroutine()
