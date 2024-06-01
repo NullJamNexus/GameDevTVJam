@@ -61,7 +61,7 @@ namespace AudioManager.Player
         #endregion
         private void ReleaseAllInstances()
         {
-            //releaseallinstances
+            _com.RelaeseInstance(ref _climbInstance);
         }
 
         // Audio events

@@ -69,7 +69,6 @@ namespace AudioManager.Ambiance
         private void Outside()
         {
             ChangeAmbiance(EAmbiance.outside);
-            Debug.Log("Exit");
         }
 
         private void StopAmbiance()

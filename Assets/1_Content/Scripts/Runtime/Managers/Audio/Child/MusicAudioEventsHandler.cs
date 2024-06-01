@@ -41,7 +41,8 @@ namespace AudioManager.Music
 
         private void ReleaseAllInstances()
         {
-            //releaseallinstances
+            _com.RelaeseInstance(ref _menuInstance);
+            _com.RelaeseInstance(ref _levelInstance);
         }
 
         private void ChangeMusic(MusicSignal signal)
