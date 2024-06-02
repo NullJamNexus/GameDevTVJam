@@ -17,11 +17,33 @@ namespace NJN.Runtime.Managers
 {
     public class LevelManager : MonoBehaviour, ILevelStateHandler
     {
-        [field: BoxGroup("Player"), SerializeField]
+        [BoxGroup("Player"), SerializeField]
         private Vector2 _playerSpawnPosition = new (4.19f, 2.11f);
 
-        [field: BoxGroup("Destinations"), SerializeField]
+        [BoxGroup("Destinations"), SerializeField]
         private DestinationOptionSO _startingDestination;
+        
+        [FoldoutGroup("Destination Transition"), SerializeField]
+        private float _parallaxMaxSpeed = 3f;
+        [FoldoutGroup("Destination Transition"), SerializeField]
+        private float _parallaxAccelerationRate = 0.5f;
+        [FoldoutGroup("Destination Transition"), SerializeField]
+        private float _buildingMaxSpeed = 3f;
+        [FoldoutGroup("Destination Transition"), SerializeField]
+        private float _buildingAccelerationRate = 0.5f;
+        [FoldoutGroup("Destination Transition"), SerializeField]
+        private float _buildingRemoveTime = 3f;
+        [FoldoutGroup("Destination Transition"), SerializeField]
+        private float _truckTravelTime = 3f;
+        [FoldoutGroup("Destination Transition"), SerializeField, ReadOnly, Tooltip("DO NOT CHANGE")]
+        private float _buildingSpawnX = -10f;
+        [FoldoutGroup("Destination Transition"), SerializeField, ReadOnly, Tooltip("DO NOT CHANGE")]
+        private float _buildingDecelerationRate = 0.5f;
+        [FoldoutGroup("Destination Transition"), SerializeField]
+        private float _arrivalTravelTime = 3f;
+        [FoldoutGroup("Destination Transition"), SerializeField]
+        private float _parallaxDecelerationRate = 0.5f;
+        
         
         private ICharacterFactory _characterFactory;
         private IDestinationsFactory _destinationsFactory;
@@ -81,6 +103,7 @@ namespace NJN.Runtime.Managers
         private void SpawnStartingDestination()
         {
             CurrentDestination = _destinationsFactory.CreateDestination(_startingDestination);
+            CurrentDestination.SetActiveStateForEntities(true);
         }
 
         private void OnPlayerDied(PlayerDiedSignal signal)
@@ -99,7 +122,7 @@ namespace NJN.Runtime.Managers
         
         private void OnDestinationSelected(DestinationSelectedSignal signal)
         {
-            _signalBus.Fire(new DestinationTransitionStartedSignal(3f, 0.5f));
+            _signalBus.Fire(new DestinationTransitionStartedSignal(_parallaxMaxSpeed, _parallaxAccelerationRate));
             Timing.RunCoroutine(TransitionCoroutine(signal.DestinationData).CancelWith(this));
         }
         
@@ -107,17 +130,21 @@ namespace NJN.Runtime.Managers
         {
             _inputProvider.EnableUIControls();
             
-            yield return Timing.WaitForSeconds(1f);
+            CurrentDestination.MoveOldHouse(_buildingAccelerationRate, _buildingMaxSpeed);
+            
+            yield return Timing.WaitForSeconds(_buildingRemoveTime);
             
             Destroy(CurrentDestination.gameObject);
             
-            yield return Timing.WaitForSeconds(3f);
+            yield return Timing.WaitForSeconds(_truckTravelTime);
             
             CurrentDestination = _destinationsFactory.CreateDestination(destinationData);
+            CurrentDestination.transform.position = new Vector2(_buildingSpawnX, 0f);
+            CurrentDestination.MoveNewHouse(_buildingMaxSpeed, _buildingDecelerationRate);
             
-            yield return Timing.WaitForSeconds(1f);
+            yield return Timing.WaitForSeconds(_arrivalTravelTime);
             
-            _signalBus.Fire(new DestinationTransitionFinishedSignal(0.5f));
+            _signalBus.Fire(new DestinationTransitionFinishedSignal(_parallaxDecelerationRate));
             
             _inputProvider.EnablePlayerControls();
         }
