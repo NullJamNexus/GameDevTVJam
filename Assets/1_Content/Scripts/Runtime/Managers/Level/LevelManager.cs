@@ -26,7 +26,7 @@ namespace NJN.Runtime.Managers
         private DestinationOptionSO _endingDestination;
         [BoxGroup("Destinations"), SerializeField]
         private int _totalDestinations = 10;
-        
+
         [FoldoutGroup("Destination Transition"), SerializeField]
         private float _parallaxMaxSpeed = 3f;
         [FoldoutGroup("Destination Transition"), SerializeField]
@@ -49,18 +49,18 @@ namespace NJN.Runtime.Managers
         private float _parallaxDecelerationRate = 0.5f;
 
         private int _currentDestinationCount = 0;
-        
+
         private ICharacterFactory _characterFactory;
         private IDestinationsFactory _destinationsFactory;
         private IInputProvider _inputProvider;
         private SignalBus _signalBus;
         private PlayerHUD _playerHUD;
-        
+
         public PlayerController Player { get; private set; }
         public DestinationController CurrentDestination { get; private set; }
 
         [Inject]
-        private void Construct(ICharacterFactory characterFactory, IDestinationsFactory destinationsFactory, 
+        private void Construct(ICharacterFactory characterFactory, IDestinationsFactory destinationsFactory,
             IInputProvider inputProvider, SignalBus signalBus, [Inject(Id = "HUD")] PlayerHUD playerHUD)
         {
             _characterFactory = characterFactory;
@@ -69,7 +69,7 @@ namespace NJN.Runtime.Managers
             _signalBus = signalBus;
             _playerHUD = playerHUD;
         }
-        
+
         private void OnEnable()
         {
             _signalBus.Subscribe<PlayerDiedSignal>(OnPlayerDied);
@@ -87,7 +87,7 @@ namespace NJN.Runtime.Managers
             _signalBus.TryUnsubscribe<PlayerDiedSignal>(OnPlayerDied);
             _signalBus.TryUnsubscribe<DestinationSelectedSignal>(OnDestinationSelected);
         }
-        
+
         private void SpawnPlayer()
         {
             if (Player != null)
@@ -103,7 +103,7 @@ namespace NJN.Runtime.Managers
             Player.transform.position = _playerSpawnPosition;
             _inputProvider.EnablePlayerControls();
         }
-        
+
         private void SpawnStartingDestination()
         {
             CurrentDestination = _destinationsFactory.CreateDestination(_startingDestination);
@@ -116,14 +116,14 @@ namespace NJN.Runtime.Managers
             _inputProvider.EnableUIControls();
             Timing.RunCoroutine(PlayerDiedCoroutine().CancelWith(this));
         }
-        
+
         private IEnumerator<float> PlayerDiedCoroutine()
         {
             Debug.Log("PLAYER DIED, GOING TO MAIN MENU...");
             yield return Timing.WaitForSeconds(1f);
             _signalBus.Fire<GameLostSignal>();
         }
-        
+
         private void OnDestinationSelected(DestinationSelectedSignal signal)
         {
             _currentDestinationCount++;
@@ -131,34 +131,35 @@ namespace NJN.Runtime.Managers
             _signalBus.Fire(new DestinationTransitionStartedSignal(_parallaxMaxSpeed, _parallaxAccelerationRate));
             Timing.RunCoroutine(TransitionCoroutine(signal.DestinationData).CancelWith(this));
         }
-        
+
         private IEnumerator<float> TransitionCoroutine(DestinationOptionSO destinationData)
         {
             bool isEnding = _currentDestinationCount >= _totalDestinations;
-            
-            _inputProvider.EnableUIControls();
-            
+
+            /*_inputProvider.EnableUIControls();*/
+            //Maybe Hide the truck Ladder.
+
             CurrentDestination.MoveOldHouse(_buildingAccelerationRate, _buildingMaxSpeed);
-            
+
             yield return Timing.WaitForSeconds(_buildingRemoveTime);
-            
+
             Destroy(CurrentDestination.gameObject);
-            
+
             yield return Timing.WaitForSeconds(_truckTravelTime);
-            
+
             DestinationOptionSO destination = isEnding ? _endingDestination : destinationData;
             CurrentDestination = _destinationsFactory.CreateDestination(destination);
             CurrentDestination.transform.position = new Vector2(_buildingSpawnX, 0f);
             CurrentDestination.MoveNewHouse(_buildingMaxSpeed, _buildingDecelerationRate);
-            
+
             yield return Timing.WaitForSeconds(_arrivalTravelTime);
-            
+
             _signalBus.Fire(new DestinationTransitionFinishedSignal(_parallaxDecelerationRate));
-            
+
             // TODO: In the final destination, we can make it so when you walk into house trigger, you win game instead of here...
             if (isEnding)
                 _signalBus.Fire(new GameWonSignal());
-            
+
             _inputProvider.EnablePlayerControls();
         }
     }
