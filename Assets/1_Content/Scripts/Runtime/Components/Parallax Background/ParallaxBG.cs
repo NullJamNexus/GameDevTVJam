@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using MEC;
 using NJN.Runtime.Managers;
 using Unity.Cinemachine;
+using NJN.Runtime.Managers.Level.Signals;
 
 public class ParallaxBG : MonoBehaviour
 {
@@ -41,11 +42,15 @@ public class ParallaxBG : MonoBehaviour
     private GameObject _centreObj;
     private float _currentScrollPos;
 
+    private SignalBus _signalBus;
+    private CoroutineHandle _accelerationHandle;
+
     [Inject]
-    private void Construct(LevelManager levelManager, [Inject(Id = "FollowCamera")] CinemachineCamera followCam)
+    private void Construct(LevelManager levelManager, [Inject(Id = "FollowCamera")] CinemachineCamera followCam, SignalBus signalBus)
     {
         _levelManager = levelManager;
         _followCam = followCam;
+        _signalBus = signalBus;
     }
 
     private void Start()
@@ -74,6 +79,15 @@ public class ParallaxBG : MonoBehaviour
     private void OnEnable()
     {
         ForceParallaxOn();
+        _signalBus.Subscribe<DestinationTransitionStartedSignal>(OnDestinationTransitionStarted);
+        _signalBus.Subscribe<DestinationTransitionFinishedSignal>(OnDestinationTransitionFinished);
+    }
+
+    private void OnDisable()
+    {
+        _signalBus.TryUnsubscribe<DestinationTransitionStartedSignal>(OnDestinationTransitionStarted);
+        _signalBus.TryUnsubscribe<DestinationTransitionFinishedSignal>(OnDestinationTransitionFinished);
+        Timing.KillCoroutines(_accelerationHandle);
     }
 
     private void InitializeLayers()
@@ -198,5 +212,37 @@ public class ParallaxBG : MonoBehaviour
         {
             ToggleParallax();
         }
+    }
+
+    private void OnDestinationTransitionStarted(DestinationTransitionStartedSignal signal)
+    {
+        Timing.KillCoroutines(_accelerationHandle);
+        _accelerationHandle = Timing.RunCoroutine(AccelerateToMaxSpeed(signal.MaxSpeed, signal.AccelerationRate).CancelWith(this));
+    }
+
+    private void OnDestinationTransitionFinished(DestinationTransitionFinishedSignal signal)
+    {
+        Timing.KillCoroutines(_accelerationHandle);
+        _accelerationHandle = Timing.RunCoroutine(DecelerateToStop(signal.DecelerationRate).CancelWith(this));
+    }
+
+    private IEnumerator<float> AccelerateToMaxSpeed(float maxSpeed, float accelerationRate)
+    {
+        while (_autoScrollIncrement < maxSpeed)
+        {
+            _autoScrollIncrement += 0.1f;
+            yield return Timing.WaitForSeconds(accelerationRate);
+        }
+        _autoScrollIncrement = maxSpeed;
+    }
+
+    private IEnumerator<float> DecelerateToStop(float decelerationRate)
+    {
+        while (_autoScrollIncrement > 0.1f)
+        {
+            _autoScrollIncrement -= 0.1f;
+            yield return Timing.WaitForSeconds(decelerationRate);
+        }
+        _autoScrollIncrement = 0;
     }
 }
