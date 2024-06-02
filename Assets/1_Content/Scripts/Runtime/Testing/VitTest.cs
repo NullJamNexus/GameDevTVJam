@@ -7,6 +7,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using Zenject;
 
+// TESTING
 namespace NJN.Runtime.Testing
 {
     public class VitTest : MonoBehaviour
