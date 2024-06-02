@@ -36,6 +36,7 @@ namespace NJN.Runtime.Controllers.Player
             base.PhysicsUpdate();
             
             Vector2 horizontalMove = new (_player.InputProvider.MoveInput.x, 0f);
+            VerifyFacingDirection();
             _player.Movement.PhysicsHorizontalMove(horizontalMove, _isSprinting);
         }
 
@@ -49,6 +50,15 @@ namespace NJN.Runtime.Controllers.Player
         private bool ShouldIdle()
         {
             return _player.InputProvider.MoveInput.x == 0;
+        }
+        
+        private void VerifyFacingDirection()
+        {
+            if (_player.IsFacingRight && _player.InputProvider.MoveInput.x < 0
+                || !_player.IsFacingRight && _player.InputProvider.MoveInput.x > 0)
+            {
+                _player.Flip(_player.InputProvider.MoveInput);
+            }
         }
     }
 }
