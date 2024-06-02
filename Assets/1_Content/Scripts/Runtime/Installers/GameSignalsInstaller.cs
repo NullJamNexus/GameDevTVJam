@@ -66,6 +66,7 @@ namespace NJN.Runtime.Installers
             Container.DeclareSignal<EndEnemyChaseSignal>();
             Container.DeclareSignal<DrinkCoolerWaterSignal>();
             Container.DeclareSignal<DrinkOutsideWaterSignal>();
+            Container.DeclareSignal<PlayerStepSignal>();
         }
     }
 }
