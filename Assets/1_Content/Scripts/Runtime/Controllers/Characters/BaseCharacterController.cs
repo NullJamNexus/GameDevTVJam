@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using NJN.Runtime.Controllers.Data;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace NJN.Runtime.Controllers
@@ -20,6 +21,12 @@ namespace NJN.Runtime.Controllers
         private float _groundCheckDistance = 0.2f;
         [field: FoldoutGroup("Physics"), SerializeField]
         private bool _showDebugLine = false;
+        
+        [field: FoldoutGroup("Animation"), SerializeField, HideLabel]
+        public AnimParams AnimParams { get; private set; }
+        
+        [field: FoldoutGroup("Feedbacks"), SerializeField, HideLabel]
+        public FeedbackTypes Feedbacks { get; private set; }
         
         public SpriteRenderer Model { get; private set; }
         public Animator Animator { get; private set; }

@@ -1,6 +1,4 @@
-﻿using NJN.Runtime.Controllers.Player;
-using NJN.Runtime.Controllers.States;
-using NJN.Runtime.StateMachines;
+﻿using NJN.Runtime.StateMachines;
 using UnityEngine;
 
 namespace NJN.Runtime.Controllers.Player
@@ -17,6 +15,8 @@ namespace NJN.Runtime.Controllers.Player
         public override void Enter()
         {
             base.Enter();
+            
+            _player.Animator.SetBool(_player.AnimParams.RunBoolName, true);
         }
 
         public override void LogicUpdate()
@@ -45,6 +45,8 @@ namespace NJN.Runtime.Controllers.Player
             base.Exit();
             
             _player.Movement.PhysicsStop();
+            
+            _player.Animator.SetBool(_player.AnimParams.RunBoolName, false);
         }
         
         private bool ShouldIdle()
