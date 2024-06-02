@@ -101,6 +101,7 @@ namespace NJN.Runtime.Controllers.Player
         
         public override void TakeDamage(float damage)
         {
+            Feedbacks.HitFeedback.PlayFeedbacks();
             Stats.TakeDamage(damage);
         }
         
