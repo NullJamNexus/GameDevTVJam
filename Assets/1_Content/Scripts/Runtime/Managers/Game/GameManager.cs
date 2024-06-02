@@ -22,14 +22,16 @@ namespace NJN.Runtime.Managers
         {
             _signalBus.Subscribe<BootstrapperInitializedSignal>(OnBootstrapperInitialized);
             _signalBus.Subscribe<PlayPressedSignal>(OnPlayGame);
-            _signalBus.Subscribe<GameOverSignal>(OnGameOver);
+            _signalBus.Subscribe<GameLostSignal>(OnGameLost);
+            _signalBus.Subscribe<GameWonSignal>(OnGameWon);
         }
         
         public void Dispose()
         {
             _signalBus.TryUnsubscribe<BootstrapperInitializedSignal>(OnBootstrapperInitialized);
             _signalBus.TryUnsubscribe<PlayPressedSignal>(OnPlayGame);
-            _signalBus.TryUnsubscribe<GameOverSignal>(OnGameOver);
+            _signalBus.TryUnsubscribe<GameLostSignal>(OnGameLost);
+            _signalBus.TryUnsubscribe<GameWonSignal>(OnGameWon);
         }
         
         private void OnBootstrapperInitialized(BootstrapperInitializedSignal signal)
@@ -42,7 +44,12 @@ namespace NJN.Runtime.Managers
             _sceneLoader.LoadSceneAsync(SceneType.Level);
         }
         
-        private void OnGameOver()
+        private void OnGameLost()
+        {
+            _sceneLoader.LoadSceneAsync(SceneType.MainMenu);
+        }
+        
+        private void OnGameWon()
         {
             _sceneLoader.LoadSceneAsync(SceneType.MainMenu);
         }

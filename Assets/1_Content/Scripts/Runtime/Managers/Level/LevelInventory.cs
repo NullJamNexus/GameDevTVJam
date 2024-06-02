@@ -1,5 +1,6 @@
 ﻿using System;
 using NJN.Runtime.Components;
+using NJN.Runtime.Managers.Signals;
 using NJN.Runtime.UI.Panels;
 using Sirenix.OdinInspector;
 using UniRx;
@@ -93,6 +94,7 @@ namespace NJN.Runtime.Managers
             {
                 _signalBus.Fire(new FuelDepletedSignal());
                 StopFuelDepletion();
+                _signalBus.Fire(new GameLostSignal());
             }
         }
     }

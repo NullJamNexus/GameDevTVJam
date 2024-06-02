@@ -22,7 +22,9 @@ namespace NJN.Runtime.Installers
             Container.DeclareSignal<SceneLoadStartedSignal>();
             Container.DeclareSignal<SceneLoadFinishedSignal>();
             Container.DeclareSignal<PlayPressedSignal>();
-            Container.DeclareSignal<GameOverSignal>();
+            Container.DeclareSignal<GameLostSignal>();
+            Container.DeclareSignal<GameWonSignal>();
+            Container.DeclareSignal<ProgressUpdatedSignal>();
             
             // Scenes
             Container.DeclareSignal<LoadingFadeSignal>();

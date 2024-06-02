@@ -1,5 +1,8 @@
-﻿using NJN.Runtime.Components;
+﻿using System;
+using NJN.Runtime.Components;
 using NJN.Runtime.Managers;
+using NJN.Runtime.Managers.Level.Signals;
+using NJN.Runtime.UI.Panels;
 using Sirenix.OdinInspector;
 using TMPro;
 using UniRx;
@@ -20,6 +23,10 @@ namespace NJN.Runtime.UI
 
         [FoldoutGroup("Progress"), SerializeField]
         private RectTransform _progressIndicator;
+        [FoldoutGroup("Progress"), SerializeField]
+        private float _maxIndicatorPosition = -912.7f;
+        [FoldoutGroup("Progress"), SerializeField]
+        private Image _progressFill;
         
         [FoldoutGroup("Timer"), SerializeField]
         private TMP_Text _timerText;
@@ -33,13 +40,31 @@ namespace NJN.Runtime.UI
         
         private ISurvivalStats _survivalStats;
         private ILevelInventory _levelInventory;
+        private SignalBus _signalBus;
         
         [Inject]
-        private void Construct(ILevelInventory levelInventory)
+        private void Construct(ILevelInventory levelInventory, SignalBus signalBus)
         {
             _levelInventory = levelInventory;
+            _signalBus = signalBus;
         }
-        
+
+        private void OnEnable()
+        {
+            _signalBus.Subscribe<ProgressUpdatedSignal>(OnDestinationSelected);
+        }
+
+        private void Start()
+        {
+            _progressFill.fillAmount = 0f;
+            _progressIndicator.anchoredPosition = new Vector2(0f, _progressIndicator.anchoredPosition.y);
+        }
+
+        private void OnDisable()
+        {
+            _signalBus.TryUnsubscribe<ProgressUpdatedSignal>(OnDestinationSelected);
+        }
+
         public void SetUp(ISurvivalStats survivalStats)
         {
             _survivalStats = survivalStats;
@@ -77,6 +102,24 @@ namespace NJN.Runtime.UI
             {
                 _scrapsText.text = $"{value} Scraps";
             }).AddTo(this);
+        }
+        
+        private void OnDestinationSelected(ProgressUpdatedSignal signal)
+        {
+            UpdateProgress(signal.CurrentDestination, signal.TotalDestinations);
+        }
+
+        private void UpdateProgress(int currentLocation, int totalLocations)
+        {
+            if (totalLocations <= 0)
+                return;
+
+            float progress = (float)currentLocation / totalLocations;
+
+            _progressFill.fillAmount = progress;
+
+            float indicatorPosition = progress * _maxIndicatorPosition;
+            _progressIndicator.anchoredPosition = new Vector2(indicatorPosition, _progressIndicator.anchoredPosition.y);
         }
     }
 }
