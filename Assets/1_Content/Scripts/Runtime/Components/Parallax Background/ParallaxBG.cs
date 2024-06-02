@@ -147,9 +147,9 @@ public class ParallaxBG : MonoBehaviour
     private void ScrollLayersTransition(float increment)
     {
         float centreObjPosX = _followCam.transform.position.x;
-        _layerBack.transform.position = new Vector2(((-centreObjPosX + increment) / _speedOffset) % 40, _layerBack.transform.position.y);
-        _layerMiddle.transform.position = new Vector2(((-centreObjPosX + increment) / (_speedOffset / 2)) % 40, _layerMiddle.transform.position.y);
-        _layerFront.transform.position = new Vector2(((-centreObjPosX + increment) / (_speedOffset / 4)) % 40, _layerFront.transform.position.y);
+        _layerBack.transform.position = new Vector2(((-centreObjPosX + increment) / _speedOffset) % 44.6f, _layerBack.transform.position.y);
+        _layerMiddle.transform.position = new Vector2(((-centreObjPosX + increment) / (_speedOffset / 2)) % 22, _layerMiddle.transform.position.y);
+        _layerFront.transform.position = new Vector2(((-centreObjPosX + increment) / (_speedOffset / 4)) % 37.5f, _layerFront.transform.position.y);
     }
     
     private IEnumerator<float> MovingSpritesCoroutine()
