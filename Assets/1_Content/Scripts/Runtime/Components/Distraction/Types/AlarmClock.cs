@@ -6,7 +6,7 @@ using UnityEngine;
 namespace NJN.Runtime.Components
 {
     [RequireComponent(typeof(Collider2D))]
-    public class AlarmClock : BaseComponent, IDamagable
+    public class AlarmClock : InteractableComponent, IDamagable
     {
         [BoxGroup("Settings"), SerializeField]
         private LayerMask _distractableLayers;
@@ -15,8 +15,8 @@ namespace NJN.Runtime.Components
         [BoxGroup("Settings"), SerializeField]
         private float _durability = 20f;
 
-        private Collider2D _collider2D;
-        
+        public Collider2D _collider2D;
+
         public Transform Transform => transform;
 
         private void Awake()
@@ -31,7 +31,7 @@ namespace NJN.Runtime.Components
             CauseDistraction();
             _collider2D.enabled = true;
         }
-        
+
         private void CauseDistraction()
         {
             Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, _distractionRange, _distractableLayers);
@@ -43,7 +43,7 @@ namespace NJN.Runtime.Components
                 }
             }
         }
-        
+
         public void TakeDamage(float damage)
         {
             _durability -= damage;
@@ -51,6 +51,12 @@ namespace NJN.Runtime.Components
             {
                 Destroy(gameObject);
             }
+        }
+
+        public override void Interact(IInteractor interactor)
+        {
+            CauseDistraction();
+            _collider2D.enabled = true;
         }
 
 #if UNITY_EDITOR
