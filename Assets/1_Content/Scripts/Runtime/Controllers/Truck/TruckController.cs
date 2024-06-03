@@ -2,12 +2,14 @@
 using UnityEngine;
 using Zenject;
 using NJN.Runtime.SoundSignal;
+using NJN.Runtime.Managers.Level.Signals;
 
 namespace NJN.Runtime.Controllers
 {
     [RequireComponent(typeof(Collider2D))]
     public class TruckController : MonoBehaviour
     {
+        private TruckControl _truckControl;
         [SerializeField]
         private LayerMask _playerLayer;
 
@@ -17,6 +19,25 @@ namespace NJN.Runtime.Controllers
         private void Construct(SignalBus signalBus)
         {
             _signalBus = signalBus;
+        }
+
+        private void Start()
+        {
+            _signalBus.Subscribe<DestinationTransitionStartedSignal>(ChangeTransitionState);
+            _signalBus.Subscribe<DestinationTransitionFinishedSignal>(ChangeTransitionState);
+            _truckControl = GetComponentInChildren<TruckControl>();
+        }
+
+        private void ChangeTransitionState()
+        {
+            if(_truckControl._inTransition==true)
+            {
+                _truckControl._inTransition=false;
+            }
+            else
+            {
+                _truckControl._inTransition=true;
+            }
         }
 
         private void OnTriggerEnter2D(Collider2D other)
