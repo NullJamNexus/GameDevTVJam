@@ -59,6 +59,7 @@ namespace NJN.Runtime.Components
             HideInteractPrompt();
             _collider2D.enabled = true;
             CauseDistraction();
+            _signalBus.Fire(new AlarmClockSignal());
         }
 
 #if UNITY_EDITOR
