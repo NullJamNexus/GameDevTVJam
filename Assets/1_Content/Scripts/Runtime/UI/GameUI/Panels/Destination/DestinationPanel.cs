@@ -84,6 +84,12 @@ namespace NJN.Runtime.UI.Panels
             {
                 DestinationOptionVisual optionVisual = _destinationsFactory.CreateRandomOption(_optionsParent, _optionVisualPrefab);
                 if (optionVisual == null) break;
+                if (_destinationOptions.Find(x => x.DestinationData == optionVisual.DestinationData) != null)
+                {
+                    Destroy(optionVisual.gameObject);
+                    i--;
+                    continue;
+                }
                 optionVisual.SetUpCallback(OnOptionSelected);
                 ValidateOption(optionVisual);
                 _destinationOptions.Add(optionVisual);
