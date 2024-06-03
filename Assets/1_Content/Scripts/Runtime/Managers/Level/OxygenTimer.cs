@@ -7,6 +7,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using Zenject;
 using MEC;
+using System.Collections;
 
 namespace NJN.Runtime.Managers
 {
@@ -67,35 +68,34 @@ namespace NJN.Runtime.Managers
 
         private void OnExitTruck()
         {
-            Timing.KillCoroutines(_oxygenCoroutineHandle);
-            _oxygenCoroutineHandle = Timing.RunCoroutine(LoseOxygen().CancelWith(this));
+            StopAllCoroutines();
+            StartCoroutine(LoseOxygen());
         }
 
         private void OnEnterTruck()
         {
-            Timing.KillCoroutines(_oxygenCoroutineHandle);
-            _oxygenCoroutineHandle = Timing.RunCoroutine(RegainOxygen().CancelWith(this));
+            StopAllCoroutines();
+            StartCoroutine(RegainOxygen());
         }
 
         private void OnReachDestination()
         {
-            Timing.KillCoroutines(_oxygenCoroutineHandle);
-            Timing.KillCoroutines(_damageCoroutineHandle);
+            StopAllCoroutines();
             _remainingOxygenTime = _oxygenFullTime;
             UpdateTimerText();
         }
 
         private void StartDamage()
         {
-            Timing.KillCoroutines(_damageCoroutineHandle);
-            _damageCoroutineHandle = Timing.RunCoroutine(ApplyDamage().CancelWith(this));
+            StopAllCoroutines();
+            StartCoroutine(ApplyDamage());
         }
 
-        private IEnumerator<float> LoseOxygen()
+        private IEnumerator LoseOxygen()
         {
             while (true)
             {
-                yield return Timing.WaitForSeconds(1f);
+                yield return new WaitForSeconds(1f);
                 _remainingOxygenTime--;
                 UpdateTimerText();
 
@@ -103,27 +103,26 @@ namespace NJN.Runtime.Managers
                 {
                     _remainingOxygenTime = 0;
                     StartDamage();
-                    yield break;
                 }
             }
         }
 
-        private IEnumerator<float> RegainOxygen()
+        private IEnumerator RegainOxygen()
         {
             while (true)
             {
-                yield return Timing.WaitForSeconds(_oxygenRegainFrequency);
+                yield return new WaitForSeconds(_oxygenRegainFrequency);
                 _remainingOxygenTime = math.min(_remainingOxygenTime + 1, _oxygenFullTime);
                 UpdateTimerText();
             }
         }
 
-        private IEnumerator<float> ApplyDamage()
+        private IEnumerator ApplyDamage()
         {
             while (true)
             {
                 _signalBus.Fire(new PlayerDamageSignal(_damage));
-                yield return Timing.WaitForSeconds(_delayBetweenDamage);
+                yield return new WaitForSeconds(_delayBetweenDamage);
             }
         }
 
