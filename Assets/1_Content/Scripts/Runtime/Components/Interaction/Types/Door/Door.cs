@@ -12,9 +12,18 @@ namespace NJN.Runtime.Components
         [BoxGroup("Components"), SerializeField]     
         private Collider2D _collider;
 
+        [SerializeField]
+        private Sprite _doorOpenSprite;
+
+        [SerializeField]
+        private Sprite _doorClosedSprite;
+
+        private SpriteRenderer _spriteRenderer;
+
 
         private void Start()
         {
+            _spriteRenderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
             IsOpen = _StartOpen;
             if (IsOpen)
                 OpenDoorNoAnim();
@@ -34,12 +43,14 @@ namespace NJN.Runtime.Components
         }
         protected virtual void OpenDoor()
         {
+            _spriteRenderer.sprite = _doorOpenSprite;
             _signalBus.Fire(new DoorOpenSignal());
             _collider.enabled = false;
             //play open anim
         }
         protected virtual void CloseDoor()
         {
+            _spriteRenderer.sprite = _doorClosedSprite;
             _signalBus.Fire(new DoorCloseSignal());
             _collider.enabled = true;
             // play close anim
