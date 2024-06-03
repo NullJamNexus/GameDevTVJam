@@ -2,6 +2,8 @@ using NJN.Runtime.Managers.Level.Signals;
 using Unity.VisualScripting;
 using UnityEngine;
 using Zenject;
+using NJN.Runtime.SoundSignal;
+using NJN.Runtime.Managers.Scenes.Signals;
 
 namespace NJN.Runtime.Components
 {
@@ -21,6 +23,8 @@ namespace NJN.Runtime.Components
         {
             _signalBus.Subscribe<DestinationTransitionStartedSignal>(TransitionStart);
             _signalBus.Subscribe<DestinationTransitionFinishedSignal>(TransitionEnd);
+            _signalBus.Subscribe<SceneLoadFinishedSignal>(ActivateBuilding);
+
         }
 
         private void OnDestroy()
@@ -33,6 +37,7 @@ namespace NJN.Runtime.Components
             if (!_isTransitionActive && _isActive) 
             {
                 _signalBus.Fire(new EnterBuildingSignal());
+                _signalBus?.Fire(new MusicSignal(EMusic.level));
             }
         }
 
@@ -41,12 +46,14 @@ namespace NJN.Runtime.Components
             if (!_isTransitionActive && _isActive)
             {
                 _signalBus.Fire(new ExitBuildingSignal());
+                _signalBus?.Fire(new MusicSignal(EMusic.stop));
             }
         }
         private void ActivateBuilding()
         {
             _isActive = true;
         }
+
 
         private void TransitionStart()
         {
@@ -56,6 +63,7 @@ namespace NJN.Runtime.Components
         private void TransitionEnd()
         {
             _isTransitionActive = false;
+            ActivateBuilding();
         }
     }
 }

@@ -45,6 +45,8 @@ namespace AudioManager.Music
             _com.RelaeseInstance(ref _menuInstance);
             _com.RelaeseInstance(ref _levelInstance);
         }
+
+
         private void ChangeMusic(MusicSignal signal)
         {
             if (signal.Music == _currentMusic)
@@ -52,10 +54,12 @@ namespace AudioManager.Music
 
             if(_currentMusic != EMusic.stop)
                 _com.StopInstance(ref GetCurrentInstance());
-
+            if (signal.Music == EMusic.level && _currentMusic == EMusic.truck)
+                return;
             _currentMusic = signal.Music;
             if (_currentMusic != EMusic.stop)
                 _com.SetInstanceAndPlay(ref GetCurrentInstance(), GetReferance());
+
         }
         private ref EventInstance GetCurrentInstance()
         {

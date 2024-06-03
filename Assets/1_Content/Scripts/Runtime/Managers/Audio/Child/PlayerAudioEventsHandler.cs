@@ -36,6 +36,7 @@ namespace AudioManager.Player
             _signalBus.Subscribe<PlayerGetDamage>(GetDamage);
             _signalBus.Subscribe<EatFoodSignal>(EatFood);
             _signalBus.Subscribe<UseStairsSignal>(UseStairs);
+            _signalBus.Subscribe<PlayerStepSignal>(PlayFootsteps);
         }
         
         public void Dispose()
@@ -53,6 +54,7 @@ namespace AudioManager.Player
             _signalBus.TryUnsubscribe<PlayerGetDamage>(GetDamage);
             _signalBus.TryUnsubscribe<EatFoodSignal>(EatFood);
             _signalBus.TryUnsubscribe<UseStairsSignal>(UseStairs);
+            _signalBus.Subscribe<PlayerStepSignal>(PlayFootsteps);
         }
 
         #region EventInstances
@@ -116,6 +118,10 @@ namespace AudioManager.Player
         private void UseStairs()
         {
             _com.PlayOneShot(_data.UsingStairs);
+        }
+        private void PlayFootsteps()
+        { 
+        _com.PlayOneShot(_data.Move);
         }
     }
 }
