@@ -30,7 +30,9 @@ namespace NJN.Runtime.UI
         
         [FoldoutGroup("Timer"), SerializeField]
         private TMP_Text _timerText;
-        
+        [FoldoutGroup("Timer"), SerializeField]
+        private GameObject _timerPanel;
+
         [FoldoutGroup("Resources"), SerializeField]
         private TMP_Text _foodText;
         [FoldoutGroup("Resources"), SerializeField]
@@ -52,6 +54,8 @@ namespace NJN.Runtime.UI
         private void OnEnable()
         {
             _signalBus.Subscribe<ProgressUpdatedSignal>(OnDestinationSelected);
+            _signalBus.Subscribe<EnteredTruckSignal>(HideTimer);
+            _signalBus.Subscribe<ExitedTruckSignal>(ShowTimer);
         }
 
         private void Start()
@@ -63,6 +67,8 @@ namespace NJN.Runtime.UI
         private void OnDisable()
         {
             _signalBus.TryUnsubscribe<ProgressUpdatedSignal>(OnDestinationSelected);
+            _signalBus.TryUnsubscribe<EnteredTruckSignal>(HideTimer);
+            _signalBus.TryUnsubscribe<ExitedTruckSignal>(ShowTimer);
         }
 
         public void SetUp(ISurvivalStats survivalStats)
@@ -120,6 +126,16 @@ namespace NJN.Runtime.UI
 
             float indicatorPosition = progress * _maxIndicatorPosition;
             _progressIndicator.anchoredPosition = new Vector2(indicatorPosition, _progressIndicator.anchoredPosition.y);
+        }
+
+        private void ShowTimer()
+        {
+            _timerPanel.SetActive(true);
+        }
+
+        private void HideTimer()
+        {
+            _timerPanel.SetActive(false);
         }
     }
 }
