@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using MEC;
 using NJN.Runtime.Components;
+using NJN.Runtime.Managers.Level.Signals;
 using NJN.Runtime.Managers.Signals;
 using NJN.Runtime.UI.Panels;
 using Sirenix.OdinInspector;
@@ -94,8 +98,16 @@ namespace NJN.Runtime.Managers
             {
                 _signalBus.Fire(new FuelDepletedSignal());
                 StopFuelDepletion();
-                _signalBus.Fire(new GameLostSignal());
+                Timing.RunCoroutine(RanOutOfFuelCoroutine().CancelWith(this));
             }
+        }
+
+        private IEnumerator<float> RanOutOfFuelCoroutine()
+        {
+            yield return Timing.WaitForSeconds(0.5f);
+            _signalBus.Fire(new GameOverSignal(GameOverReason.EmptyFuel));
+            yield return Timing.WaitForSeconds(2f);
+            _signalBus.Fire(new GameLostSignal());
         }
     }
 }

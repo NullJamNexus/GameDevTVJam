@@ -119,9 +119,11 @@ namespace NJN.Runtime.Managers
 
         private IEnumerator<float> PlayerDiedCoroutine()
         {
-            Debug.Log("PLAYER DIED, GOING TO MAIN MENU...");
-            yield return Timing.WaitForSeconds(1f);
-            _signalBus.Fire<GameLostSignal>();
+            _inputProvider.EnableUIControls();
+            yield return Timing.WaitForSeconds(0.5f);
+            _signalBus.Fire(new GameOverSignal(GameOverReason.NoHealth));
+            yield return Timing.WaitForSeconds(2f);
+            _signalBus.Fire(new GameLostSignal());
         }
 
         private void OnDestinationSelected(DestinationSelectedSignal signal)
@@ -158,9 +160,17 @@ namespace NJN.Runtime.Managers
 
             // TODO: In the final destination, we can make it so when you walk into house trigger, you win game instead of here...
             if (isEnding)
+            {
+                _inputProvider.EnableUIControls();
+                yield return Timing.WaitForSeconds(0.5f);
+                _signalBus.Fire(new GameOverSignal(GameOverReason.ReachedBunker));
+                yield return Timing.WaitForSeconds(2f);
                 _signalBus.Fire(new GameWonSignal());
-
-            _inputProvider.EnablePlayerControls();
+            }
+            else
+            {
+                _inputProvider.EnablePlayerControls();
+            }
         }
     }
 }
