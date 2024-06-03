@@ -83,6 +83,7 @@ namespace NJN.Runtime.UI.Panels
             for (int i = 0; i < _maxOptionsCount; i++)
             {
                 DestinationOptionVisual optionVisual = _destinationsFactory.CreateRandomOption(_optionsParent, _optionVisualPrefab);
+                if (optionVisual == null) break;
                 optionVisual.SetUpCallback(OnOptionSelected);
                 ValidateOption(optionVisual);
                 _destinationOptions.Add(optionVisual);
