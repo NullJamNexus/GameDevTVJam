@@ -55,8 +55,6 @@ namespace NJN.Runtime.Installers
             Container.DeclareSignal<FuelDepletedSignal>();
             Container.DeclareSignal<EnteredTruckSignal>();
             Container.DeclareSignal<ExitedTruckSignal>();
-            Container.DeclareSignal<EnteredBuildingSignal>();
-            Container.DeclareSignal<ExitedBuildingSignal>();
             Container.DeclareSignal<StopAmbianceSignal>();
             Container.DeclareSignal<MusicSignal>();
             Container.DeclareSignal<EatFoodSignal>();

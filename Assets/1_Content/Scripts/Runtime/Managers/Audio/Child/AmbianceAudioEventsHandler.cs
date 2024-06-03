@@ -36,7 +36,8 @@ namespace AudioManager.Ambiance
             _signalBus.Subscribe<EnteredTruckSignal>(InTruck);
             _signalBus.Subscribe<ExitedTruckSignal>(Outside);
             _signalBus.Subscribe<StopAmbianceSignal>(StopAmbiance);
-
+            _signalBus.Subscribe<EnterBuildingSignal>(InBuilding);
+            _signalBus.Subscribe<ExitBuildingSignal>(Outside);
             // connect enter exit building
 
         }
@@ -46,7 +47,8 @@ namespace AudioManager.Ambiance
             _signalBus.TryUnsubscribe<EnteredTruckSignal>(InTruck);
             _signalBus.TryUnsubscribe<ExitedTruckSignal>(Outside);
             _signalBus.TryUnsubscribe<StopAmbianceSignal>(StopAmbiance);
-
+            _signalBus.TryUnsubscribe<EnterBuildingSignal>(InBuilding);
+            _signalBus.TryUnsubscribe<ExitBuildingSignal>(Outside);
             ReleaseAllInstances();
         }
 
@@ -59,7 +61,9 @@ namespace AudioManager.Ambiance
         
         private void InTruck()
         {
-            ChangeAmbiance(EAmbiance.truck);
+            //ChangeAmbiance(EAmbiance.truck);
+            ChangeAmbiance(EAmbiance.outside);
+            _com.SetGlobalParameter("Player_In_Truck", 1.0f);
         }
         private void InBuilding()
         {
@@ -69,6 +73,7 @@ namespace AudioManager.Ambiance
         private void Outside()
         {
             ChangeAmbiance(EAmbiance.outside);
+            _com.SetGlobalParameter("Player_In_Truck", 0.0f);
         }
 
         private void StopAmbiance()
