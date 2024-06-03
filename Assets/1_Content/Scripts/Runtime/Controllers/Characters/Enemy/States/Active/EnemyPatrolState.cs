@@ -18,6 +18,8 @@ namespace NJN.Runtime.Controllers.Enemy
             base.Enter();
 
             SetMoveDirection();
+
+            _enemy.Animator.SetBool(_enemy.AnimParams.RunBoolName, true);
         }
 
         public override void LogicUpdate()
@@ -42,6 +44,7 @@ namespace NJN.Runtime.Controllers.Enemy
             base.Exit();
             
             _enemy.Movement.PhysicsStop();
+            _enemy.Animator.SetBool(_enemy.AnimParams.RunBoolName, false);
         }
 
         private void SetMoveDirection()

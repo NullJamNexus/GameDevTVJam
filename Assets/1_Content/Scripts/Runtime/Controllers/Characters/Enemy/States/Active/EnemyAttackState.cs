@@ -21,6 +21,7 @@ namespace NJN.Runtime.Controllers.Enemy
             // TODO: Timing of damage might need to change
             if (_enemy.LineOfSight.DamagableTarget != null)
             {
+                _enemy.Animator.SetTrigger(_enemy.AnimParams.AttackTriggerName);
                 _enemy.DamageProcessor.DealDamage(_enemy.LineOfSight.DamagableTarget);
             }
         }
