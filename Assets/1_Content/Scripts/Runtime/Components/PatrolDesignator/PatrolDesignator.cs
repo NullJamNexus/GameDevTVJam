@@ -16,6 +16,11 @@ namespace NJN.Runtime.Components
         private Vector3 _initialPosition;
         private int _patrolPointIndex = -1;
 
+        [SerializeField] private LayerMask _layerMask;
+        [SerializeField] private float _RayCheckDistance = 1;
+
+        private Vector2 _direction;
+
         private void Awake()
         {
             _initialPosition = transform.position;
@@ -31,8 +36,8 @@ namespace NJN.Runtime.Components
 
             _patrolPointIndex = (_patrolPointIndex + 1) % _patrolPoints.Count;
             Vector2 worldTarget = GetWorldPatrolPoint(_patrolPointIndex);
-            Vector2 direction = worldTarget - position;
-            return direction;
+            _direction = worldTarget - position;
+            return _direction;
         }
 
         public bool HasArrivedAtPoint(Vector2 position)
@@ -42,10 +47,21 @@ namespace NJN.Runtime.Components
                 return false;
             }
 
+            if (IsPathBlocked())
+                return true;
+
             Vector2 worldTarget = GetWorldPatrolPoint(_patrolPointIndex);
             return Mathf.Abs(position.x - worldTarget.x) <= _closeEnough;
         }
-
+        private bool IsPathBlocked()
+        {
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, _direction, _RayCheckDistance, _layerMask);
+            if (hit.collider != null)
+            {
+                return true;
+            }
+            return false;
+        }
         private Vector2 GetWorldPatrolPoint(int index)
         {
             return (Vector2)_initialPosition + _patrolPoints[index];
