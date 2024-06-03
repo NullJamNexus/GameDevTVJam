@@ -1,4 +1,5 @@
 using FMOD.Studio;
+using System;
 using FMODUnity;
 using NJN.Runtime.Components;
 using NJN.Runtime.Controllers;
@@ -46,7 +47,10 @@ namespace AudioManager.Enemy
 
         private void StartEnemyChase()
         {
+            Random random = new Random();
+            int randomNumber = random.Next(3);
             _com.PlayInstanceIfNotPlaying(ref _chaseInstance ,_data.EnemyAttack);
+            _chaseInstance.setParameterByNameWithLabel("Random_Monster", randomNumber.ToString() );
         }
 
         private void EndEnemyChase()

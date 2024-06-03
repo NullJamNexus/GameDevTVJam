@@ -37,7 +37,7 @@ namespace NJN.Runtime.Components
             if (!_isTransitionActive && _isActive) 
             {
                 _signalBus.Fire(new EnterBuildingSignal());
-                _signalBus?.Fire(new MusicSignal(EMusic.level));
+//                _signalBus?.Fire(new MusicSignal(EMusic.level));
             }
         }
 
@@ -46,7 +46,7 @@ namespace NJN.Runtime.Components
             if (!_isTransitionActive && _isActive)
             {
                 _signalBus.Fire(new ExitBuildingSignal());
-                _signalBus?.Fire(new MusicSignal(EMusic.stop));
+                //_signalBus?.Fire(new MusicSignal(EMusic.stop));
             }
         }
         private void ActivateBuilding()

@@ -54,7 +54,7 @@ namespace NJN.Runtime.Controllers
             if (((1 << other.gameObject.layer) & _playerLayer) != 0)
             {
                 _signalBus?.TryFire(new ExitedTruckSignal());
-                _signalBus?.Fire(new MusicSignal(EMusic.stop));
+                _signalBus?.Fire(new MusicSignal(EMusic.level));
             }
         }
     }

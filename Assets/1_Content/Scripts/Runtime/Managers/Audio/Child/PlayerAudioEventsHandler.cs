@@ -54,7 +54,7 @@ namespace AudioManager.Player
             _signalBus.TryUnsubscribe<PlayerGetDamage>(GetDamage);
             _signalBus.TryUnsubscribe<EatFoodSignal>(EatFood);
             _signalBus.TryUnsubscribe<UseStairsSignal>(UseStairs);
-            _signalBus.Subscribe<PlayerStepSignal>(PlayFootsteps);
+            _signalBus.TryUnsubscribe<PlayerStepSignal>(PlayFootsteps);
         }
 
         #region EventInstances

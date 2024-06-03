@@ -3,6 +3,7 @@ using NJN.Runtime.Managers.Scenes;
 using NJN.Runtime.Managers.Signals;
 using NJN.Scriptables;
 using Zenject;
+using NJN.Runtime.SoundSignal;
 
 namespace NJN.Runtime.Managers
 {
@@ -37,21 +38,25 @@ namespace NJN.Runtime.Managers
         private void OnBootstrapperInitialized(BootstrapperInitializedSignal signal)
         {
             _sceneLoader.LoadSceneAsync(SceneType.MainMenu);
+
         }
         
         private void OnPlayGame()
         {
+            _signalBus?.Fire(new MusicSignal(EMusic.truck));
             _sceneLoader.LoadSceneAsync(SceneType.Level);
         }
         
         private void OnGameLost()
         {
             _sceneLoader.LoadSceneAsync(SceneType.MainMenu);
+            _signalBus?.Fire(new MusicSignal(EMusic.truck));
         }
         
         private void OnGameWon()
         {
             _sceneLoader.LoadSceneAsync(SceneType.MainMenu);
+            _signalBus?.Fire(new MusicSignal(EMusic.truck));
         }
     }
 }

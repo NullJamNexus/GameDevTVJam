@@ -36,6 +36,7 @@ namespace NJN.Runtime.Components
             //HealthChangedEvent?.Invoke(HealthStat.Current, HealthStat.Max);
             if(_isPlayerCharacter)
             {
+                if(amount>9)
                 _signalBus.Fire(new PlayerGetDamage());
             }
             

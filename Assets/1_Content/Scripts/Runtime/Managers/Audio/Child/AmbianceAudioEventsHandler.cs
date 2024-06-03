@@ -4,6 +4,7 @@ using NJN.Runtime.Components;
 using NJN.Runtime.Fmod;
 using NJN.Runtime.SoundSignal;
 using NJN.Scriptables;
+using NJN.Runtime.Managers.Level.Signals;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -38,6 +39,8 @@ namespace AudioManager.Ambiance
             _signalBus.Subscribe<StopAmbianceSignal>(StopAmbiance);
             _signalBus.Subscribe<EnterBuildingSignal>(InBuilding);
             _signalBus.Subscribe<ExitBuildingSignal>(Outside);
+            _signalBus.Subscribe<DestinationTransitionStartedSignal>(TruckOn);
+            _signalBus.Subscribe<DestinationTransitionFinishedSignal>(InTruck);
             // connect enter exit building
 
         }
@@ -49,6 +52,8 @@ namespace AudioManager.Ambiance
             _signalBus.TryUnsubscribe<StopAmbianceSignal>(StopAmbiance);
             _signalBus.TryUnsubscribe<EnterBuildingSignal>(InBuilding);
             _signalBus.TryUnsubscribe<ExitBuildingSignal>(Outside);
+            _signalBus.TryUnsubscribe<DestinationTransitionStartedSignal>(TruckOn);
+            _signalBus.TryUnsubscribe<DestinationTransitionFinishedSignal>(InTruck);
             ReleaseAllInstances();
         }
 
@@ -58,10 +63,13 @@ namespace AudioManager.Ambiance
             _com.RelaeseInstance(ref _outsideInstance);
             _com.RelaeseInstance(ref _buildingInstance);
         }
-        
+
+        private void TruckOn()
+        {
+            ChangeAmbiance(EAmbiance.truck);
+        }
         private void InTruck()
         {
-            //ChangeAmbiance(EAmbiance.truck);
             ChangeAmbiance(EAmbiance.outside);
             _com.SetGlobalParameter("Player_In_Truck", 1.0f);
         }

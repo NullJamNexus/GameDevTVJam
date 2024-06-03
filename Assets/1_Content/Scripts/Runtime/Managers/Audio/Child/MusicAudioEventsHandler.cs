@@ -7,6 +7,7 @@ using NJN.Runtime.SoundSignal;
 using NJN.Scriptables;
 using System;
 using Zenject;
+using NJN.Runtime.Managers.Signals;
 
 namespace AudioManager.Music
 {
@@ -54,8 +55,6 @@ namespace AudioManager.Music
 
             if(_currentMusic != EMusic.stop)
                 _com.StopInstance(ref GetCurrentInstance());
-            if (signal.Music == EMusic.level && _currentMusic == EMusic.truck)
-                return;
             _currentMusic = signal.Music;
             if (_currentMusic != EMusic.stop)
                 _com.SetInstanceAndPlay(ref GetCurrentInstance(), GetReferance());
