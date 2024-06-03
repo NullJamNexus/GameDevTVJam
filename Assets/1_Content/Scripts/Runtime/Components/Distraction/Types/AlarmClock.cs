@@ -6,7 +6,7 @@ using UnityEngine;
 namespace NJN.Runtime.Components
 {
     [RequireComponent(typeof(Collider2D))]
-    public class AlarmClock : BaseComponent, IDamagable
+    public class AlarmClock : InteractableComponent, IDamagable
     {
         [BoxGroup("Settings"), SerializeField]
         private LayerMask _distractableLayers;
@@ -22,7 +22,7 @@ namespace NJN.Runtime.Components
         private void Awake()
         {
             _collider2D = GetComponent<Collider2D>();
-            _collider2D.enabled = false;
+            //_collider2D.enabled = false;
         }
 
         [Button(ButtonSizes.Large)]
@@ -51,6 +51,14 @@ namespace NJN.Runtime.Components
             {
                 Destroy(gameObject);
             }
+        }
+
+        public override void Interact(IInteractor interactor)
+        {
+            base.Interact(interactor);
+            HideInteractPrompt();
+            _collider2D.enabled = true;
+            CauseDistraction();
         }
 
 #if UNITY_EDITOR
