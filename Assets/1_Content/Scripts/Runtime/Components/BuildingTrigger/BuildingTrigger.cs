@@ -12,7 +12,6 @@ namespace NJN.Runtime.Components
         private bool _isTransitionActive;
         private bool _isActive; // spawning building in 0,0 and directly interacting with the player
         private SignalBus _signalBus;
-        private MusicSignal _currentMusic;
   
         [Inject]
         private void Construct(SignalBus signalBus)
@@ -37,7 +36,6 @@ namespace NJN.Runtime.Components
         {
             if (!_isTransitionActive && _isActive) 
             {
-                if(_currentMusic.Music != EMusic.truck)
                 _signalBus.Fire(new EnterBuildingSignal());
                 _signalBus?.Fire(new MusicSignal(EMusic.level));
             }
