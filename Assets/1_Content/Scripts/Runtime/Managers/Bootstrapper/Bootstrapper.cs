@@ -6,6 +6,9 @@ using NJN.Runtime.Managers.Signals;
 using Zenject;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using NJN.Runtime.SoundSignal;
+using NJN.Runtime.Components;
+
 
 namespace NJN.Runtime.Managers.Bootstrapper
 {
@@ -71,6 +74,8 @@ namespace NJN.Runtime.Managers.Bootstrapper
         {
             StopAllCoroutines();
             SceneManager.LoadScene("2_MainMenu", LoadSceneMode.Single);
+            _signalBus?.Fire(new MusicSignal(EMusic.truck));
+            _signalBus?.Fire(new ExitBuildingSignal());
             //_signalBus.Fire(new BootstrapperInitializedSignal());
         }
     }

@@ -7,6 +7,7 @@ using NJN.Runtime.SoundSignal;
 using NJN.Scriptables;
 using System;
 using Zenject;
+using NJN.Runtime.Managers.Signals;
 
 namespace AudioManager.Music
 {
