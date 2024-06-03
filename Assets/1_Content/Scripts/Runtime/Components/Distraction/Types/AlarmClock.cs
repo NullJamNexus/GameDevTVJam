@@ -22,7 +22,7 @@ namespace NJN.Runtime.Components
         private void Awake()
         {
             _collider2D = GetComponent<Collider2D>();
-            _collider2D.enabled = false;
+            //_collider2D.enabled = false;
         }
 
         [Button(ButtonSizes.Large)]
@@ -55,8 +55,10 @@ namespace NJN.Runtime.Components
 
         public override void Interact(IInteractor interactor)
         {
-            CauseDistraction();
+            base.Interact(interactor);
+            HideInteractPrompt();
             _collider2D.enabled = true;
+            CauseDistraction();
         }
 
 #if UNITY_EDITOR
