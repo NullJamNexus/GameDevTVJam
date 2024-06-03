@@ -23,7 +23,7 @@ namespace NJN.Runtime.Components
         {
             if (IsGrounded())
             {
-                _signalBus.TryFire(new PlayerStep());
+                _signalBus.TryFire(new PlayerStepSignal());
             }
         }
 
