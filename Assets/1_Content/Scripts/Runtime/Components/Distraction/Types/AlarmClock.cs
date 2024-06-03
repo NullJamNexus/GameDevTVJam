@@ -15,8 +15,8 @@ namespace NJN.Runtime.Components
         [BoxGroup("Settings"), SerializeField]
         private float _durability = 20f;
 
-        private Collider2D _collider2D;
-        
+        public Collider2D _collider2D;
+
         public Transform Transform => transform;
 
         private void Awake()
@@ -31,7 +31,7 @@ namespace NJN.Runtime.Components
             CauseDistraction();
             _collider2D.enabled = true;
         }
-        
+
         private void CauseDistraction()
         {
             Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, _distractionRange, _distractableLayers);
@@ -43,7 +43,7 @@ namespace NJN.Runtime.Components
                 }
             }
         }
-        
+
         public void TakeDamage(float damage)
         {
             _durability -= damage;
