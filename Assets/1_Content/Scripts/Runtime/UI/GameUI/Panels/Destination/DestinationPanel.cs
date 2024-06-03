@@ -101,6 +101,7 @@ namespace NJN.Runtime.UI.Panels
         {
             _gameUI.TogglePanel(this, false);
             _hasAllOptions = false;
+            _destinationsFactory.RemoveDestinationOption(destinationOption.DestinationData);
             _signalBus.Fire(new DestinationSelectedSignal(destinationOption.DestinationData));
         }
     }

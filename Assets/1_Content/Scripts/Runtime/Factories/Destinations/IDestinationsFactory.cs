@@ -8,6 +8,7 @@ namespace NJN.Runtime.Factories
     public interface IDestinationsFactory
     {
         public DestinationOptionVisual CreateRandomOption(GameObject parentObject, DestinationOptionVisual prefab);
+        public void RemoveDestinationOption(DestinationOptionSO destinationData);
         public DestinationController CreateDestination(DestinationOptionSO destinationData);
     }
 }

@@ -33,13 +33,12 @@ namespace NJN.Runtime.Factories
             
             int randomIndex = Random.Range(0, _destinations.Count);
             DestinationOptionSO destinationData = _destinations[randomIndex];
-            RemoveDestinationOption(destinationData);
             DestinationOptionVisual destinationOptionVisual = _container.InstantiatePrefabForComponent<DestinationOptionVisual>(prefab, parentObject.transform);
             destinationOptionVisual.SetUpFromFactory(destinationData);
             return destinationOptionVisual;
         }
         
-        private void RemoveDestinationOption(DestinationOptionSO destinationData)
+        public void RemoveDestinationOption(DestinationOptionSO destinationData)
         {
             _destinations.Remove(destinationData);
         }
