@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NJN.Runtime.Components;
 using NJN.Runtime.StateMachines;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace NJN.Runtime.Controllers
@@ -11,6 +12,9 @@ namespace NJN.Runtime.Controllers
         where TController : BaseController<TController, TState>
         where TState : BaseControllerState<TState, TController>
     {
+        [field: FoldoutGroup("General"), SerializeField, ReadOnly]
+        public string StateName { get; set; }
+        
         private List<IComponent> _components = new();
         
         public ControllerStateMachine<TState, TController> StateMachine { get; private set; }
@@ -23,7 +27,22 @@ namespace NJN.Runtime.Controllers
         }
 
         protected abstract void InitializeStateMachine();
+
+        protected virtual void Update()
+        {
+            StateMachine.CurrentState.LogicUpdate();
+        }
         
+        protected virtual void FixedUpdate()
+        {
+            StateMachine.CurrentState.PhysicsUpdate();
+        }
+        
+        protected virtual void OnDestroy()
+        {
+            StateMachine.CleanUp();
+        }
+
         protected T VerifyComponent<T>() where T : IComponent
         {
             EnsureInterface<T>();

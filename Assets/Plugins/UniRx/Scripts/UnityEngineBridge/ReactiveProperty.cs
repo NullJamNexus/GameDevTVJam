@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using Sirenix.OdinInspector;
 using UniRx.InternalUtil;
 #if !UniRxLibrary
 using UnityEngine;
@@ -84,7 +85,7 @@ namespace UniRx
 #endif
 
 #if !UniRxLibrary
-        [SerializeField]
+        [SerializeField, HideLabel]
 #endif
         T value = default(T);
 

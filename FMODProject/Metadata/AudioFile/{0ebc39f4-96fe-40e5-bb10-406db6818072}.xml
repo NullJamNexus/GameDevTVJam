@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{0ebc39f4-96fe-40e5-bb10-406db6818072}">
+		<property name="assetPath">
+			<value>Geiger Ext - SFX.wav</value>
+		</property>
+		<property name="isStreaming">
+			<value>true</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>48</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>40.124749999999999</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{8930589d-1d2f-4daa-a446-a95391355dee}</destination>
+		</relationship>
+	</object>
+</objects>

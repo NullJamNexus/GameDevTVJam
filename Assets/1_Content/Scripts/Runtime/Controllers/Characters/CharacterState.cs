@@ -1,12 +1,24 @@
 ﻿using NJN.Runtime.StateMachines;
+using UnityEngine;
 
 namespace NJN.Runtime.Controllers
 {
-    public abstract class CharacterState : BaseControllerState<CharacterState, CharacterController>
+    public abstract class CharacterState : BaseControllerState<CharacterState, BaseCharacterController>
     {
-        public CharacterState(CharacterController controller, ControllerStateMachine<CharacterState, 
-            CharacterController> stateMachine) : base(controller, stateMachine)
+        public CharacterState(BaseCharacterController controller, ControllerStateMachine<CharacterState, 
+            BaseCharacterController> stateMachine) : base(controller, stateMachine)
         {
         }
+
+        public virtual void OnCollisionEnter(Collision2D collision) { }
+        public virtual void OnCollisionStay(Collision2D collision) { }
+        public virtual void OnCollisionExit(Collision2D collision) { }
+        public virtual void OnTriggerEnter(Collider2D collider) { }
+        public virtual void OnTriggerStay(Collider2D collider) { }
+        public virtual void OnTriggerExit(Collider2D collider) { }
+
+        public virtual void HasLineOfSightToPlayer() { }
+        public virtual void NoLineOfSightToPlayer(Vector3 LastKnownPosition) { }
+        public virtual void TryToDistract() { }
     }
 }

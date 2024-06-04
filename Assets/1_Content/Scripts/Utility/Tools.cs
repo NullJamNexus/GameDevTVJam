@@ -7,6 +7,14 @@ namespace Vit.Utilities
     public static class Tools
     {
         /// <summary>
+        /// Checks if a GameObject is in a given LayerMask.
+        /// </summary>
+        public static bool IsInLayerMask(GameObject obj, LayerMask layerMask)
+        {
+            return (layerMask.value & (1 << obj.layer)) != 0;
+        }
+        
+        /// <summary>
         /// Will get all the layers that are currently set in the editor that are not blank.
         /// </summary>
         public static IEnumerable<string> GetLayerNames()

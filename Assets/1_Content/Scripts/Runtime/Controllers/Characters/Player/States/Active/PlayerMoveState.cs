@@ -1,0 +1,66 @@
+﻿using NJN.Runtime.StateMachines;
+using UnityEngine;
+
+namespace NJN.Runtime.Controllers.Player
+{
+    public class PlayerMoveState : PlayerActiveState
+    {
+        private bool _isSprinting;
+        
+        public PlayerMoveState(PlayerController controller, ControllerStateMachine<CharacterState, 
+            BaseCharacterController> stateMachine) : base(controller, stateMachine)
+        {
+        }
+
+        public override void Enter()
+        {
+            base.Enter();
+            
+            _player.Animator.SetBool(_player.AnimParams.RunBoolName, true);
+        }
+
+        public override void LogicUpdate()
+        {
+            base.LogicUpdate();
+
+            _isSprinting = _player.InputProvider.SprintInput.Held;
+            
+            if (ShouldIdle())
+            {
+                _player.StateMachine.ChangeState(_player.IdleState);
+            }
+        }
+
+        public override void PhysicsUpdate()
+        {
+            base.PhysicsUpdate();
+            
+            Vector2 horizontalMove = new (_player.InputProvider.MoveInput.x, 0f);
+            VerifyFacingDirection();
+            _player.Movement.PhysicsHorizontalMove(horizontalMove, _isSprinting);
+        }
+
+        public override void Exit()
+        {
+            base.Exit();
+            
+            _player.Movement.PhysicsStop();
+            
+            _player.Animator.SetBool(_player.AnimParams.RunBoolName, false);
+        }
+        
+        private bool ShouldIdle()
+        {
+            return _player.InputProvider.MoveInput.x == 0;
+        }
+        
+        private void VerifyFacingDirection()
+        {
+            if (_player.IsFacingRight && _player.InputProvider.MoveInput.x < 0
+                || !_player.IsFacingRight && _player.InputProvider.MoveInput.x > 0)
+            {
+                _player.Flip(_player.InputProvider.MoveInput);
+            }
+        }
+    }
+}

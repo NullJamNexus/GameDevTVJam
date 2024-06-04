@@ -48,13 +48,18 @@ namespace NJN.Runtime.Input
             inputAction2.canceled += ctx => OnCanceled();
         }
 
-        public void OnStarted() => Held = true;
+        public void OnStarted()
+        {
+            Held = true;
+            Pressed = true;
+        }
 
         public void OnPerformed() => Pressed = true;
 
         public void OnCanceled()
         {
             Held = false;
+            Pressed = false;
             Released = true;
         }
 
