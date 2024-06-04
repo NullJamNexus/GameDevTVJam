@@ -85,5 +85,10 @@ namespace NJN.Runtime.Controllers.Enemy
             DistractionProcessor.SetLocation(location);
             StateMachine.ChangeState(DistractedState);
         }
+
+        public void SwitchToIdle()
+        {
+            StateMachine.ChangeState(IdleState);
+        }
     }
 }

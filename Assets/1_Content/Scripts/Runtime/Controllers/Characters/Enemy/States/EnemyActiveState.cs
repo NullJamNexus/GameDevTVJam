@@ -41,6 +41,10 @@ namespace NJN.Runtime.Controllers.Enemy
             {
                 _enemy.DamageProcessor.DealDamage(damagable);
             }
+            if (collision.gameObject.CompareTag("Player"))
+            {
+                Physics2D.IgnoreCollision(_enemy.GetComponent<Collider2D>(), collision.collider);
+            }
         }
 
         public override void Exit()

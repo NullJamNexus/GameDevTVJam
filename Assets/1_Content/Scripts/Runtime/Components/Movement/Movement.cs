@@ -1,4 +1,5 @@
 ﻿using System;
+using NJN.Runtime.Controllers.Enemy;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -17,6 +18,11 @@ namespace NJN.Runtime.Components
         
         private Rigidbody2D _rigidbody;
 
+        [SerializeField] private bool _isEnemy;
+        [SerializeField] private LayerMask _layerMask;
+        [SerializeField] private float _RayCheckDistance = 1;
+
+        private Vector2 _direction;
         private void Awake()
         {
             _rigidbody = GetComponent<Rigidbody2D>();
@@ -29,6 +35,11 @@ namespace NJN.Runtime.Components
         
         public void PhysicsMove(Vector2 direction, bool isSprinting, float? speed = null)
         {
+            if (_isEnemy)
+            {
+                if (IsPathBlocked())
+                    GetComponent<EnemyController>().SwitchToIdle();
+            }
             float moveSpeed = speed ?? (isSprinting ? RunSpeed : WalkSpeed);
             _rigidbody.velocity = direction * moveSpeed;
         }
@@ -52,6 +63,15 @@ namespace NJN.Runtime.Components
         public void PhysicsStop()
         {
             _rigidbody.velocity = Vector2.zero;
+        }
+        private bool IsPathBlocked()
+        {
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, _direction, _RayCheckDistance, _layerMask);
+            if (hit.collider != null)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

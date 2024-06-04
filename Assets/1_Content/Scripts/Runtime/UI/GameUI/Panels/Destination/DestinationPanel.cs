@@ -83,6 +83,13 @@ namespace NJN.Runtime.UI.Panels
             for (int i = 0; i < _maxOptionsCount; i++)
             {
                 DestinationOptionVisual optionVisual = _destinationsFactory.CreateRandomOption(_optionsParent, _optionVisualPrefab);
+                if (optionVisual == null) break;
+                if (_destinationOptions.Find(x => x.DestinationData == optionVisual.DestinationData) != null)
+                {
+                    Destroy(optionVisual.gameObject);
+                    i--;
+                    continue;
+                }
                 optionVisual.SetUpCallback(OnOptionSelected);
                 ValidateOption(optionVisual);
                 _destinationOptions.Add(optionVisual);
@@ -101,6 +108,7 @@ namespace NJN.Runtime.UI.Panels
         {
             _gameUI.TogglePanel(this, false);
             _hasAllOptions = false;
+            _destinationsFactory.RemoveDestinationOption(destinationOption.DestinationData);
             _signalBus.Fire(new DestinationSelectedSignal(destinationOption.DestinationData));
         }
     }

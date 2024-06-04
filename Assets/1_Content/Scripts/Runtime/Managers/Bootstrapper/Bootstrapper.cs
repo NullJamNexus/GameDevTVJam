@@ -74,8 +74,7 @@ namespace NJN.Runtime.Managers.Bootstrapper
         {
             StopAllCoroutines();
             SceneManager.LoadScene("2_MainMenu", LoadSceneMode.Single);
-            _signalBus?.Fire(new MusicSignal(EMusic.truck));
-            _signalBus?.Fire(new ExitBuildingSignal());
+
             //_signalBus.Fire(new BootstrapperInitializedSignal());
         }
     }
