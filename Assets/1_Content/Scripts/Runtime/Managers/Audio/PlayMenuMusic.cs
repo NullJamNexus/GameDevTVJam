@@ -13,13 +13,14 @@ public class PlayMenuMusic : MonoBehaviour
     }
     void Start()
     {
-        _signalBus.Fire(new MusicSignal(EMusic.truck));
-        _signalBus.Fire(new ExitBuildingSignal());
+        
     }
+   
 
     // Update is called once per frame
     void Update()
     {
-        
+        _signalBus.Fire(new MusicSignal(EMusic.truck));
+        _signalBus.Fire(new ExitBuildingSignal());
     }
 }
