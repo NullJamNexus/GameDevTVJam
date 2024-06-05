@@ -12,21 +12,21 @@ namespace NJN.Runtime.Components
         [BoxGroup("Components"), SerializeField]     
         private Collider2D _collider;
 
-        [SerializeField]
-        private Sprite _doorOpenSprite;
+        private Animator _animator;
+        private const string _openBoolAnimName = "IsOpen";
 
-        [SerializeField]
-        private Sprite _doorClosedSprite;
-
-        private SpriteRenderer _spriteRenderer;
-
+        private void Awake()
+        {
+            _animator = GetComponentInChildren<Animator>();
+            if (_animator == null)
+                Debug.LogError("Animator is missing on " + gameObject.name);
+        }
 
         private void Start()
         {
-            _spriteRenderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
             IsOpen = _StartOpen;
             if (IsOpen)
-                OpenDoorNoAnim();
+                OpenDoor();
         }
 
         public override void Interact(IInteractor interactor)
@@ -43,23 +43,15 @@ namespace NJN.Runtime.Components
         }
         protected virtual void OpenDoor()
         {
-            _spriteRenderer.sprite = _doorOpenSprite;
             _signalBus.Fire(new DoorOpenSignal());
             _collider.enabled = false;
-            //play open anim
+            _animator.SetBool(_openBoolAnimName, true);
         }
         protected virtual void CloseDoor()
         {
-            _spriteRenderer.sprite = _doorClosedSprite;
             _signalBus.Fire(new DoorCloseSignal());
             _collider.enabled = true;
-            // play close anim
-        }
-
-        protected virtual void OpenDoorNoAnim()
-        {
-            _collider.enabled = false;
-            // change sprite to open
+            _animator.SetBool(_openBoolAnimName, false);
         }
     }
 }

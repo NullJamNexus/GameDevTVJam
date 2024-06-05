@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using NJN.Runtime.Controllers;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using Vit.Utilities;
 
 namespace NJN.Runtime.Components
 {
@@ -14,6 +16,11 @@ namespace NJN.Runtime.Components
         private float _distractionRange = 10f;
         [BoxGroup("Settings"), SerializeField]
         private float _durability = 20f;
+        [BoxGroup("Settings"), SerializeField, ValueDropdown(nameof(GetLayerNames))]
+        private string _destroyableLayer;
+
+        private Animator _animator;
+        private const string _tvOnAnimName = "IsOn";
 
         public Collider2D _collider2D;
 
@@ -23,6 +30,9 @@ namespace NJN.Runtime.Components
         {
             _collider2D = GetComponent<Collider2D>();
             //_collider2D.enabled = false;
+            _animator = GetComponentInChildren<Animator>();
+            if (_animator == null)
+                Debug.LogError("Animator is missing on " + gameObject.name);
         }
 
         [Button(ButtonSizes.Large)]
@@ -34,6 +44,8 @@ namespace NJN.Runtime.Components
 
         private void CauseDistraction()
         {
+            _animator.SetBool(_tvOnAnimName, true);
+            gameObject.layer = LayerMask.NameToLayer(_destroyableLayer);
             Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, _distractionRange, _distractableLayers);
             foreach (Collider2D hit in hits)
             {
@@ -59,6 +71,11 @@ namespace NJN.Runtime.Components
             HideInteractPrompt();
             _collider2D.enabled = true;
             CauseDistraction();
+        }
+
+        private IEnumerable<string> GetLayerNames()
+        {
+            return Tools.GetLayerNames();
         }
 
 #if UNITY_EDITOR

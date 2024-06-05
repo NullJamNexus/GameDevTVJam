@@ -77,27 +77,40 @@ namespace NJN.Runtime.UI.Panels
             {
                 Destroy(option.gameObject);
             }
-            
+
             _destinationOptions.Clear();
-            
+
+            int attemptLimit = _maxOptionsCount * 10;
+            int attempts = 0;
+
             for (int i = 0; i < _maxOptionsCount; i++)
             {
+                if (attempts >= attemptLimit)
+                {
+                    Debug.LogWarning("Reached attempt limit while creating new destination options.");
+                    break;
+                }
+
                 DestinationOptionVisual optionVisual = _destinationsFactory.CreateRandomOption(_optionsParent, _optionVisualPrefab);
                 if (optionVisual == null) break;
+
                 if (_destinationOptions.Find(x => x.DestinationData == optionVisual.DestinationData) != null)
                 {
                     Destroy(optionVisual.gameObject);
                     i--;
+                    attempts++;
                     continue;
                 }
+
                 optionVisual.SetUpCallback(OnOptionSelected);
                 ValidateOption(optionVisual);
                 _destinationOptions.Add(optionVisual);
+                attempts++;
             }
-            
+
             _hasAllOptions = true;
         }
-        
+
         private void ValidateOption(DestinationOptionVisual destinationOption)
         {
             int fuelCost = destinationOption.DestinationData.FuelCost;

@@ -32,6 +32,8 @@ namespace NJN.Runtime.Controllers.Player
             _defaultLayer = LayerMask.LayerToName(_player.gameObject.layer);
             _player.gameObject.layer = LayerMask.NameToLayer(_player.HideProcessor.GetHiddenLayer());
             _player.Rigidbody.isKinematic = true;
+
+            _player.Movement.PhysicsStop();
         }
         
         public override void LogicUpdate()
