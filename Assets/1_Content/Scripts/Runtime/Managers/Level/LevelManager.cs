@@ -47,6 +47,8 @@ namespace NJN.Runtime.Managers
         private float _arrivalTravelTime = 3f;
         [FoldoutGroup("Destination Transition"), SerializeField]
         private float _parallaxDecelerationRate = 0.5f;
+        [FoldoutGroup("Destination Transition"), SerializeField]
+        private float _parallaxForceCloseTime = 5.45f;
 
         private int _currentDestinationCount = 0;
 
@@ -157,6 +159,10 @@ namespace NJN.Runtime.Managers
             yield return Timing.WaitForSeconds(_arrivalTravelTime);
 
             _signalBus.Fire(new DestinationTransitionFinishedSignal(_parallaxDecelerationRate));
+
+            yield return Timing.WaitForSeconds(_parallaxForceCloseTime);
+
+            _signalBus.Fire(new ForceEndTransition());
 
             // TODO: In the final destination, we can make it so when you walk into house trigger, you win game instead of here...
             if (isEnding)

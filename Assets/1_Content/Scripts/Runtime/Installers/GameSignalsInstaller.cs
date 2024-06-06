@@ -68,6 +68,7 @@ namespace NJN.Runtime.Installers
             Container.DeclareSignal<PlayerStepSignal>();
             Container.DeclareSignal<EnterBuildingSignal>();
             Container.DeclareSignal<ExitBuildingSignal>();
+            Container.DeclareSignal<ForceEndTransition>();
         }
     }
 }

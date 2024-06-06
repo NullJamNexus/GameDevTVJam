@@ -81,12 +81,14 @@ public class ParallaxBG : MonoBehaviour
         ForceParallaxOn();
         _signalBus.Subscribe<DestinationTransitionStartedSignal>(OnDestinationTransitionStarted);
         _signalBus.Subscribe<DestinationTransitionFinishedSignal>(OnDestinationTransitionFinished);
+        _signalBus.Subscribe<ForceEndTransition>(EndTransition);
     }
 
     private void OnDisable()
     {
         _signalBus.TryUnsubscribe<DestinationTransitionStartedSignal>(OnDestinationTransitionStarted);
         _signalBus.TryUnsubscribe<DestinationTransitionFinishedSignal>(OnDestinationTransitionFinished);
+        _signalBus.TryUnsubscribe<ForceEndTransition>(EndTransition);
         Timing.KillCoroutines(_accelerationHandle);
     }
 
@@ -243,6 +245,12 @@ public class ParallaxBG : MonoBehaviour
             _autoScrollIncrement -= 0.1f;
             yield return Timing.WaitForSeconds(decelerationRate);
         }
+        _autoScrollIncrement = 0;
+    }
+
+    private void EndTransition()
+    {
+        Timing.KillCoroutines(_accelerationHandle);
         _autoScrollIncrement = 0;
     }
 }
