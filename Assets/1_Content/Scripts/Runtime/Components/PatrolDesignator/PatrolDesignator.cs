@@ -33,8 +33,10 @@ namespace NJN.Runtime.Components
                 Debug.Log("[PatrolDesignator] No patrol points set!");
                 return Vector2.zero;
             }
+            if (_patrolPointIndex == -1)
+                ChangePatrolPoint();
 
-            _patrolPointIndex = (_patrolPointIndex + 1) % _patrolPoints.Count;
+            //ChangePatrolPoint();
             Vector2 worldTarget = GetWorldPatrolPoint(_patrolPointIndex);
             _direction = worldTarget - position;
             return _direction;
@@ -46,12 +48,25 @@ namespace NJN.Runtime.Components
             {
                 return false;
             }
-
+            bool shouldChangeDirection;
             if (IsPathBlocked())
-                return true;
+                shouldChangeDirection = true;
+            else
+            {
+                Vector2 worldTarget = GetWorldPatrolPoint(_patrolPointIndex);
+                 shouldChangeDirection = Mathf.Abs(position.x - worldTarget.x) <= _closeEnough;
+            }
 
-            Vector2 worldTarget = GetWorldPatrolPoint(_patrolPointIndex);
-            return Mathf.Abs(position.x - worldTarget.x) <= _closeEnough;
+            if(shouldChangeDirection)
+            {
+                ChangePatrolPoint();
+            }
+            return shouldChangeDirection;
+        }
+
+        private void ChangePatrolPoint()
+        {
+            _patrolPointIndex = (_patrolPointIndex + 1) % _patrolPoints.Count;
         }
         private bool IsPathBlocked()
         {
