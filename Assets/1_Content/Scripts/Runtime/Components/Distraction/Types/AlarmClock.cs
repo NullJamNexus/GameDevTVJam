@@ -6,7 +6,7 @@ using UnityEngine;
 namespace NJN.Runtime.Components
 {
     [RequireComponent(typeof(Collider2D))]
-    public class AlarmClock : InteractableComponent, IDamagable
+    public class AlarmClock : InteractableComponent, IDamagable, IRemoteInteractable
     {
         [BoxGroup("Settings"), SerializeField]
         private LayerMask _distractableLayers;
@@ -66,6 +66,12 @@ namespace NJN.Runtime.Components
         {
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, _distractionRange);
+        }
+
+        public void RemoteInteractTriggered()
+        {
+            CauseDistraction();
+            _collider2D.enabled = true;
         }
 #endif
     }
